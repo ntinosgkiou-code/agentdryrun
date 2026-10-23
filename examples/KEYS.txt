@@ -1,0 +1,4 @@
+# Public keys only. Nothing in this file is secret. A verifier must get these keys by a route the log's operator does not control.
+log-key (acme-demo)=MHY2fDusvOBeEJjZJngCGuF/NjHtLpGLcgrHgM0EhWA=
+auditor-witness=Mwi9ce86bGM/9ctAKQeNu+bVxN9AlGJec/bNcsRab88=
+insurer-witness=wh8uZprcOMB/IjMVDoLD1cVQxvYRZ8jzoXIAssy5jbg=

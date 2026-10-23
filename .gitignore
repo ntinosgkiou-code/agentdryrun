@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.env
+*.key
+witness_state.json
+reports/
+.venv/
