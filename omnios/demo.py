@@ -24,7 +24,7 @@ SHOWN = ("log key pinned", "records checked", "witnesses ", "witness policy", "P
 
 
 def _verify(bundle: str):
-    cmd = [sys.executable, os.path.join(ROOT, "verify.py"), os.path.join(EX, bundle), "--log-key", LOG_KEY, "--min-witnesses", "2"]
+    cmd = [sys.executable, os.path.join(ROOT, "verify.py"), os.path.join(EX, bundle), "--log-key", LOG_KEY, "--min-witnesses", "2", "--require-all"]
     for name, key in WITNESSES.items():
         cmd += ["--witness", f"{name}={key}"]
     p = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")

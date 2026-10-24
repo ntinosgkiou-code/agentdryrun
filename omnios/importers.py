@@ -3,13 +3,15 @@
 Only TOOL calls become events: an agent's action is a tool call, the model's text and the retrieval steps are not.
 Each event is {"tool", "params", "external_id", "occurred_at"}, the same shape `report.load_events` returns.
 
-The three shapes below follow the vendors' documented field names. They were built and tested on small invented fixtures,
-NOT on exports from a live system: if your export is read wrongly, open an issue with a redacted sample.
+The three shapes below follow the vendors' field names, which were checked on 2026-10-24 against the primary sources
+(OpenTelemetry GenAI conventions repo, Langfuse source, LangChain's run data format). The readers were run only on small
+invented fixtures, NOT on exports from a live system: if your export is read wrongly, open an issue with a redacted sample.
 
     OpenTelemetry   OTLP/JSON (resourceSpans). A span is a tool call when `gen_ai.operation.name` is "execute_tool" or it
                     has `gen_ai.tool.name`. Arguments come from `gen_ai.tool.call.arguments` (opt-in in the convention:
                     if your instrumentation does not record them, the rules see no parameters).
     Langfuse        observations with type TOOL (list, {"data": [...]}, JSON Lines, or traces that carry "observations").
+                    In the v2 API `input` is in the `io` field group, which is not returned by default: ask for fields=core,basic,io.
     LangSmith       runs with run_type "tool" (list, {"runs": [...]}, or JSON Lines).
 
 What an export cannot tell us: whether the call succeeded, and who approved it. A failed call is still an attempted action.

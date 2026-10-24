@@ -2,6 +2,18 @@
 
 A dated, honest log of what was built, what worked, and what was wrong. Newest first. Nothing here is a customer story: there are none yet.
 
+## 2026-10-24 (night): attacking our own verifier
+- **I wrote 76 hostile bundles and ran them against `verify.py`.** Nothing changed was ever accepted as `VERIFIED` (edited, removed, reordered or forged records, forged checkpoints, wrong key, stripped witnesses). That is the part that matters, and it held.
+- **But three things were wrong, and one of them was a real hole.**
+  1. *Silent omission (real).* `manifest.json` is not signed. I removed 37 of 67 records and changed the `scope` label: `VERIFIED`, no warning. The README had said the verifier checks records were "not removed", which was only true when the scope said `all`. The label is attacker-controlled, so the code now trusts only the record count, warns `INCOMPLETE`, and offers `--require-all`. README, spec and KNOWN-LIMITS corrected.
+  2. *Crashes.* 24 of the 76 ended in a traceback with exit 1 (documented exit codes are 0, 2, 3). They never passed, but a clean failure is the contract.
+  3. *Unbounded read.* A 327 KB zip inflating to 300 MB was read whole and verified. Now capped.
+- **A false alarm of mine:** I first thought removing one witness left the bundle verified. The valid bundle carries both cosignatures on one note, so my test removed nothing. Removing a witness's signature line fails correctly.
+- **Two broken references** in the public docs pointed at files that exist only in the private repository (`TRUST-GAPS.md`, `tests/test_evidence.py`). Fixed.
+- **Checked against primary sources:** the OpenTelemetry `execute_tool` conventions (status Development), Langfuse `TOOL` observations (the `input` field is in the `io` group, not returned by default in API v2) and LangSmith's run format. The readers were not changed; the Langfuse caveat was added to the docs.
+- **Found and not fixed here:** the name. "OmniOS" is also an actively released illumos distribution (omnios.org, release r151058 in May 2026) with a GitHub organization of the same name. Trademark status was not verified (no registry lookup was possible). A rename decision is pending.
+- Not done: a second implementation to cross-check our checkpoint bytes; a real external review.
+
 ## 2026-10-24 (evening)
 - **Added trace readers** (Langfuse, LangSmith, OpenTelemetry OTLP/JSON) so the shadow report runs on an export in one command instead of a hand-made CSV. The three invented example exports give the same 45 verdicts as `events.csv` (16 / 20 / 9), and a test keeps it that way.
 - **What is NOT verified:** I wrote the readers from the vendors' documented field names and did not check them against exports from live systems (a documentation lookup was not done before writing them). The README and the module say so. If a reader is wrong on your data, that is a bug report, not a surprise.

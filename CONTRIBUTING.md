@@ -5,7 +5,7 @@ You do not need permission to try it, break it or build on it. It is Apache-2.0.
 
 ## Run it
 ```bash
-python -m unittest discover -s tests      # 39 tests, no network, about a second
+python -m unittest discover -s tests      # 58 tests, no network, a few seconds
 python -m omnios demo                     # the whole thing on the shipped example
 python verify.py --help
 python -m omnios shadow --help

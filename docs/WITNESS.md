@@ -46,7 +46,7 @@ It does **not** say the records are correct or complete, that every action was l
 
 | Catches | Does not catch |
 |---|---|
-| An old record edited, deleted or reordered (the new tree does not extend the old one) | A false record *added now* (it extends the old tree perfectly). That needs approvals signed by the approvers' own keys (`TRUST-GAPS.md` G1) |
+| An old record edited, deleted or reordered (the new tree does not extend the old one) | A false record *added now* (it extends the old tree perfectly). That needs approvals signed by the approvers' own keys (see [KNOWN-LIMITS.md](KNOWN-LIMITS.md)) |
 | A log cut back to an earlier size (restored backup, truncation): "log shrank" | An action the agent took without asking, so it was never logged (use proxy mode; compare with the system of record) |
 | A fork: a different tree of the same size, or one history shown to the witness and another to the auditor (the bundle must extend what the witness cosigned) | A witness that colludes with the operator, or runs on the operator's machine |
 | (pull mode) A log that signs a bigger tree and refuses to prove it extends the old one: ALERT, not "outage". In push mode a log that simply stops pushing shows up as GAPS | Anything that happened between two checks and was fully repaired before the next |

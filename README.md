@@ -31,7 +31,7 @@ git clone https://github.com/ntinosgkiou-code/omnios && cd omnios && python -m o
 | | |
 |---|---|
 | **Shadow report** | Give it a list of what your agent did (a CSV, or a **Langfuse / LangSmith / OpenTelemetry** trace export) and a rules file. It judges every action as a dry run (*would pass / would need approval / would be refused*), lists the tools your agent uses that **no rule covers**, and writes a report you can hand to a manager or an auditor. Runs locally. Nothing is blocked, nothing is sent anywhere. |
-| **Offline verifier** | One Python file that checks an evidence bundle: records not edited, not reordered, not removed; signed by the key you pinned; witnessed; and the approval rules recorded in the log were followed. |
+| **Offline verifier** | One Python file that checks an evidence bundle: every record it contains is unedited and in the signed tree; signed by the key you pinned; witnessed; the approval rules recorded in the log were followed; and it tells you when records are **missing** from the bundle. Hostile or malformed bundles end in FAILED, never in a crash or a false VERIFIED. |
 | **Independent witness** | A small service that remembers a log's checkpoints and refuses any that rewrite the past. |
 | **Rules language** | The JSON format for "this tool needs two approvers above €1,000", with a strict validator. |
 | **Specs and real examples** | The bundle format, the witness protocol, and a valid and a tampered bundle you can run against. |
@@ -54,7 +54,7 @@ On Windows, use `py -3` instead of `python` if `python` is not found. No git? Us
 
 Only the witness service needs packages: `pip install -r requirements.txt`.
 
-Check everything works: `python -m unittest discover -s tests` (39 tests, about a second).
+Check everything works: `python -m unittest discover -s tests` (58 tests, a few seconds).
 
 ---
 
@@ -107,14 +107,14 @@ report: report.html   (nothing was blocked or executed)
 
 | Your tool | What to export | What counts as a tool call |
 |---|---|---|
-| **Langfuse** | observations as JSON or JSON Lines (a list, `{"data": [...]}`, or traces that carry `observations`) | `type: TOOL` (name = the tool, `input` = its parameters) |
+| **Langfuse** | observations as JSON or JSON Lines (a list, `{"data": [...]}`, or traces that carry `observations`). From the v2 API ask for `fields=core,basic,io`: `input` is not in the default field groups | `type: TOOL` (name = the tool, `input` = its parameters) |
 | **LangSmith** | runs as JSON or JSON Lines (a list or `{"runs": [...]}`) | `run_type: tool` (name = the tool, `inputs` = its parameters) |
-| **OpenTelemetry** | OTLP/JSON (`resourceSpans`) | a span with `gen_ai.operation.name = execute_tool` or `gen_ai.tool.name`; parameters from `gen_ai.tool.call.arguments` |
+| **OpenTelemetry** | OTLP/JSON (`resourceSpans`) | a span with `gen_ai.operation.name = execute_tool` or `gen_ai.tool.name`; parameters from `gen_ai.tool.call.arguments` (upstream these GenAI conventions are still marked *Development*, so names may change) |
 
 To see what was read before judging it, or to keep only the parameters your rules look at (recommended before you share a file): `python -m omnios import export.json --rules my-rules.json --out events.jsonl`.
 
 **Read this before trusting it on your own export.**
-- The three readers follow the vendors' documented field names and were tested on **invented** fixtures ([`examples/traces/`](examples/traces/)), not on exports from live systems. If yours is read wrongly or not at all, open an issue with a redacted sample: that is the most useful report you can send.
+- **What was checked, and what was not.** On 2026-10-24 the field names were checked against the primary sources: the [OpenTelemetry GenAI conventions](https://github.com/open-telemetry/semantic-conventions-genai) (`execute_tool`, `gen_ai.tool.name`, `gen_ai.tool.call.id`, and the opt-in `gen_ai.tool.call.arguments`), the [Langfuse source](https://github.com/langfuse/langfuse) (`type` `TOOL`, `startTime`, `input`) and the [LangSmith run data format](https://docs.langchain.com/langsmith/run-data-format) (`run_type` `tool`, `inputs`, `start_time`). The readers were then run only on **invented** fixtures ([`examples/traces/`](examples/traces/)), never on an export from a live system. If yours is read wrongly or not at all, open an issue with a redacted sample: that is the most useful report you can send.
 - OpenTelemetry records tool **arguments** only if your instrumentation is set to (the convention makes it opt-in). Without them, rules that need a field send those actions to a human, and the tool says how many.
 - Your tool names must match the names in the rules file. Names that match no rule show up under *tools the agent used that no rule covers*, which is usually the finding.
 - An export does not say whether a call **succeeded** or who approved it. A failed call is still an attempted action.
@@ -171,7 +171,7 @@ python verify.py examples/bundle-valid.zip \
   --log-key MHY2fDusvOBeEJjZJngCGuF/NjHtLpGLcgrHgM0EhWA= \
   --witness auditor-witness=Mwi9ce86bGM/9ctAKQeNu+bVxN9AlGJec/bNcsRab88= \
   --witness insurer-witness=wh8uZprcOMB/IjMVDoLD1cVQxvYRZ8jzoXIAssy5jbg= \
-  --min-witnesses 2
+  --min-witnesses 2 --require-all
 ```
 
 ```text
@@ -190,7 +190,7 @@ RESULT: VERIFIED
 Now the same bundle after someone changed one approval (`alice` became `mallory`) and re-zipped it:
 
 ```bash
-python verify.py examples/bundle-tampered.zip --log-key ... --witness ... --min-witnesses 2
+python verify.py examples/bundle-tampered.zip --log-key ... --witness ... --min-witnesses 2 --require-all
 ```
 
 ```text
@@ -206,7 +206,14 @@ Editing the manifest does not help the attacker: its hash check is only a conven
 
 **The keys are public** and live in [`examples/KEYS.txt`](examples/KEYS.txt). In real use you obtain them from the log's owner **by another route** (a call, a signed contract). A bundle that vouches for its own key proves nothing, so without `--log-key` the verifier says `UNPINNED` and warns you.
 
-Exit codes: `0` verified (warnings may exist), `2` failed, `3` unreadable. Flags: `--min-witnesses K`, `--max-age 36h`, `--json`.
+Exit codes: `0` verified (warnings may exist), `2` failed, `3` unreadable or malformed. Flags: `--min-witnesses K`, `--max-age 36h`, `--require-all`, `--max-bytes N`, `--json`.
+
+**Three rules for whoever receives a bundle.**
+1. **Use your own copy of `verify.py`** (this repository), never the one inside the bundle: whoever made the bundle wrote that one.
+2. **Ask for completeness with `--require-all`.** `manifest.json` is not signed, so its `scope` label proves nothing; someone can leave records out and relabel the scope. Without `--require-all` you still get an `INCOMPLETE` warning when the bundle holds fewer records than the signed checkpoint covers, but only the flag turns it into a failure.
+3. **Pin the keys** (`--log-key`, `--witness`) from a source the log's operator does not control.
+
+A hostile bundle is treated as hostile input: members that would inflate beyond `--max-bytes` (default 256 MiB) are refused before they are read, and wrong types, deep nesting or damaged files give a clean result. [`tests/test_adversarial.py`](tests/test_adversarial.py) runs the attacks (edited, removed, repeated and reordered records, forged leaves, proofs and checkpoints, the wrong key, stripped witnesses, relabelled scope, oversize and malformed files). That shows those attacks fail. It is not an audit.
 
 ### What `verify.py` checks
 
@@ -214,7 +221,8 @@ Exit codes: `0` verified (warnings may exist), `2` failed, `3` unreadable. Flags
 2. The checkpoint is signed by the **pinned** log key.
 3. Every record: its text hashes to its leaf, the leaf is in that tree (inclusion proof, RFC 9162), the text is canonical JSON, consecutive records are chained.
 4. Witness cosignatures: which trusted witnesses signed which size and when, and whether the log provably extends what they saw.
-5. **The rules recorded in the log were followed:** enough distinct approvers, none of them the agent, approver groups respected, no execution before approval, and every change to rules or keys had the other admins' approvals it needed.
+5. **Completeness:** whether the bundle holds every record the signed checkpoint covers (`INCOMPLETE` warning, or a failure with `--require-all`).
+6. **The rules recorded in the log were followed:** enough distinct approvers, none of them the agent, approver groups respected, no execution before approval, and every change to rules or keys had the other admins' approvals it needed.
 
 Full format: [`docs/EVIDENCE-BUNDLE-SPEC.md`](docs/EVIDENCE-BUNDLE-SPEC.md). Anyone can write a second verifier from that page. If it disagrees with this one on any bundle, that is a bug report ([SECURITY.md](SECURITY.md)).
 
@@ -254,7 +262,7 @@ Give the log's owner your public key and your URL. A witness only ever says *"I 
 ```
 
 1. **Every step is a record**, written *before* the action happens: the proposal, each approval, the execution. Records carry identifiers, digests and the rule-generated reason for each decision, never raw parameters or credentials (a reason can quote a number, such as a daily total over a limit).
-2. **Records form a Merkle tree**, and the log signs the tree's root with Ed25519 as a checkpoint ([C2SP](https://c2sp.org) signed-note format).
+2. **Records form a Merkle tree**, and the log signs the tree's root with Ed25519 as a checkpoint, laid out as in the [C2SP](https://c2sp.org) signed-note and tlog-checkpoint specifications (implemented from the published text, not yet cross-checked against another implementation).
 3. **Witnesses** remember checkpoints; a rewritten past cannot be witnessed.
 4. **The verifier works offline from one file.** You choose the bar: which keys you trust, how many witnesses, how recent.
 
@@ -318,7 +326,7 @@ omnios/witnessd.py, tlog.py  the independent witness and the Merkle-tree code
 docs/                        RULES, EVIDENCE-BUNDLE-SPEC, WITNESS, KNOWN-LIMITS
 ROADMAP.md, BUILD-LOG.md, CHANGELOG.md, CONTRIBUTING.md   how it is built, in public
 examples/                    rules, events, a report, a valid and a tampered bundle, public keys
-tests/                       39 tests, no network
+tests/                       58 tests, no network (test_adversarial.py attacks the verifier with hostile bundles)
 examples/traces/             invented Langfuse, LangSmith and OpenTelemetry exports of the same 45 actions
 tools/make_trace_examples.py re-creates examples/traces/ from examples/events.csv
 tools/make_demo_gif.py       optional (needs Pillow): re-creates docs/assets/demo.gif from the real demo output

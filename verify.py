@@ -21,7 +21,16 @@ What is checked (every item is reported, none is skipped silently):
 
 What it cannot tell you: that a record is TRUE (only that it was committed and not rewritten), or that actions were not
 omitted before being logged. A witness limits rewriting to what it had already seen.
-Exit code: 0 all good · 2 something failed · 3 usage / unreadable bundle.
+
+COMPLETENESS: the records the bundle contains are checked one by one, but manifest.json is NOT signed, so its "scope" label
+proves nothing. If the bundle holds fewer records than the signed checkpoint says the log has, you get an INCOMPLETE warning
+(a problem with --require-all): the records shown are genuine, and what is missing is neither shown nor proven irrelevant.
+
+NEVER run the verify.py that is INSIDE a bundle: whoever made the bundle wrote it. Use your own copy of this file.
+
+A malformed or hostile bundle ends in a clean FAILED / unreadable result, never a crash and never VERIFIED. Members larger
+than --max-bytes (default 256 MiB) are refused before they are read, so a small zip cannot inflate into your memory.
+Exit code: 0 all good · 2 something failed · 3 usage / unreadable / malformed bundle.
 """
 from __future__ import annotations
 
@@ -37,6 +46,8 @@ from typing import Any, Optional
 
 _EM = "—"
 GENESIS = "0" * 64
+MAX_MEMBER_BYTES = 256 * 1024 * 1024      # a bundle member may not inflate beyond this (override: --max-bytes)
+MAX_ENTRIES = 64                          # a real bundle has 5 files
 
 
 # ───────────────────────── hashing and Merkle (RFC 9162) ─────────────────────────
@@ -272,27 +283,57 @@ def _policy_hash(doc: dict) -> str:
 
 
 def verify_bundle(path: str, log_key_b64: Optional[str] = None, witnesses: Optional[dict] = None, *,
-                  min_witnesses: Optional[int] = None, max_age: Optional[float] = None, now: Optional[float] = None) -> dict:
+                  min_witnesses: Optional[int] = None, max_age: Optional[float] = None, now: Optional[float] = None,
+                  require_all: bool = False, max_member_bytes: int = MAX_MEMBER_BYTES) -> dict:
     """Returns a report dict. `report["ok"]` is True only if every cryptographic check passed AND no rule violation was
-    found. Warnings (unpinned key, partial witness coverage, dangling execution) do not flip `ok` but are listed.
+    found. Warnings (unpinned key, partial witness coverage, dangling execution, INCOMPLETE bundle) do not flip `ok` but are
+    listed. Whatever is wrong with the bundle, this returns a report: it does not raise.
 
     Witness policy (optional, set by the person who asks for the proof):
       min_witnesses  at least this many DISTINCT trusted witnesses must hold a valid cosignature on a checkpoint that
                      this log provably extends (the bundle fails otherwise)
       max_age        seconds: a witness only counts if its latest cosignature is at most this old (needs the cosignature/v1
                      timestamp; a plain signed-note cosignature has none and does not count). Implies min_witnesses >= 1.
+      require_all    fail unless the bundle holds EVERY record the signed checkpoint covers (the manifest's scope label is
+                     not signed, so only the record count can be trusted)
+      max_member_bytes  refuse a bundle member that would inflate beyond this
       now            the clock, for tests."""
+    try:
+        return _verify_bundle(path, log_key_b64, witnesses, min_witnesses=min_witnesses, max_age=max_age, now=now,
+                              require_all=require_all, max_member_bytes=max_member_bytes)
+    except Exception as e:      # a hostile bundle must fail cleanly: not crash, and above all not pass
+        return {"ok": False, "pinned": log_key_b64 is not None, "warnings": [], "info": {}, "actions": {},
+                "problems": [f"malformed bundle ({type(e).__name__}: {str(e)[:200]})"]}
+
+
+def _verify_bundle(path: str, log_key_b64: Optional[str], witnesses: Optional[dict], *, min_witnesses: Optional[int],
+                   max_age: Optional[float], now: Optional[float], require_all: bool, max_member_bytes: int) -> dict:
     rep: dict = {"ok": True, "pinned": log_key_b64 is not None, "problems": [], "warnings": [], "info": {}, "actions": {}}
 
     def problem(msg: str) -> None:
         rep["ok"] = False
         rep["problems"].append(msg)
 
+    def unreadable(msg: str) -> dict:
+        return {"ok": False, "problems": [msg], "warnings": [], "info": {}, "actions": {}, "pinned": False}
+
     try:
         z = zipfile.ZipFile(path)
+        infos = z.infolist()
+        names = [i.filename for i in infos]
+        if len(infos) > MAX_ENTRIES:
+            return unreadable(f"cannot read the bundle: {len(infos)} entries (a bundle has a handful)")
+        if len(set(names)) != len(names):
+            return unreadable("cannot read the bundle: it contains the same file name twice")
+        for i in infos:
+            if i.file_size > max_member_bytes:
+                return unreadable(f"cannot read the bundle: {i.filename} would inflate to {i.file_size} bytes, over the limit of "
+                                  f"{max_member_bytes} (raise it with --max-bytes only if you trust this bundle)")
         manifest = json.loads(z.read("manifest.json").decode("utf-8"))
     except (OSError, KeyError, ValueError, zipfile.BadZipFile) as e:
-        return {"ok": False, "problems": [f"cannot read the bundle: {e}"], "warnings": [], "info": {}, "actions": {}, "pinned": False}
+        return unreadable(f"cannot read the bundle: {e}")
+    if not isinstance(manifest, dict):
+        return unreadable("cannot read the bundle: manifest.json is not a JSON object")
 
     if manifest.get("format") != "omnios-evidence-bundle" or manifest.get("version") != 1:
         return {"ok": False, "pinned": log_key_b64 is not None, "warnings": [], "info": {}, "actions": {},
@@ -315,6 +356,9 @@ def verify_bundle(path: str, log_key_b64: Optional[str] = None, witnesses: Optio
         problem("the bundle claims a different log key than the one you pinned")
     key_name, origin = manifest.get("key_name"), manifest.get("origin")
     cps = json.loads(z.read("checkpoints.json").decode("utf-8"))
+    if not isinstance(cps, dict) or not isinstance(cps.get("main"), dict) or not isinstance(cps["main"].get("note"), str):
+        problem("checkpoints.json is malformed: it needs main.note")
+        return rep
     main = cps["main"]
     try:
         body, _ = split_note(main["note"])
@@ -336,9 +380,18 @@ def verify_bundle(path: str, log_key_b64: Optional[str] = None, witnesses: Optio
     records = [json.loads(line) for line in z.read("records.jsonl").decode("utf-8").splitlines() if line.strip()]
     parsed: dict[int, dict] = {}
     rhashes: dict[int, str] = {}
+    last_seq = -1
     for r in records:
-        raw = r["body"].encode("utf-8")
+        if not (isinstance(r, dict) and type(r.get("seq")) is int and isinstance(r.get("body"), str) and isinstance(r.get("leaf"), str)
+                and isinstance(r.get("proof"), list) and all(isinstance(p, str) for p in r["proof"])):
+            problem("a line of records.jsonl is malformed: it needs seq (an integer), body, leaf and proof (text)")
+            continue
         seq = r["seq"]
+        if seq <= last_seq:
+            problem(f"record {seq}: records.jsonl must list each record once, in ascending order")
+            continue
+        last_seq = seq
+        raw = r["body"].encode("utf-8")
         if leaf_hash(raw).hex() != r["leaf"]:
             problem(f"record {seq}: text does not hash to its leaf")
             continue
@@ -362,9 +415,19 @@ def verify_bundle(path: str, log_key_b64: Optional[str] = None, witnesses: Optio
                 problem("record 0 does not start from the genesis hash")
         elif seq - 1 in rhashes and rec["prev"] != rhashes[seq - 1]:
             problem(f"record {seq}: chain link does not match record {seq - 1}")
-    if (manifest.get("scope") or {}).get("kind") == "all" and len(parsed) != size:
-        problem(f"scope 'all' promised {size} records, {len(parsed)} verified")
+    scope = manifest.get("scope")
+    kind = scope.get("kind") if isinstance(scope, dict) else None
+    if len(parsed) != size:
+        if kind == "all":
+            problem(f"scope 'all' promised {size} records, {len(parsed)} verified")
+        elif require_all:
+            problem(f"INCOMPLETE: --require-all was given and the bundle holds {len(parsed)} verified records of the {size} the checkpoint covers")
+        else:
+            rep["warnings"].append(
+                f"INCOMPLETE: {len(parsed)} verified records of the {size} the checkpoint covers (scope label: {kind!r}, which is not signed). "
+                "The records shown are genuine; the missing ones are neither shown nor proven irrelevant. Use --require-all to demand a complete bundle.")
     rep["info"]["records_verified"] = len(parsed)
+    rep["info"]["complete"] = len(parsed) == size
 
     # 4. witnesses
     trusted = {n: base64.b64decode(k) for n, k in (witnesses or {}).items()}
@@ -554,6 +617,10 @@ def main(argv: Optional[list] = None) -> int:
     ap.add_argument("--witness", action="append", default=[], metavar="NAME=KEY", help="a trusted witness public key (repeatable)")
     ap.add_argument("--min-witnesses", type=int, metavar="K", help="require at least K distinct trusted witnesses")
     ap.add_argument("--max-age", metavar="AGE", help="a witness counts only if its latest cosignature is this recent, e.g. 36h, 7d, 3600")
+    ap.add_argument("--require-all", action="store_true",
+                    help="fail unless the bundle holds every record the signed checkpoint covers (the manifest's scope label is not signed)")
+    ap.add_argument("--max-bytes", type=int, default=MAX_MEMBER_BYTES, metavar="N",
+                    help=f"refuse a bundle member that would inflate beyond N bytes (default {MAX_MEMBER_BYTES})")
     ap.add_argument("--json", action="store_true")
     a = ap.parse_args(argv)
     age = None
@@ -563,14 +630,27 @@ def main(argv: Optional[list] = None) -> int:
             print("--max-age: a number with an optional s, m, h or d (e.g. 36h)", file=sys.stderr)
             return 3
         age = float(m.group(1)) * {"": 1, "s": 1, "m": 60, "h": 3600, "d": 86400}[m.group(2)]
+    def bad_key(k: str) -> bool:
+        try:
+            return len(base64.b64decode(k, validate=True)) != 32
+        except ValueError:
+            return True
+
+    if a.log_key and bad_key(a.log_key):
+        print("--log-key must be a base64 Ed25519 public key (32 bytes)", file=sys.stderr)
+        return 3
     wit = {}
     for w in a.witness:
         if "=" not in w:
             print("--witness needs NAME=BASE64KEY", file=sys.stderr)
             return 3
         n, k = w.split("=", 1)
+        if bad_key(k):
+            print(f"--witness {n}: the key must be a base64 Ed25519 public key (32 bytes)", file=sys.stderr)
+            return 3
         wit[n] = k
-    rep = verify_bundle(a.bundle, a.log_key, wit, min_witnesses=a.min_witnesses, max_age=age)
+    rep = verify_bundle(a.bundle, a.log_key, wit, min_witnesses=a.min_witnesses, max_age=age,
+                        require_all=a.require_all, max_member_bytes=a.max_bytes)
     if "tenant" not in rep.get("info", {}) and not rep["ok"] and not rep.get("info"):
         print(render(rep) if not a.json else json.dumps(rep, indent=2), file=sys.stderr)
         return 3

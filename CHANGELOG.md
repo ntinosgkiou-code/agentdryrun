@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.0 (2026-10-24)  Verifier hardening
+Found by attacking our own verifier (`tests/test_adversarial.py`, 19 cases; an earlier exploratory run of 76 hostile bundles).
+- **Fixed: silent omission.** A bundle with records removed and its unsigned `scope` label changed verified with no warning. `verify.py` now warns `INCOMPLETE` whenever the bundle holds fewer records than the signed checkpoint covers, and `--require-all` makes it a failure.
+- **Fixed: crashes.** 24 of 76 hostile bundles (missing or damaged files, wrong JSON types, deep nesting) ended in a Python traceback and exit 1. They now end in a clean FAILED or unreadable result (exit 2 or 3). Never `VERIFIED`, before or after.
+- **Fixed: unbounded read.** A 327 KB zip inflating to 300 MB was read whole (~600 MB of memory). Members above `--max-bytes` (default 256 MiB) are refused before reading; duplicate zip entry names and more than 64 entries are refused.
+- Stricter `records.jsonl`: each record once, ascending, with correctly typed fields (repeating or swapping lines used to pass harmlessly; it now fails).
+- `--log-key` and `--witness` keys are validated (32-byte base64) with a clear message.
+- Docs: README no longer says the verifier checks that records were "not removed" without qualification; three rules for whoever receives a bundle; removed two references to files that exist only in the private repository.
+- Importers: field names checked against the OpenTelemetry, Langfuse and LangChain primary sources; Langfuse `fields=core,basic,io` caveat documented.
+- 58 tests.
+
 ## 0.2.0 (2026-10-24)
 - `shadow --events` now reads **Langfuse, LangSmith and OpenTelemetry (OTLP/JSON)** trace exports directly; only tool calls are judged
 - `python -m omnios import export.json [--rules rules.json] --out events.jsonl`: see what was read, keep only the parameters your rules look at
