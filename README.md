@@ -264,9 +264,14 @@ omnios/report.py             the shadow report (numbers and HTML) and the CSV/JS
 omnios/policy.py             the rules language: validation and evaluation
 omnios/witnessd.py, tlog.py  the independent witness and the Merkle-tree code
 docs/                        RULES, EVIDENCE-BUNDLE-SPEC, WITNESS, KNOWN-LIMITS
+ROADMAP.md, BUILD-LOG.md, CHANGELOG.md, CONTRIBUTING.md   how it is built, in public
 examples/                    rules, events, a report, a valid and a tampered bundle, public keys
 tests/                       23 tests, no network
 ```
+
+## Built in public
+
+This is an open-source tool built in the open. The [roadmap](ROADMAP.md) says what is done and what is next, the [build log](BUILD-LOG.md) records what worked and what was wrong (including corrections), and [CONTRIBUTING.md](CONTRIBUTING.md) lists the contributions that help most: breaking the verifier, writing a second one, and importers for Langfuse, LangSmith and OpenTelemetry. Issues are welcome.
 
 ## Roadmap
 
