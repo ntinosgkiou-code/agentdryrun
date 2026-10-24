@@ -2,6 +2,13 @@
 
 A dated, honest log of what was built, what worked, and what was wrong. Newest first. Nothing here is a customer story: there are none yet.
 
+## 2026-10-24 (late night): the recorder
+- **Why:** every way in so far needed an export or a hand-made CSV. The shortest path from "I have an agent" to "show me what it would have needed approval for" is two lines of code around its tool functions.
+- **Built** `omnios.record.Recorder`, a front-office example with rules, and `pyproject.toml` so `pip install git+...` works. Checked the install in a clean virtual environment and ran `omnios`, `omnios-verify` and `Recorder` from another directory.
+- **Honest limits, also in the README:** it records attempts, not outcomes or approvals; a tool you forget to wrap is invisible; it is a measuring tool, not a security control.
+- The example agent is a script replaying invented calls. It is **not** a customer and the numbers in the example report say nothing about real agents.
+- Still pending: the name (see the entry below), and a first real user.
+
 ## 2026-10-24 (night): attacking our own verifier
 - **I wrote 76 hostile bundles and ran them against `verify.py`.** Nothing changed was ever accepted as `VERIFIED` (edited, removed, reordered or forged records, forged checkpoints, wrong key, stripped witnesses). That is the part that matters, and it held.
 - **But three things were wrong, and one of them was a real hole.**

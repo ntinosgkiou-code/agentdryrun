@@ -37,7 +37,7 @@ def main(args) -> int:
     needed = [os.path.join(EX, n) for n in ("rules-finance.json", "events.csv", "bundle-valid.zip", "bundle-tampered.zip")]
     missing = [p for p in needed if not os.path.isfile(p)]
     if missing:
-        print("the demo needs the examples/ folder of the repository; missing: " + ", ".join(os.path.basename(p) for p in missing), file=sys.stderr)
+        print("the demo needs the examples/ folder of the repository (git clone https://github.com/ntinosgkiou-code/omnios); missing: " + ", ".join(os.path.basename(p) for p in missing), file=sys.stderr)
         return 3
 
     print("OmniOS demo: what this repository does, on the shipped example (a made-up company, invented data).\n")

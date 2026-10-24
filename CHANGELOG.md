@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0 (2026-10-24)  Record your own agent
+- `omnios.record.Recorder`: two lines (`@rec.tool("name")`) write an agent's tool calls to a local events file before each call runs. Sync and async, threads, `rec.wrap` for code you cannot edit. Keeps only short scalar parameters and, with `rules=`, only the fields the rules look at. Never breaks the agent (one warning if the file cannot be written). Records the attempt only.
+- `examples/agent_demo.py` + `examples/rules-front-office.json`: a toy front-office assistant (50 invented calls: book, cancel, invoice, refund, message, win-back) and the rules for it; tests pin the verdicts (37 pass, 11 need approval, 2 refused) and check that names and message bodies never reach the file.
+- `pyproject.toml`: `pip install git+https://github.com/ntinosgkiou-code/omnios` gives the `omnios` and `omnios-verify` commands and the `Recorder` import (checked in a clean virtual environment). Optional extra `[witness]`.
+- `shadow` no longer prints the "no --permissions" note when the rules name no permission.
+- 68 tests.
+
 ## 0.3.0 (2026-10-24)  Verifier hardening
 Found by attacking our own verifier (`tests/test_adversarial.py`, 19 cases; an earlier exploratory run of 76 hostile bundles).
 - **Fixed: silent omission.** A bundle with records removed and its unsigned `scope` label changed verified with no warning. `verify.py` now warns `INCOMPLETE` whenever the bundle holds fewer records than the signed checkpoint covers, and `--require-all` makes it a failure.

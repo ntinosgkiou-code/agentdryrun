@@ -30,7 +30,8 @@ git clone https://github.com/ntinosgkiou-code/omnios && cd omnios && python -m o
 
 | | |
 |---|---|
-| **Shadow report** | Give it a list of what your agent did (a CSV, or a **Langfuse / LangSmith / OpenTelemetry** trace export) and a rules file. It judges every action as a dry run (*would pass / would need approval / would be refused*), lists the tools your agent uses that **no rule covers**, and writes a report you can hand to a manager or an auditor. Runs locally. Nothing is blocked, nothing is sent anywhere. |
+| **Recorder** | Two lines around your agent's tool functions write what it does to a local file. No vendor, no export, never breaks your agent. |
+| **Shadow report** | Give it a list of what your agent did (the recorder's file, a CSV, or a **Langfuse / LangSmith / OpenTelemetry** trace export) and a rules file. It judges every action as a dry run (*would pass / would need approval / would be refused*), lists the tools your agent uses that **no rule covers**, and writes a report you can hand to a manager or an auditor. Runs locally. Nothing is blocked, nothing is sent anywhere. |
 | **Offline verifier** | One Python file that checks an evidence bundle: every record it contains is unedited and in the signed tree; signed by the key you pinned; witnessed; the approval rules recorded in the log were followed; and it tells you when records are **missing** from the bundle. Hostile or malformed bundles end in FAILED, never in a crash or a false VERIFIED. |
 | **Independent witness** | A small service that remembers a log's checkpoints and refuses any that rewrite the past. |
 | **Rules language** | The JSON format for "this tool needs two approvers above €1,000", with a strict validator. |
@@ -52,9 +53,11 @@ python -m omnios shadow --help
 
 On Windows, use `py -3` instead of `python` if `python` is not found. No git? Use GitHub's **Code → Download ZIP** and unpack it.
 
-Only the witness service needs packages: `pip install -r requirements.txt`.
+Prefer pip? `pip install git+https://github.com/ntinosgkiou-code/omnios` gives you the `omnios` and `omnios-verify` commands and `from omnios.record import Recorder` (the demo and the examples live in the clone).
 
-Check everything works: `python -m unittest discover -s tests` (58 tests, a few seconds).
+Only the witness service needs packages: `pip install -r requirements.txt` (or `pip install "omnios[witness] @ git+https://github.com/ntinosgkiou-code/omnios"`).
+
+Check everything works: `python -m unittest discover -s tests` (68 tests, about ten seconds).
 
 ---
 
@@ -88,6 +91,40 @@ Open `my-report.html` in a browser. It shows the four numbers, a table by tool, 
 ---
 
 ## 2. Use it on your own data
+
+### Your agent is Python? Record it in two lines
+
+No export, no vendor, no change to what your agent does. Put `@rec.tool("name")` on each function the agent can call:
+
+```python
+from omnios.record import Recorder
+
+rec = Recorder("agent-events.jsonl", rules="my-rules.json")   # `rules=` keeps ONLY the parameters your rules look at
+
+@rec.tool("refunds.issue")
+def issue_refund(customer, amount_eur): ...
+```
+
+Every call appends one line to `agent-events.jsonl` *before* the function runs, then runs it unchanged. Then judge the file like any other: `python -m omnios shadow --rules my-rules.json --events agent-events.jsonl`.
+
+A complete, runnable example is [`examples/agent_demo.py`](examples/agent_demo.py): a toy front-office assistant (book, cancel, invoice, refund, message) that replays 50 invented calls, with [`examples/rules-front-office.json`](examples/rules-front-office.json):
+
+```bash
+python examples/agent_demo.py
+python -m omnios shadow --rules examples/rules-front-office.json --events agent-events.jsonl --out report.html
+```
+
+```text
+50 events judged: 37 would pass, 11 would need approval, 2 would be refused.
+tools the agent used that no rule covers: calendar.share (2)
+report: report.html   (nothing was blocked or executed)
+```
+
+What the recorder is and is not:
+- It records the **attempt**, not whether it succeeded or who approved it. A tool you did not wrap is invisible.
+- **Data minimisation:** only short scalar parameters are kept, and with `rules=` only the fields your rules look at. In the example, customer names and message bodies never reach the file (a test checks it).
+- **It never breaks your agent:** if the file cannot be written you get one warning and the call goes ahead. That makes it a measuring tool, not a security control. Making agents *ask first* is the Gateway's job, not this module's.
+- Works with sync and async functions, threads, and code you cannot edit (`rec.wrap(client.send, "payments.send")`).
 
 ### Already tracing your agent with Langfuse, LangSmith or OpenTelemetry? Skip step 1
 
@@ -318,7 +355,9 @@ The complete list is in [`docs/KNOWN-LIMITS.md`](docs/KNOWN-LIMITS.md).
 ```text
 verify.py                    the offline verifier (single file, standard library only)
 omnios/demo.py               `python -m omnios demo`: the shadow report and the verifier on the example, in one command
+omnios/record.py             `Recorder`: two lines that write your agent's tool calls to a local events file
 omnios/importers.py          reads tool calls from Langfuse, LangSmith and OpenTelemetry exports; the `import` command
+pyproject.toml               makes `pip install git+https://github.com/ntinosgkiou-code/omnios` work
 omnios/shadow.py             the dry-run judge and the `shadow` command
 omnios/report.py             the shadow report (numbers and HTML) and the CSV/JSONL loader
 omnios/policy.py             the rules language: validation and evaluation
@@ -326,7 +365,8 @@ omnios/witnessd.py, tlog.py  the independent witness and the Merkle-tree code
 docs/                        RULES, EVIDENCE-BUNDLE-SPEC, WITNESS, KNOWN-LIMITS
 ROADMAP.md, BUILD-LOG.md, CHANGELOG.md, CONTRIBUTING.md   how it is built, in public
 examples/                    rules, events, a report, a valid and a tampered bundle, public keys
-tests/                       58 tests, no network (test_adversarial.py attacks the verifier with hostile bundles)
+tests/                       68 tests, no network (test_adversarial.py attacks the verifier with hostile bundles)
+examples/agent_demo.py       a toy agent recorded with two lines; rules-front-office.json are its rules
 examples/traces/             invented Langfuse, LangSmith and OpenTelemetry exports of the same 45 actions
 tools/make_trace_examples.py re-creates examples/traces/ from examples/events.csv
 tools/make_demo_gif.py       optional (needs Pillow): re-creates docs/assets/demo.gif from the real demo output

@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "omnios"
+version = "0.4.0"
+description = "Record what your AI agents did, judge it against your rules locally, and verify evidence bundles offline."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = []
+classifiers = [
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Intended Audience :: Developers",
+  "Topic :: Security",
+]
+
+[project.optional-dependencies]
+witness = ["cryptography>=42", "fastapi>=0.110", "uvicorn>=0.29", "pydantic>=2"]
+
+[project.scripts]
+omnios = "omnios.__main__:main"
+omnios-verify = "verify:main"
+
+[tool.setuptools]
+packages = ["omnios"]
+py-modules = ["verify"]

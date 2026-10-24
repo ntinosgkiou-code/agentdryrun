@@ -15,7 +15,10 @@ Honest status, updated as things ship. Checked = in this repository and tested.
 
 - [x] Attack tests for the verifier: hostile bundles, relabelled scope, oversize and malformed files (`tests/test_adversarial.py`); `--require-all`, `--max-bytes`
 
+- [x] `Recorder`: two lines around an agent's tool functions write the events the shadow report reads; `pip install git+...`
+
 ## Next
+- [ ] A recorder for non-Python agents (a tiny HTTP or CLI shim), and adapters for the common agent frameworks' tool decorators
 - [ ] Cross-check our checkpoint and `cosignature/v1` bytes against a second implementation (for example Go's `x/mod/sumdb/note`)
 - [ ] Check the three readers against **real** exports (send a redacted sample), and fix what they get wrong
 - [ ] More sources: OpenInference / Phoenix, Braintrust, Helicone, plain OpenAI and Anthropic tool-call logs

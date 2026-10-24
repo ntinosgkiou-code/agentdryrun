@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "default_unknown_tool": "pending",
+  "tools": {
+    "appointments.book": {
+      "description": "Book an appointment",
+      "reversibility": "two_way",
+      "risk": "low"
+    },
+    "appointments.reschedule": {
+      "description": "Move an appointment",
+      "reversibility": "two_way",
+      "risk": "low"
+    },
+    "appointments.cancel": {
+      "description": "Cancel an appointment",
+      "reversibility": "two_way",
+      "risk": "low",
+      "escalate": [
+        {
+          "when": {"field": "hours_before", "op": "<", "value": 2},
+          "reason": "Late cancellation: a human decides about the fee"
+        }
+      ]
+    },
+    "customers.add": {
+      "description": "Create a customer record",
+      "reversibility": "two_way",
+      "risk": "low"
+    },
+    "customers.note": {
+      "description": "Add a note to a customer record",
+      "reversibility": "two_way",
+      "risk": "low"
+    },
+    "invoices.create": {
+      "description": "Issue an invoice",
+      "reversibility": "two_way",
+      "risk": "low",
+      "deny": [
+        {"when": {"field": "amount_eur", "op": ">", "value": 5000}, "reason": "Above the 5,000 EUR ceiling for an invoice raised by the assistant"}
+      ],
+      "escalate": [
+        {"when": {"field": "amount_eur", "op": ">", "value": 500}, "reason": "Large invoice: a human checks it"}
+      ]
+    },
+    "payments.record": {
+      "description": "Record a payment received",
+      "reversibility": "one_way_recoverable",
+      "risk": "low",
+      "escalate": [
+        {"when": {"field": "amount_eur", "op": ">", "value": 1000}, "reason": "Large payment recorded: a human confirms it matches the bank"}
+      ]
+    },
+    "refunds.issue": {
+      "description": "Refund a customer",
+      "reversibility": "one_way_recoverable",
+      "risk": "high",
+      "deny": [
+        {"when": {"field": "amount_eur", "op": ">", "value": 1000}, "reason": "Above the 1,000 EUR refund ceiling"}
+      ],
+      "limits": [
+        {"field": "amount_eur", "per": "day", "max": 1500, "on_exceed": "escalate"}
+      ],
+      "approvals": {
+        "required": 1,
+        "extra": [{"when": {"field": "amount_eur", "op": ">", "value": 200}, "required": 2}]
+      }
+    },
+    "messages.send": {
+      "description": "Send an SMS or email to customers",
+      "reversibility": "one_way_recoverable",
+      "risk": "low",
+      "escalate": [
+        {"when": {"field": "recipients", "op": ">", "value": 1}, "reason": "Bulk message: a human approves the wording and the list"}
+      ]
+    },
+    "winback.send": {
+      "description": "Send a win-back campaign to past customers",
+      "reversibility": "one_way_recoverable",
+      "risk": "low",
+      "escalate": [
+        {"when": {"field": "recipients", "op": ">", "value": 20}, "reason": "Campaign larger than 20 people"}
+      ],
+      "limits": [
+        {"field": "recipients", "per": "week", "max": 100, "on_exceed": "escalate"}
+      ]
+    }
+  }
+}

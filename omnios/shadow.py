@@ -141,7 +141,8 @@ def main(args) -> int:
         print(f"cannot read the events: {e}", file=sys.stderr)
         return 3
     perms = {p.strip() for p in args.permissions.split(",") if p.strip()} if args.permissions else None
-    if perms is None:
+    names_permissions = any(isinstance(t, dict) and t.get("permission") for t in (policy.get("tools") or {}).values())
+    if perms is None and names_permissions:
         print("note: no --permissions given, so the agent is assumed to hold every permission named in the rules. "
               "Pass --permissions to test the real set.", file=sys.stderr)
     obs = run_shadow(policy, events, agent=args.agent, permissions=perms)
