@@ -248,11 +248,11 @@ def try_load(path: str, keep_fields: Optional[set] = None):
     if not events:
         raise ValueError(f"this is a {info['format']} export with {info['records']} {info['unit']}, but none is a tool call "
                          f"(Langfuse: type TOOL; LangSmith: run_type tool; OpenTelemetry: gen_ai.operation.name = execute_tool)")
+    info["tool_calls"] = len(events)
+    info["with_parameters"] = sum(1 for e in events if e["params"])      # counted before any filtering: it says what the export held
     if keep_fields is not None:
         for ev in events:
             ev["params"] = {k: v for k, v in ev["params"].items() if k in keep_fields}
-    info["tool_calls"] = len(events)
-    info["with_parameters"] = sum(1 for e in events if e["params"])
     events.sort(key=lambda e: e.get("occurred_at") if e.get("occurred_at") is not None else float("inf"))
     return events, info
 

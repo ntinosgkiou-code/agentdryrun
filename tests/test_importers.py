@@ -149,9 +149,11 @@ class Boundaries(unittest.TestCase):
     def test_fields_in_rules_and_keep_filter(self):
         fields = importers.fields_in_rules(example_rules())
         self.assertIn("amount_eur", fields)
-        events, _ = importers.try_load(os.path.join(EX, "traces", "langfuse.json"), keep_fields={"amount_eur"})
+        events, info = importers.try_load(os.path.join(EX, "traces", "langfuse.json"), keep_fields={"amount_eur"})
         self.assertTrue(all(set(e["params"]) <= {"amount_eur"} for e in events))
         self.assertTrue(any(e["params"] for e in events))
+        self.assertEqual(info["with_parameters"], 45)                       # the export held parameters; filtering is not "missing"
+        self.assertNotIn("without parameters", importers.describe(info))
 
 
 class Cli(unittest.TestCase):
