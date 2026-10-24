@@ -2,6 +2,12 @@
 
 A dated, honest log of what was built, what worked, and what was wrong. Newest first. Nothing here is a customer story: there are none yet.
 
+## 2026-10-24 (later)
+- **Published** this repository. The first CI run **failed**: `ubuntu-latest` is now Ubuntu 26.04, which has no Python 3.9 build, and the other two matrix jobs were cancelled by fail-fast. Not a code problem; fixed by pinning `ubuntu-24.04` and setting `fail-fast: false`. All three versions pass.
+- **A mistake, corrected:** the README said `git clone <this repository>` until it was actually published. It now has the real URL.
+- **Added** `python -m omnios demo` (one command shows the shadow report, a bundle that verifies and a tampered one that fails), a terminal recording, a screenshot of the example report and a social preview image. The recording is generated from the real output of the command by `tools/make_demo_gif.py`; only the typing speed is staged. The demo prints only the lines that decide each outcome; the full output is `verify.py`'s.
+- Still true: no external review, no customers, no known users. 24 tests.
+
 ## 2026-10-24
 - **Checked** that `verify.py` runs with no third-party packages at all. With `cryptography` blocked it reports `signature check: pure-python` and still returns `VERIFIED` on the example bundle.
 - **Added** this log, the roadmap, the changelog and contribution notes, so progress and mistakes are visible.

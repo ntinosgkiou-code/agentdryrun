@@ -1,10 +1,24 @@
 # OmniOS
 
+[![tests](https://github.com/ntinosgkiou-code/omnios/actions/workflows/tests.yml/badge.svg)](https://github.com/ntinosgkiou-code/omnios/actions/workflows/tests.yml)
+
 **See what your AI agents did, check it without trusting anyone, and find out where your rules would have stopped them.**
 
 When an AI agent moves money, changes a customer record or deletes data, sooner or later someone asks:
 *who approved this? can you show the record was not changed afterwards? where would your rules have stopped it?*
 OmniOS answers all three. This repository is the part you can **read, run and check yourself**.
+
+![Terminal recording of python -m omnios demo: a shadow report on a made-up payments agent, an evidence bundle that verifies, and the same bundle after one approval was edited, which fails](docs/assets/demo.gif)
+
+*That is the real output of one command on the example in this repository (invented data). Regenerate the recording with [`tools/make_demo_gif.py`](tools/make_demo_gif.py).*
+
+**Try it now.** Python 3.9 or newer, nothing to install, nothing leaves your machine:
+
+```bash
+git clone https://github.com/ntinosgkiou-code/omnios && cd omnios && python -m omnios demo
+```
+
+(No git? **Code → Download ZIP**, unpack, run `python -m omnios demo` inside. On Windows use `py -3` if `python` is not found.)
 
 > **Status: prototype.** No external security review. Never run with a real customer or bank. Read [what it cannot prove](docs/KNOWN-LIMITS.md) before relying on any of it.
 
@@ -29,8 +43,9 @@ OmniOS answers all three. This repository is the part you can **read, run and ch
 You need **Python 3.9 or newer**. The shadow report and the verifier need **nothing else**: no packages, no account, no network.
 
 ```bash
-git clone <this repository>
+git clone https://github.com/ntinosgkiou-code/omnios
 cd omnios
+python -m omnios demo          # the whole thing on the shipped example
 python verify.py --help
 python -m omnios shadow --help
 ```
@@ -39,7 +54,7 @@ On Windows, use `py -3` instead of `python` if `python` is not found. No git? Us
 
 Only the witness service needs packages: `pip install -r requirements.txt`.
 
-Check everything works: `python -m unittest discover -s tests` (23 tests, about a second).
+Check everything works: `python -m unittest discover -s tests` (24 tests, about a second).
 
 ---
 
@@ -63,6 +78,10 @@ report: my-report.html   (nothing was blocked or executed)
 ```
 
 Open `my-report.html` in a browser. It shows the four numbers, a table by tool, why actions did not pass, and **"look at these first"**: the refused and escalated actions, newest first. A ready-made copy is in [`examples/shadow-report.html`](examples/shadow-report.html).
+
+![The shadow report for the example: 45 actions reported, 16 would have been allowed, 20 would have needed approval, 9 would have been refused, and the two tools no rule covers](docs/assets/shadow-report.png)
+
+*The top of the example report. It is marked SAMPLE because the company, vendors and amounts are invented.*
 
 **How to read it.** The tools your agent uses that *no rule covers* are usually the most interesting finding: nobody decided whether it may do that. Then look at the refused actions (what would have been blocked, and why), then at the share that would have needed a human (is that a number your team could actually handle?).
 
@@ -259,6 +278,7 @@ The complete list is in [`docs/KNOWN-LIMITS.md`](docs/KNOWN-LIMITS.md).
 
 ```text
 verify.py                    the offline verifier (single file, standard library only)
+omnios/demo.py               `python -m omnios demo`: the shadow report and the verifier on the example, in one command
 omnios/shadow.py             the dry-run judge and the `shadow` command
 omnios/report.py             the shadow report (numbers and HTML) and the CSV/JSONL loader
 omnios/policy.py             the rules language: validation and evaluation
@@ -266,7 +286,9 @@ omnios/witnessd.py, tlog.py  the independent witness and the Merkle-tree code
 docs/                        RULES, EVIDENCE-BUNDLE-SPEC, WITNESS, KNOWN-LIMITS
 ROADMAP.md, BUILD-LOG.md, CHANGELOG.md, CONTRIBUTING.md   how it is built, in public
 examples/                    rules, events, a report, a valid and a tampered bundle, public keys
-tests/                       23 tests, no network
+tests/                       24 tests, no network
+tools/make_demo_gif.py       optional (needs Pillow): re-creates docs/assets/demo.gif from the real demo output
+docs/assets/                 the recording, the report screenshot and the social preview image
 ```
 
 ## Built in public

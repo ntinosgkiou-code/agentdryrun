@@ -1,4 +1,5 @@
 """
+python -m omnios demo                                                                 the whole thing on the shipped example, one command
 python -m omnios shadow --rules rules.json --events events.csv --out report.html    judge what your agent did (dry run, local)
 python -m omnios rules check rules.json                                              validate a rules file
 python -m omnios witness init|run|serve|report                                       the independent witness
@@ -26,6 +27,9 @@ def main(argv: Optional[list] = None) -> int:
     p.add_argument("--name", default="Your company", help="name shown on the report")
     p.add_argument("--banner", help="a notice shown at the top of the report")
 
+    p = sub.add_parser("demo", help="run the shadow report and the verifier on the shipped example (one command)")
+    p.add_argument("--out", default="omnios-demo-report.html", help="where to write the demo's shadow report")
+
     r = sub.add_parser("rules", help="work with a rules file").add_subparsers(dest="sub", required=True)
     p = r.add_parser("check", help="validate a rules file")
     p.add_argument("file")
@@ -50,6 +54,9 @@ def main(argv: Optional[list] = None) -> int:
     if a.cmd == "shadow":
         from . import shadow
         return shadow.main(a)
+    if a.cmd == "demo":
+        from . import demo
+        return demo.main(a)
     if a.cmd == "rules":
         from .policy import validate_policy
         try:
