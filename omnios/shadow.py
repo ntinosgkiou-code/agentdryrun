@@ -130,7 +130,13 @@ def main(args) -> int:
         print("the rules file is not valid:\n  " + "\n  ".join(errs), file=sys.stderr)
         return 3
     try:
-        events = load_events(args.events)
+        from . import importers
+        traced = importers.try_load(args.events)          # an OpenTelemetry / Langfuse / LangSmith export, read as it is
+        if traced:
+            events = traced[0]
+            print("read a " + importers.describe(traced[1]))
+        else:
+            events = load_events(args.events)
     except (OSError, ValueError) as e:
         print(f"cannot read the events: {e}", file=sys.stderr)
         return 3

@@ -1,0 +1,1026 @@
+{
+ "data": [
+  {
+   "id": "gen-000",
+   "traceId": "trace-000",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-06T21:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-001",
+   "traceId": "trace-000",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-06T21:00:00.000Z",
+   "input": {
+    "vendor": "Delta Supplies",
+    "amount_eur": 320
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-001",
+   "traceId": "trace-001",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-07T15:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-002",
+   "traceId": "trace-001",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-07T15:00:00.000Z",
+   "input": {
+    "vendor": "Orion Logistics",
+    "amount_eur": 780
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-002",
+   "traceId": "trace-002",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-07T23:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "inv-001",
+   "traceId": "trace-002",
+   "type": "TOOL",
+   "name": "invoices.mark_paid",
+   "startTime": "2026-10-07T23:00:00.000Z",
+   "input": {
+    "invoice": "INV-1000"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-003",
+   "traceId": "trace-003",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-08T09:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-003",
+   "traceId": "trace-003",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-08T09:00:00.000Z",
+   "input": {
+    "vendor": "Nova Print",
+    "amount_eur": 1250
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-004",
+   "traceId": "trace-004",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-08T18:12:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "inv-002",
+   "traceId": "trace-004",
+   "type": "TOOL",
+   "name": "invoices.mark_paid",
+   "startTime": "2026-10-08T18:12:00.000Z",
+   "input": {
+    "invoice": "INV-1001"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-005",
+   "traceId": "trace-005",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-09T03:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-004",
+   "traceId": "trace-005",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-09T03:00:00.000Z",
+   "input": {
+    "vendor": "Atlas Cleaning",
+    "amount_eur": 410
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-006",
+   "traceId": "trace-006",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-09T13:24:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "inv-003",
+   "traceId": "trace-006",
+   "type": "TOOL",
+   "name": "invoices.mark_paid",
+   "startTime": "2026-10-09T13:24:00.000Z",
+   "input": {
+    "invoice": "INV-1002"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-007",
+   "traceId": "trace-007",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-09T21:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-005",
+   "traceId": "trace-007",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-09T21:00:00.000Z",
+   "input": {
+    "vendor": "Kappa Software",
+    "amount_eur": 2900
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-008",
+   "traceId": "trace-008",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-10T08:36:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "inv-004",
+   "traceId": "trace-008",
+   "type": "TOOL",
+   "name": "invoices.mark_paid",
+   "startTime": "2026-10-10T08:36:00.000Z",
+   "input": {
+    "invoice": "INV-1003"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-009",
+   "traceId": "trace-009",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-10T15:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-006",
+   "traceId": "trace-009",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-10T15:00:00.000Z",
+   "input": {
+    "vendor": "Delta Supplies",
+    "amount_eur": 560
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-010",
+   "traceId": "trace-010",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-11T03:48:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "inv-005",
+   "traceId": "trace-010",
+   "type": "TOOL",
+   "name": "invoices.mark_paid",
+   "startTime": "2026-10-11T03:48:00.000Z",
+   "input": {
+    "invoice": "INV-1004"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-011",
+   "traceId": "trace-011",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-11T09:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-007",
+   "traceId": "trace-011",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-11T09:00:00.000Z",
+   "input": {
+    "vendor": "Orion Logistics",
+    "amount_eur": 7800
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-012",
+   "traceId": "trace-012",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-11T12:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "iban-1",
+   "traceId": "trace-012",
+   "type": "TOOL",
+   "name": "vendors.bank_details.change",
+   "startTime": "2026-10-11T12:00:00.000Z",
+   "input": {
+    "vendor": "Delta Supplies",
+    "iban": "GR00 0000 0000"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-013",
+   "traceId": "trace-013",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-11T23:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "inv-006",
+   "traceId": "trace-013",
+   "type": "TOOL",
+   "name": "invoices.mark_paid",
+   "startTime": "2026-10-11T23:00:00.000Z",
+   "input": {
+    "invoice": "INV-1005"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-014",
+   "traceId": "trace-014",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-12T03:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-008",
+   "traceId": "trace-014",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-12T03:00:00.000Z",
+   "input": {
+    "vendor": "Nova Print",
+    "amount_eur": 1500
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-015",
+   "traceId": "trace-015",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-12T18:12:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "inv-007",
+   "traceId": "trace-015",
+   "type": "TOOL",
+   "name": "invoices.mark_paid",
+   "startTime": "2026-10-12T18:12:00.000Z",
+   "input": {
+    "invoice": "INV-1006"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-016",
+   "traceId": "trace-016",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-12T21:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-009",
+   "traceId": "trace-016",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-12T21:00:00.000Z",
+   "input": {
+    "vendor": "Atlas Cleaning",
+    "amount_eur": 240
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-017",
+   "traceId": "trace-017",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-13T13:24:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "inv-008",
+   "traceId": "trace-017",
+   "type": "TOOL",
+   "name": "invoices.mark_paid",
+   "startTime": "2026-10-13T13:24:00.000Z",
+   "input": {
+    "invoice": "INV-1007"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-018",
+   "traceId": "trace-018",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-13T15:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-010",
+   "traceId": "trace-018",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-13T15:00:00.000Z",
+   "input": {
+    "vendor": "Kappa Software",
+    "amount_eur": 3100
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-019",
+   "traceId": "trace-019",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-14T08:36:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "inv-009",
+   "traceId": "trace-019",
+   "type": "TOOL",
+   "name": "invoices.mark_paid",
+   "startTime": "2026-10-14T08:36:00.000Z",
+   "input": {
+    "invoice": "INV-1008"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-020",
+   "traceId": "trace-020",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-14T09:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-011",
+   "traceId": "trace-020",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-14T09:00:00.000Z",
+   "input": {
+    "vendor": "Delta Supplies",
+    "amount_eur": 980
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-021",
+   "traceId": "trace-021",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-14T12:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "contract-1",
+   "traceId": "trace-021",
+   "type": "TOOL",
+   "name": "contracts.sign",
+   "startTime": "2026-10-14T12:00:00.000Z",
+   "input": {
+    "counterparty": "Delta Supplies",
+    "value_eur": 15000
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-022",
+   "traceId": "trace-022",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-15T03:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-012",
+   "traceId": "trace-022",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-15T03:00:00.000Z",
+   "input": {
+    "vendor": "Orion Logistics",
+    "amount_eur": 12400
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-023",
+   "traceId": "trace-023",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-15T03:48:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "inv-010",
+   "traceId": "trace-023",
+   "type": "TOOL",
+   "name": "invoices.mark_paid",
+   "startTime": "2026-10-15T03:48:00.000Z",
+   "input": {
+    "invoice": "INV-1009"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-024",
+   "traceId": "trace-024",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-15T12:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "iban-2",
+   "traceId": "trace-024",
+   "type": "TOOL",
+   "name": "vendors.bank_details.change",
+   "startTime": "2026-10-15T12:00:00.000Z",
+   "input": {
+    "vendor": "Kappa Software",
+    "iban": "GR00 0000 0000"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-025",
+   "traceId": "trace-025",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-15T12:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "contract-2",
+   "traceId": "trace-025",
+   "type": "TOOL",
+   "name": "contracts.sign",
+   "startTime": "2026-10-15T12:00:00.000Z",
+   "input": {
+    "counterparty": "Orion Logistics",
+    "value_eur": 30000
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-026",
+   "traceId": "trace-026",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-15T21:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-013",
+   "traceId": "trace-026",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-15T21:00:00.000Z",
+   "input": {
+    "vendor": "Nova Print",
+    "amount_eur": 640
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-027",
+   "traceId": "trace-027",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-15T23:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "inv-011",
+   "traceId": "trace-027",
+   "type": "TOOL",
+   "name": "invoices.mark_paid",
+   "startTime": "2026-10-15T23:00:00.000Z",
+   "input": {
+    "invoice": "INV-1010"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-028",
+   "traceId": "trace-028",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-16T12:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "contract-3",
+   "traceId": "trace-028",
+   "type": "TOOL",
+   "name": "contracts.sign",
+   "startTime": "2026-10-16T12:00:00.000Z",
+   "input": {
+    "counterparty": "Nova Print",
+    "value_eur": 45000
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-029",
+   "traceId": "trace-029",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-16T15:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-014",
+   "traceId": "trace-029",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-16T15:00:00.000Z",
+   "input": {
+    "vendor": "Atlas Cleaning",
+    "amount_eur": 4100
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-030",
+   "traceId": "trace-030",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-16T18:12:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "inv-012",
+   "traceId": "trace-030",
+   "type": "TOOL",
+   "name": "invoices.mark_paid",
+   "startTime": "2026-10-16T18:12:00.000Z",
+   "input": {
+    "invoice": "INV-1011"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-031",
+   "traceId": "trace-031",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-17T09:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-015",
+   "traceId": "trace-031",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-17T09:00:00.000Z",
+   "input": {
+    "vendor": "Kappa Software",
+    "amount_eur": 9200
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-032",
+   "traceId": "trace-032",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-17T12:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-burst-0",
+   "traceId": "trace-032",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-17T12:00:00.000Z",
+   "input": {
+    "vendor": "Delta Supplies",
+    "amount_eur": 6500
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-033",
+   "traceId": "trace-033",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-17T12:15:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-burst-1",
+   "traceId": "trace-033",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-17T12:15:00.000Z",
+   "input": {
+    "vendor": "Delta Supplies",
+    "amount_eur": 6500
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-034",
+   "traceId": "trace-034",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-17T12:30:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-burst-2",
+   "traceId": "trace-034",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-17T12:30:00.000Z",
+   "input": {
+    "vendor": "Delta Supplies",
+    "amount_eur": 6500
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-035",
+   "traceId": "trace-035",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-17T13:24:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "inv-013",
+   "traceId": "trace-035",
+   "type": "TOOL",
+   "name": "invoices.mark_paid",
+   "startTime": "2026-10-17T13:24:00.000Z",
+   "input": {
+    "invoice": "INV-1012"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-036",
+   "traceId": "trace-036",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-18T03:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-016",
+   "traceId": "trace-036",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-18T03:00:00.000Z",
+   "input": {
+    "vendor": "Delta Supplies",
+    "amount_eur": 880
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-037",
+   "traceId": "trace-037",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-18T08:36:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "inv-014",
+   "traceId": "trace-037",
+   "type": "TOOL",
+   "name": "invoices.mark_paid",
+   "startTime": "2026-10-18T08:36:00.000Z",
+   "input": {
+    "invoice": "INV-1013"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-038",
+   "traceId": "trace-038",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-18T12:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-noamount",
+   "traceId": "trace-038",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-18T12:00:00.000Z",
+   "input": {
+    "vendor": "Orion Logistics"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-039",
+   "traceId": "trace-039",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-18T12:10:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-badnumber",
+   "traceId": "trace-039",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-18T12:10:00.000Z",
+   "input": {
+    "vendor": "Nova Print",
+    "amount_eur": "1 200,50"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-040",
+   "traceId": "trace-040",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-18T21:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-017",
+   "traceId": "trace-040",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-18T21:00:00.000Z",
+   "input": {
+    "vendor": "Orion Logistics",
+    "amount_eur": 5600
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-041",
+   "traceId": "trace-041",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-19T03:48:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "inv-015",
+   "traceId": "trace-041",
+   "type": "TOOL",
+   "name": "invoices.mark_paid",
+   "startTime": "2026-10-19T03:48:00.000Z",
+   "input": {
+    "invoice": "INV-1014"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-042",
+   "traceId": "trace-042",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-19T12:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "mail-1",
+   "traceId": "trace-042",
+   "type": "TOOL",
+   "name": "email.send",
+   "startTime": "2026-10-19T12:00:00.000Z",
+   "input": {
+    "to": "supplier@example.com"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-043",
+   "traceId": "trace-043",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-19T15:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "pay-018",
+   "traceId": "trace-043",
+   "type": "TOOL",
+   "name": "payments.send",
+   "startTime": "2026-10-19T15:00:00.000Z",
+   "input": {
+    "vendor": "Nova Print",
+    "amount_eur": 430
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "gen-044",
+   "traceId": "trace-044",
+   "type": "GENERATION",
+   "name": "plan-next-step",
+   "startTime": "2026-10-19T23:00:00.000Z",
+   "input": "(model prompt)",
+   "output": "(model answer)"
+  },
+  {
+   "id": "inv-016",
+   "traceId": "trace-044",
+   "type": "TOOL",
+   "name": "invoices.mark_paid",
+   "startTime": "2026-10-19T23:00:00.000Z",
+   "input": {
+    "invoice": "INV-1015"
+   },
+   "output": {
+    "ok": true
+   }
+  }
+ ],
+ "meta": {
+  "page": 1,
+  "limit": 90,
+  "totalItems": 90
+ }
+}

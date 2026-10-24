@@ -2,6 +2,11 @@
 
 A dated, honest log of what was built, what worked, and what was wrong. Newest first. Nothing here is a customer story: there are none yet.
 
+## 2026-10-24 (evening)
+- **Added trace readers** (Langfuse, LangSmith, OpenTelemetry OTLP/JSON) so the shadow report runs on an export in one command instead of a hand-made CSV. The three invented example exports give the same 45 verdicts as `events.csv` (16 / 20 / 9), and a test keeps it that way.
+- **What is NOT verified:** I wrote the readers from the vendors' documented field names and did not check them against exports from live systems (a documentation lookup was not done before writing them). The README and the module say so. If a reader is wrong on your data, that is a bug report, not a surprise.
+- Known gaps: OpenTelemetry tool arguments are opt-in in the convention, so many exports will have none; an export does not say whether a call succeeded; tool names must match the rules file.
+
 ## 2026-10-24 (later)
 - **Published** this repository. The first CI run **failed**: `ubuntu-latest` is now Ubuntu 26.04, which has no Python 3.9 build, and the other two matrix jobs were cancelled by fail-fast. Not a code problem; fixed by pinning `ubuntu-24.04` and setting `fail-fast: false`. All three versions pass.
 - **A mistake, corrected:** the README said `git clone <this repository>` until it was actually published. It now has the real URL.

@@ -30,7 +30,7 @@ git clone https://github.com/ntinosgkiou-code/omnios && cd omnios && python -m o
 
 | | |
 |---|---|
-| **Shadow report** | Give it a list of what your agent did and a rules file. It judges every action as a dry run (*would pass / would need approval / would be refused*), lists the tools your agent uses that **no rule covers**, and writes a report you can hand to a manager or an auditor. Runs locally. Nothing is blocked, nothing is sent anywhere. |
+| **Shadow report** | Give it a list of what your agent did (a CSV, or a **Langfuse / LangSmith / OpenTelemetry** trace export) and a rules file. It judges every action as a dry run (*would pass / would need approval / would be refused*), lists the tools your agent uses that **no rule covers**, and writes a report you can hand to a manager or an auditor. Runs locally. Nothing is blocked, nothing is sent anywhere. |
 | **Offline verifier** | One Python file that checks an evidence bundle: records not edited, not reordered, not removed; signed by the key you pinned; witnessed; and the approval rules recorded in the log were followed. |
 | **Independent witness** | A small service that remembers a log's checkpoints and refuses any that rewrite the past. |
 | **Rules language** | The JSON format for "this tool needs two approvers above €1,000", with a strict validator. |
@@ -54,7 +54,7 @@ On Windows, use `py -3` instead of `python` if `python` is not found. No git? Us
 
 Only the witness service needs packages: `pip install -r requirements.txt`.
 
-Check everything works: `python -m unittest discover -s tests` (24 tests, about a second).
+Check everything works: `python -m unittest discover -s tests` (39 tests, about a second).
 
 ---
 
@@ -89,7 +89,38 @@ Open `my-report.html` in a browser. It shows the four numbers, a table by tool, 
 
 ## 2. Use it on your own data
 
-### Step 1: write down what your agent did
+### Already tracing your agent with Langfuse, LangSmith or OpenTelemetry? Skip step 1
+
+Point `--events` straight at the export. The tool calls are found and judged; everything else (model calls, retrieval) is skipped.
+
+```bash
+python -m omnios shadow --rules examples/rules-finance.json --events examples/traces/langfuse.json \
+  --permissions finance:pay,finance:vendor-admin,finance:books --out report.html
+```
+
+```text
+read a Langfuse export: 90 observations, 45 tool calls
+45 events judged: 16 would pass, 20 would need approval, 9 would be refused.
+tools the agent used that no rule covers: contracts.sign (3), email.send (1)
+report: report.html   (nothing was blocked or executed)
+```
+
+| Your tool | What to export | What counts as a tool call |
+|---|---|---|
+| **Langfuse** | observations as JSON or JSON Lines (a list, `{"data": [...]}`, or traces that carry `observations`) | `type: TOOL` (name = the tool, `input` = its parameters) |
+| **LangSmith** | runs as JSON or JSON Lines (a list or `{"runs": [...]}`) | `run_type: tool` (name = the tool, `inputs` = its parameters) |
+| **OpenTelemetry** | OTLP/JSON (`resourceSpans`) | a span with `gen_ai.operation.name = execute_tool` or `gen_ai.tool.name`; parameters from `gen_ai.tool.call.arguments` |
+
+To see what was read before judging it, or to keep only the parameters your rules look at (recommended before you share a file): `python -m omnios import export.json --rules my-rules.json --out events.jsonl`.
+
+**Read this before trusting it on your own export.**
+- The three readers follow the vendors' documented field names and were tested on **invented** fixtures ([`examples/traces/`](examples/traces/)), not on exports from live systems. If yours is read wrongly or not at all, open an issue with a redacted sample: that is the most useful report you can send.
+- OpenTelemetry records tool **arguments** only if your instrumentation is set to (the convention makes it opt-in). Without them, rules that need a field send those actions to a human, and the tool says how many.
+- Your tool names must match the names in the rules file. Names that match no rule show up under *tools the agent used that no rule covers*, which is usually the finding.
+- An export does not say whether a call **succeeded** or who approved it. A failed call is still an attempted action.
+- Everything runs locally, like the rest of the shadow report.
+
+### Otherwise, step 1: write down what your agent did
 
 A CSV file (or JSON Lines) with one row per action. Export it from your logs, your agent framework, or your payment system.
 
@@ -279,6 +310,7 @@ The complete list is in [`docs/KNOWN-LIMITS.md`](docs/KNOWN-LIMITS.md).
 ```text
 verify.py                    the offline verifier (single file, standard library only)
 omnios/demo.py               `python -m omnios demo`: the shadow report and the verifier on the example, in one command
+omnios/importers.py          reads tool calls from Langfuse, LangSmith and OpenTelemetry exports; the `import` command
 omnios/shadow.py             the dry-run judge and the `shadow` command
 omnios/report.py             the shadow report (numbers and HTML) and the CSV/JSONL loader
 omnios/policy.py             the rules language: validation and evaluation
@@ -286,14 +318,16 @@ omnios/witnessd.py, tlog.py  the independent witness and the Merkle-tree code
 docs/                        RULES, EVIDENCE-BUNDLE-SPEC, WITNESS, KNOWN-LIMITS
 ROADMAP.md, BUILD-LOG.md, CHANGELOG.md, CONTRIBUTING.md   how it is built, in public
 examples/                    rules, events, a report, a valid and a tampered bundle, public keys
-tests/                       24 tests, no network
+tests/                       39 tests, no network
+examples/traces/             invented Langfuse, LangSmith and OpenTelemetry exports of the same 45 actions
+tools/make_trace_examples.py re-creates examples/traces/ from examples/events.csv
 tools/make_demo_gif.py       optional (needs Pillow): re-creates docs/assets/demo.gif from the real demo output
 docs/assets/                 the recording, the report screenshot and the social preview image
 ```
 
 ## Built in public
 
-This is an open-source tool built in the open. The [roadmap](ROADMAP.md) says what is done and what is next, the [build log](BUILD-LOG.md) records what worked and what was wrong (including corrections), and [CONTRIBUTING.md](CONTRIBUTING.md) lists the contributions that help most: breaking the verifier, writing a second one, and importers for Langfuse, LangSmith and OpenTelemetry. Issues are welcome.
+This is an open-source tool built in the open. The [roadmap](ROADMAP.md) says what is done and what is next, the [build log](BUILD-LOG.md) records what worked and what was wrong (including corrections), and [CONTRIBUTING.md](CONTRIBUTING.md) lists the contributions that help most: breaking the verifier, writing a second one, and checking the Langfuse, LangSmith and OpenTelemetry readers against real exports. Issues are welcome.
 
 ## Roadmap
 

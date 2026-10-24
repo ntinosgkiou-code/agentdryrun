@@ -1,0 +1,2545 @@
+{
+ "resourceSpans": [
+  {
+   "resource": {
+    "attributes": [
+     {
+      "key": "service.name",
+      "value": {
+       "stringValue": "acme-demo-agent"
+      }
+     }
+    ]
+   },
+   "scopeSpans": [
+    {
+     "scope": {
+      "name": "demo"
+     },
+     "spans": [
+      {
+       "traceId": "00000000000000000000000000000000",
+       "spanId": "0000000000000001",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791320398000000000",
+       "endTimeUnixNano": "1791320399000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000000",
+       "spanId": "00000000000003e8",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1791320400000000000",
+       "endTimeUnixNano": "1791320400500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-001"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Delta Supplies\", \"amount_eur\": 320}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000001",
+       "spanId": "0000000000000002",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791385198000000000",
+       "endTimeUnixNano": "1791385199000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000001",
+       "spanId": "00000000000003e9",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1791385200000000000",
+       "endTimeUnixNano": "1791385200500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-002"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Orion Logistics\", \"amount_eur\": 780}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000002",
+       "spanId": "0000000000000003",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791413998000000000",
+       "endTimeUnixNano": "1791413999000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000002",
+       "spanId": "00000000000003ea",
+       "name": "execute_tool invoices.mark_paid",
+       "kind": 1,
+       "startTimeUnixNano": "1791414000000000000",
+       "endTimeUnixNano": "1791414000500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "invoices.mark_paid"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "inv-001"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"invoice\": \"INV-1000\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000003",
+       "spanId": "0000000000000004",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791449998000000000",
+       "endTimeUnixNano": "1791449999000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000003",
+       "spanId": "00000000000003eb",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1791450000000000000",
+       "endTimeUnixNano": "1791450000500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-003"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Nova Print\", \"amount_eur\": 1250}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000004",
+       "spanId": "0000000000000005",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791483118000000000",
+       "endTimeUnixNano": "1791483119000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000004",
+       "spanId": "00000000000003ec",
+       "name": "execute_tool invoices.mark_paid",
+       "kind": 1,
+       "startTimeUnixNano": "1791483120000000000",
+       "endTimeUnixNano": "1791483120500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "invoices.mark_paid"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "inv-002"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"invoice\": \"INV-1001\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000005",
+       "spanId": "0000000000000006",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791514798000000000",
+       "endTimeUnixNano": "1791514799000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000005",
+       "spanId": "00000000000003ed",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1791514800000000000",
+       "endTimeUnixNano": "1791514800500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-004"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Atlas Cleaning\", \"amount_eur\": 410}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000006",
+       "spanId": "0000000000000007",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791552238000000000",
+       "endTimeUnixNano": "1791552239000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000006",
+       "spanId": "00000000000003ee",
+       "name": "execute_tool invoices.mark_paid",
+       "kind": 1,
+       "startTimeUnixNano": "1791552240000000000",
+       "endTimeUnixNano": "1791552240500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "invoices.mark_paid"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "inv-003"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"invoice\": \"INV-1002\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000007",
+       "spanId": "0000000000000008",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791579598000000000",
+       "endTimeUnixNano": "1791579599000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000007",
+       "spanId": "00000000000003ef",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1791579600000000000",
+       "endTimeUnixNano": "1791579600500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-005"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Kappa Software\", \"amount_eur\": 2900}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000008",
+       "spanId": "0000000000000009",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791621358000000000",
+       "endTimeUnixNano": "1791621359000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000008",
+       "spanId": "00000000000003f0",
+       "name": "execute_tool invoices.mark_paid",
+       "kind": 1,
+       "startTimeUnixNano": "1791621360000000000",
+       "endTimeUnixNano": "1791621360500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "invoices.mark_paid"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "inv-004"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"invoice\": \"INV-1003\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000009",
+       "spanId": "000000000000000a",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791644398000000000",
+       "endTimeUnixNano": "1791644399000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000009",
+       "spanId": "00000000000003f1",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1791644400000000000",
+       "endTimeUnixNano": "1791644400500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-006"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Delta Supplies\", \"amount_eur\": 560}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000000a",
+       "spanId": "000000000000000b",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791690478000000000",
+       "endTimeUnixNano": "1791690479000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000000a",
+       "spanId": "00000000000003f2",
+       "name": "execute_tool invoices.mark_paid",
+       "kind": 1,
+       "startTimeUnixNano": "1791690480000000000",
+       "endTimeUnixNano": "1791690480500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "invoices.mark_paid"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "inv-005"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"invoice\": \"INV-1004\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000000b",
+       "spanId": "000000000000000c",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791709198000000000",
+       "endTimeUnixNano": "1791709199000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000000b",
+       "spanId": "00000000000003f3",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1791709200000000000",
+       "endTimeUnixNano": "1791709200500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-007"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Orion Logistics\", \"amount_eur\": 7800}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000000c",
+       "spanId": "000000000000000d",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791719998000000000",
+       "endTimeUnixNano": "1791719999000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000000c",
+       "spanId": "00000000000003f4",
+       "name": "execute_tool vendors.bank_details.change",
+       "kind": 1,
+       "startTimeUnixNano": "1791720000000000000",
+       "endTimeUnixNano": "1791720000500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "vendors.bank_details.change"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "iban-1"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Delta Supplies\", \"iban\": \"GR00 0000 0000\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000000d",
+       "spanId": "000000000000000e",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791759598000000000",
+       "endTimeUnixNano": "1791759599000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000000d",
+       "spanId": "00000000000003f5",
+       "name": "execute_tool invoices.mark_paid",
+       "kind": 1,
+       "startTimeUnixNano": "1791759600000000000",
+       "endTimeUnixNano": "1791759600500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "invoices.mark_paid"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "inv-006"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"invoice\": \"INV-1005\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000000e",
+       "spanId": "000000000000000f",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791773998000000000",
+       "endTimeUnixNano": "1791773999000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000000e",
+       "spanId": "00000000000003f6",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1791774000000000000",
+       "endTimeUnixNano": "1791774000500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-008"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Nova Print\", \"amount_eur\": 1500}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000000f",
+       "spanId": "0000000000000010",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791828718000000000",
+       "endTimeUnixNano": "1791828719000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000000f",
+       "spanId": "00000000000003f7",
+       "name": "execute_tool invoices.mark_paid",
+       "kind": 1,
+       "startTimeUnixNano": "1791828720000000000",
+       "endTimeUnixNano": "1791828720500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "invoices.mark_paid"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "inv-007"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"invoice\": \"INV-1006\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000010",
+       "spanId": "0000000000000011",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791838798000000000",
+       "endTimeUnixNano": "1791838799000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000010",
+       "spanId": "00000000000003f8",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1791838800000000000",
+       "endTimeUnixNano": "1791838800500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-009"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Atlas Cleaning\", \"amount_eur\": 240}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000011",
+       "spanId": "0000000000000012",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791897838000000000",
+       "endTimeUnixNano": "1791897839000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000011",
+       "spanId": "00000000000003f9",
+       "name": "execute_tool invoices.mark_paid",
+       "kind": 1,
+       "startTimeUnixNano": "1791897840000000000",
+       "endTimeUnixNano": "1791897840500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "invoices.mark_paid"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "inv-008"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"invoice\": \"INV-1007\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000012",
+       "spanId": "0000000000000013",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791903598000000000",
+       "endTimeUnixNano": "1791903599000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000012",
+       "spanId": "00000000000003fa",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1791903600000000000",
+       "endTimeUnixNano": "1791903600500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-010"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Kappa Software\", \"amount_eur\": 3100}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000013",
+       "spanId": "0000000000000014",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791966958000000000",
+       "endTimeUnixNano": "1791966959000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000013",
+       "spanId": "00000000000003fb",
+       "name": "execute_tool invoices.mark_paid",
+       "kind": 1,
+       "startTimeUnixNano": "1791966960000000000",
+       "endTimeUnixNano": "1791966960500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "invoices.mark_paid"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "inv-009"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"invoice\": \"INV-1008\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000014",
+       "spanId": "0000000000000015",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791968398000000000",
+       "endTimeUnixNano": "1791968399000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000014",
+       "spanId": "00000000000003fc",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1791968400000000000",
+       "endTimeUnixNano": "1791968400500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-011"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Delta Supplies\", \"amount_eur\": 980}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000015",
+       "spanId": "0000000000000016",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1791979198000000000",
+       "endTimeUnixNano": "1791979199000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000015",
+       "spanId": "00000000000003fd",
+       "name": "execute_tool contracts.sign",
+       "kind": 1,
+       "startTimeUnixNano": "1791979200000000000",
+       "endTimeUnixNano": "1791979200500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "contracts.sign"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "contract-1"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"counterparty\": \"Delta Supplies\", \"value_eur\": 15000}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000016",
+       "spanId": "0000000000000017",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792033198000000000",
+       "endTimeUnixNano": "1792033199000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000016",
+       "spanId": "00000000000003fe",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1792033200000000000",
+       "endTimeUnixNano": "1792033200500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-012"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Orion Logistics\", \"amount_eur\": 12400}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000017",
+       "spanId": "0000000000000018",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792036078000000000",
+       "endTimeUnixNano": "1792036079000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000017",
+       "spanId": "00000000000003ff",
+       "name": "execute_tool invoices.mark_paid",
+       "kind": 1,
+       "startTimeUnixNano": "1792036080000000000",
+       "endTimeUnixNano": "1792036080500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "invoices.mark_paid"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "inv-010"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"invoice\": \"INV-1009\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000018",
+       "spanId": "0000000000000019",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792065598000000000",
+       "endTimeUnixNano": "1792065599000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000018",
+       "spanId": "0000000000000400",
+       "name": "execute_tool vendors.bank_details.change",
+       "kind": 1,
+       "startTimeUnixNano": "1792065600000000000",
+       "endTimeUnixNano": "1792065600500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "vendors.bank_details.change"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "iban-2"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Kappa Software\", \"iban\": \"GR00 0000 0000\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000019",
+       "spanId": "000000000000001a",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792065598000000000",
+       "endTimeUnixNano": "1792065599000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000019",
+       "spanId": "0000000000000401",
+       "name": "execute_tool contracts.sign",
+       "kind": 1,
+       "startTimeUnixNano": "1792065600000000000",
+       "endTimeUnixNano": "1792065600500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "contracts.sign"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "contract-2"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"counterparty\": \"Orion Logistics\", \"value_eur\": 30000}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000001a",
+       "spanId": "000000000000001b",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792097998000000000",
+       "endTimeUnixNano": "1792097999000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000001a",
+       "spanId": "0000000000000402",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1792098000000000000",
+       "endTimeUnixNano": "1792098000500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-013"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Nova Print\", \"amount_eur\": 640}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000001b",
+       "spanId": "000000000000001c",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792105198000000000",
+       "endTimeUnixNano": "1792105199000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000001b",
+       "spanId": "0000000000000403",
+       "name": "execute_tool invoices.mark_paid",
+       "kind": 1,
+       "startTimeUnixNano": "1792105200000000000",
+       "endTimeUnixNano": "1792105200500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "invoices.mark_paid"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "inv-011"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"invoice\": \"INV-1010\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000001c",
+       "spanId": "000000000000001d",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792151998000000000",
+       "endTimeUnixNano": "1792151999000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000001c",
+       "spanId": "0000000000000404",
+       "name": "execute_tool contracts.sign",
+       "kind": 1,
+       "startTimeUnixNano": "1792152000000000000",
+       "endTimeUnixNano": "1792152000500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "contracts.sign"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "contract-3"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"counterparty\": \"Nova Print\", \"value_eur\": 45000}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000001d",
+       "spanId": "000000000000001e",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792162798000000000",
+       "endTimeUnixNano": "1792162799000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000001d",
+       "spanId": "0000000000000405",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1792162800000000000",
+       "endTimeUnixNano": "1792162800500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-014"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Atlas Cleaning\", \"amount_eur\": 4100}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000001e",
+       "spanId": "000000000000001f",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792174318000000000",
+       "endTimeUnixNano": "1792174319000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000001e",
+       "spanId": "0000000000000406",
+       "name": "execute_tool invoices.mark_paid",
+       "kind": 1,
+       "startTimeUnixNano": "1792174320000000000",
+       "endTimeUnixNano": "1792174320500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "invoices.mark_paid"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "inv-012"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"invoice\": \"INV-1011\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000001f",
+       "spanId": "0000000000000020",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792227598000000000",
+       "endTimeUnixNano": "1792227599000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000001f",
+       "spanId": "0000000000000407",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1792227600000000000",
+       "endTimeUnixNano": "1792227600500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-015"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Kappa Software\", \"amount_eur\": 9200}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000020",
+       "spanId": "0000000000000021",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792238398000000000",
+       "endTimeUnixNano": "1792238399000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000020",
+       "spanId": "0000000000000408",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1792238400000000000",
+       "endTimeUnixNano": "1792238400500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-burst-0"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Delta Supplies\", \"amount_eur\": 6500}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000021",
+       "spanId": "0000000000000022",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792239298000000000",
+       "endTimeUnixNano": "1792239299000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000021",
+       "spanId": "0000000000000409",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1792239300000000000",
+       "endTimeUnixNano": "1792239300500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-burst-1"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Delta Supplies\", \"amount_eur\": 6500}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000022",
+       "spanId": "0000000000000023",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792240198000000000",
+       "endTimeUnixNano": "1792240199000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000022",
+       "spanId": "000000000000040a",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1792240200000000000",
+       "endTimeUnixNano": "1792240200500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-burst-2"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Delta Supplies\", \"amount_eur\": 6500}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000023",
+       "spanId": "0000000000000024",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792243438000000000",
+       "endTimeUnixNano": "1792243439000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000023",
+       "spanId": "000000000000040b",
+       "name": "execute_tool invoices.mark_paid",
+       "kind": 1,
+       "startTimeUnixNano": "1792243440000000000",
+       "endTimeUnixNano": "1792243440500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "invoices.mark_paid"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "inv-013"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"invoice\": \"INV-1012\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000024",
+       "spanId": "0000000000000025",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792292398000000000",
+       "endTimeUnixNano": "1792292399000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000024",
+       "spanId": "000000000000040c",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1792292400000000000",
+       "endTimeUnixNano": "1792292400500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-016"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Delta Supplies\", \"amount_eur\": 880}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000025",
+       "spanId": "0000000000000026",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792312558000000000",
+       "endTimeUnixNano": "1792312559000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000025",
+       "spanId": "000000000000040d",
+       "name": "execute_tool invoices.mark_paid",
+       "kind": 1,
+       "startTimeUnixNano": "1792312560000000000",
+       "endTimeUnixNano": "1792312560500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "invoices.mark_paid"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "inv-014"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"invoice\": \"INV-1013\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000026",
+       "spanId": "0000000000000027",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792324798000000000",
+       "endTimeUnixNano": "1792324799000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000026",
+       "spanId": "000000000000040e",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1792324800000000000",
+       "endTimeUnixNano": "1792324800500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-noamount"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Orion Logistics\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000027",
+       "spanId": "0000000000000028",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792325398000000000",
+       "endTimeUnixNano": "1792325399000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000027",
+       "spanId": "000000000000040f",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1792325400000000000",
+       "endTimeUnixNano": "1792325400500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-badnumber"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Nova Print\", \"amount_eur\": \"1 200,50\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000028",
+       "spanId": "0000000000000029",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792357198000000000",
+       "endTimeUnixNano": "1792357199000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000028",
+       "spanId": "0000000000000410",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1792357200000000000",
+       "endTimeUnixNano": "1792357200500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-017"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Orion Logistics\", \"amount_eur\": 5600}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000029",
+       "spanId": "000000000000002a",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792381678000000000",
+       "endTimeUnixNano": "1792381679000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "00000000000000000000000000000029",
+       "spanId": "0000000000000411",
+       "name": "execute_tool invoices.mark_paid",
+       "kind": 1,
+       "startTimeUnixNano": "1792381680000000000",
+       "endTimeUnixNano": "1792381680500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "invoices.mark_paid"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "inv-015"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"invoice\": \"INV-1014\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000002a",
+       "spanId": "000000000000002b",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792411198000000000",
+       "endTimeUnixNano": "1792411199000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000002a",
+       "spanId": "0000000000000412",
+       "name": "execute_tool email.send",
+       "kind": 1,
+       "startTimeUnixNano": "1792411200000000000",
+       "endTimeUnixNano": "1792411200500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "email.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "mail-1"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"to\": \"supplier@example.com\"}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000002b",
+       "spanId": "000000000000002c",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792421998000000000",
+       "endTimeUnixNano": "1792421999000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000002b",
+       "spanId": "0000000000000413",
+       "name": "execute_tool payments.send",
+       "kind": 1,
+       "startTimeUnixNano": "1792422000000000000",
+       "endTimeUnixNano": "1792422000500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "payments.send"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "pay-018"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"vendor\": \"Nova Print\", \"amount_eur\": 430}"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000002c",
+       "spanId": "000000000000002d",
+       "name": "chat demo-model",
+       "kind": 3,
+       "startTimeUnixNano": "1792450798000000000",
+       "endTimeUnixNano": "1792450799000000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "chat"
+         }
+        },
+        {
+         "key": "gen_ai.request.model",
+         "value": {
+          "stringValue": "demo-model"
+         }
+        }
+       ]
+      },
+      {
+       "traceId": "0000000000000000000000000000002c",
+       "spanId": "0000000000000414",
+       "name": "execute_tool invoices.mark_paid",
+       "kind": 1,
+       "startTimeUnixNano": "1792450800000000000",
+       "endTimeUnixNano": "1792450800500000000",
+       "attributes": [
+        {
+         "key": "gen_ai.operation.name",
+         "value": {
+          "stringValue": "execute_tool"
+         }
+        },
+        {
+         "key": "gen_ai.tool.name",
+         "value": {
+          "stringValue": "invoices.mark_paid"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.id",
+         "value": {
+          "stringValue": "inv-016"
+         }
+        },
+        {
+         "key": "gen_ai.tool.call.arguments",
+         "value": {
+          "stringValue": "{\"invoice\": \"INV-1015\"}"
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

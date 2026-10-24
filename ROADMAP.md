@@ -11,8 +11,11 @@ Honest status, updated as things ship. Checked = in this repository and tested.
 - [x] Real example bundles: one valid, one tampered, with public keys
 - [x] Known limits published first (`docs/KNOWN-LIMITS.md`)
 
+- [x] Readers for Langfuse, LangSmith and OpenTelemetry (OTLP/JSON) trace exports (`omnios/importers.py`), tested on invented fixtures only
+
 ## Next
-- [ ] Importers: Langfuse, LangSmith, OpenTelemetry exports into the events file
+- [ ] Check the three readers against **real** exports (send a redacted sample), and fix what they get wrong
+- [ ] More sources: OpenInference / Phoenix, Braintrust, Helicone, plain OpenAI and Anthropic tool-call logs
 - [ ] Map findings to controls (ISO/IEC 42001, NIST AI RMF, OWASP Agentic Top 10), worded as "relevant to", never as compliance
 - [ ] White-label report (your name and logo on the output)
 - [ ] Optional value fields in the report: minutes and cost saved against a stated baseline
