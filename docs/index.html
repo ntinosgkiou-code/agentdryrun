@@ -51,7 +51,7 @@
 
   <h2>Try it on your own history</h2>
   <pre>git clone https://github.com/ntinosgkiou-code/agentdryrun &amp;&amp; cd agentdryrun &amp;&amp; python -m agentdryrun scan</pre>
-  <p class="mu">Python 3.9 or newer. Nothing to install. Reads <code>~/.claude/projects</code> (last 30 days) and writes <code>agent-report-card.html</code>. Use <code>--no-previews</code> before you share the page. Claude Code only, for now.</p>
+  <p class="mu">Python 3.9 or newer. Nothing to install. Reads <code>~/.claude/projects</code> (last 30 days) and writes <code>agent-report-card.html</code>. Use <code>--no-previews</code> before you share the page. Claude Code only, for now. Or inside Claude Code: <code>claude plugin marketplace add ntinosgkiou-code/agentdryrun</code>, then <code>claude plugin install agentdryrun@agentdryrun</code> and <code>/agentdryrun:scan</code>.</p>
 
   <h2>Under the scan: a dry-run engine for any agent</h2>
   <div class="grid">
@@ -62,7 +62,7 @@ def issue_refund(customer, amount_eur): ...</pre></div>
   </div>
 
   <h2>In CI</h2>
-  <pre>- uses: ntinosgkiou-code/agentdryrun@v0.7.0
+  <pre>- uses: ntinosgkiou-code/agentdryrun@v0.7.1
   with:
     rules: rules.json
     events: tests/agent-events.jsonl

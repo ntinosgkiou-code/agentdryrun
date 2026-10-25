@@ -5,7 +5,7 @@ You do not need permission to try it, break it or build on it. It is Apache-2.0.
 
 ## Run it
 ```bash
-python -m unittest discover -s tests      # 115 tests, no network, about twenty seconds
+python -m unittest discover -s tests      # 119 tests, no network, about twenty seconds
 python -m agentdryrun demo                     # the whole thing on the shipped example
 python verify.py --help
 python -m agentdryrun shadow --help

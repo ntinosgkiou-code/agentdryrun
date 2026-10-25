@@ -1,6 +1,6 @@
 {
   "name": "agentdryrun",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "A dry run for AI agents: record their tool calls (JavaScript/TypeScript recorder) and judge them with the agentdryrun CLI. Zero dependencies.",
   "main": "js/index.js",
   "types": "js/index.d.ts",

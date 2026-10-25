@@ -1,0 +1,12 @@
+{
+  "name": "agentdryrun",
+  "description": "agentdryrun: a dry run on your own coding agent's history",
+  "owner": { "name": "ntinosgkiou-code", "url": "https://github.com/ntinosgkiou-code" },
+  "plugins": [
+    {
+      "name": "agentdryrun",
+      "source": "./",
+      "description": "Run /agentdryrun:scan to see what your rules would have stopped in your Claude Code history. Read-only and local."
+    }
+  ]
+}

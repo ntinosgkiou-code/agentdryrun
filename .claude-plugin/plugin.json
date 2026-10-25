@@ -1,0 +1,11 @@
+{
+  "name": "agentdryrun",
+  "displayName": "agentdryrun",
+  "version": "0.7.1",
+  "description": "Scan your own Claude Code history for what your rules would have stopped: recursive deletes, force pushes, curl | sh, secret files read, uploads. Read-only, local, zero dependencies.",
+  "author": { "name": "ntinosgkiou-code", "url": "https://github.com/ntinosgkiou-code" },
+  "homepage": "https://ntinosgkiou-code.github.io/agentdryrun/",
+  "repository": "https://github.com/ntinosgkiou-code/agentdryrun",
+  "license": "Apache-2.0",
+  "keywords": ["audit", "safety", "permissions", "dry-run", "history"]
+}

@@ -24,6 +24,7 @@ Honest status, updated as things ship. Checked = in this repository and tested.
 - [x] `scan`: report card from Claude Code transcripts, with a starter rules pack
 
 ## Next
+- [ ] Submit the plugin to Anthropic's directory (needs a paid claude.ai plan and the developer portal; the author does this)
 - [ ] `scan` for Codex CLI sessions, then Cursor and others (needs a real sample of each format: open an issue with a redacted one)
 - [ ] `scan --fix`: print the matching permission rules for the agent's own settings, once the exact syntax of each version is verified
 - [ ] Per-project rules: `.agentdryrun.json` in a repository, so a team shares one pack

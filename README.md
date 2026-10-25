@@ -23,6 +23,15 @@ git clone https://github.com/ntinosgkiou-code/agentdryrun && cd agentdryrun && p
 
 It reads `~/.claude/projects` (last 30 days; `--days 90`, `--project my-app`, `--root PATH` to change that), prints a summary and writes `agent-report-card.html`. Add `--no-previews` before you share the page: by default it contains excerpts of your commands (secrets are hidden on a best-effort basis).
 
+**Or from inside Claude Code**, as a plugin from this repository (Python 3.9+ must be on the machine; nothing else is installed):
+
+```bash
+claude plugin marketplace add ntinosgkiou-code/agentdryrun
+claude plugin install agentdryrun@agentdryrun
+```
+
+then type `/agentdryrun:scan` (optionally `--days 90`). Only you can start it: the skill is marked so that Claude cannot run it on its own, it runs one local command, and the report it writes has no command text in it.
+
 No Claude Code history yet? Try the invented sample: `python -m agentdryrun scan --root examples/claude-code-sample/projects --days 0`. [Open a sample report card](https://ntinosgkiou-code.github.io/agentdryrun/agent-report-card.html) in your browser.
 
 ![The top of a sample report card: 48 actions judged, 24 would have passed, 19 would have needed approval, 5 would have been refused, with a table by kind of action](docs/assets/report-card.png)
@@ -76,7 +85,7 @@ Prefer pip? `pip install git+https://github.com/ntinosgkiou-code/agentdryrun` gi
 
 Only the witness service needs packages: `pip install -r requirements.txt` (or `pip install "agentdryrun[witness] @ git+https://github.com/ntinosgkiou-code/agentdryrun"`).
 
-Check everything works: `python -m unittest discover -s tests` (115 tests, about twenty seconds; the JavaScript test is skipped when Node is not installed).
+Check everything works: `python -m unittest discover -s tests` (119 tests, about twenty seconds; the JavaScript test is skipped when Node is not installed).
 
 ---
 
@@ -276,7 +285,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ntinosgkiou-code/agentdryrun@v0.7.0
+      - uses: ntinosgkiou-code/agentdryrun@v0.7.1
         with:
           rules: rules.json
           events: tests/agent-events.jsonl   # recorded by your tests with the Recorder, or a trace export
@@ -461,7 +470,7 @@ docs/                        RULES, EVIDENCE-BUNDLE-SPEC, WITNESS, KNOWN-LIMITS
 ROADMAP.md, BUILD-LOG.md, CHANGELOG.md, CONTRIBUTING.md   how it is built, in public
 examples/                    rules, events, a report, a valid and a tampered bundle, public keys
 action.yml                   the GitHub Action: dry run in CI, fails the build over your limits
-tests/                       115 tests, no network (test_adversarial.py attacks the verifier with hostile bundles); tests/integration/ needs `pip install mcp`
+tests/                       119 tests, no network (test_adversarial.py attacks the verifier with hostile bundles); tests/integration/ needs `pip install mcp`
 examples/agent_demo.py       a toy agent recorded with two lines; rules-front-office.json are its rules
 examples/traces/             invented Langfuse, LangSmith and OpenTelemetry exports of the same 45 actions
 tools/make_trace_examples.py re-creates examples/traces/ from examples/events.csv
