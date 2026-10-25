@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>agentdryrun: a dry run for AI agents</title>
+<meta name="description" content="Record what your AI agent's tools did, see what your rules would have blocked or sent for approval, and keep a tamper-evident record. Local, zero dependencies, open source.">
+<meta property="og:title" content="agentdryrun: a dry run for AI agents">
+<meta property="og:description" content="Record your agent's tool calls, see what your rules would have blocked, and prove it later. Local, zero dependencies.">
+<meta property="og:image" content="https://ntinosgkiou-code.github.io/agentdryrun/assets/social-preview.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root { --bg:#ffffff; --ink:#0e1a2b; --mu:#5b6472; --ln:#d8dde6; --sf:#f4f6f9; --ac:#0b5fd1; --cd:#0d1117; --cdi:#c9d1d9; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0a111d; --ink:#e7ecf6; --mu:#93a0b6; --ln:#243350; --sf:#111b2c; --ac:#6aa8ff; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.65 system-ui, "Segoe UI", sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 48px 20px 72px; }
+  h1 { font-size: 44px; line-height: 1.1; margin: 0 0 8px; letter-spacing: -0.02em; }
+  h1 span { color: var(--ac); }
+  h2 { font-size: 22px; margin: 42px 0 10px; }
+  .lead { font-size: 21px; color: var(--ink); margin: 6px 0 4px; }
+  .mu { color: var(--mu); }
+  a { color: var(--ac); }
+  .btns { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0 8px; }
+  .btn { display: inline-block; padding: 10px 18px; border-radius: 8px; border: 1px solid var(--ln); text-decoration: none; font-weight: 600; }
+  .btn.primary { background: var(--ac); color: #fff; border-color: var(--ac); }
+  pre { background: var(--cd); color: var(--cdi); padding: 14px 16px; border-radius: 10px; overflow-x: auto; font: 14.5px/1.55 ui-monospace, Consolas, monospace; }
+  img { max-width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--ln); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 14px; }
+  .card { background: var(--sf); border: 1px solid var(--ln); border-radius: 12px; padding: 14px 16px; }
+  .card b { display: block; margin-bottom: 4px; }
+  .warn { background: var(--sf); border-left: 4px solid #d29922; padding: 12px 16px; border-radius: 6px; }
+  footer { margin-top: 48px; color: var(--mu); font-size: 15px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>agent<span>dryrun</span></h1>
+  <p class="lead"><b>A dry run for AI agents.</b></p>
+  <p>Record what your agent's tools did, see what your rules <i>would</i> have blocked or sent for approval, and keep a record nobody can quietly edit. Think <code>terraform plan</code>, but for the actions of an AI agent. Local, zero dependencies, nothing is sent anywhere.</p>
+
+  <div class="btns">
+    <a class="btn primary" href="shadow-report.html">See a sample report</a>
+    <a class="btn" href="https://github.com/ntinosgkiou-code/agentdryrun">GitHub</a>
+    <a class="btn" href="https://github.com/ntinosgkiou-code/agentdryrun/releases/latest">Latest release</a>
+  </div>
+
+  <p><img src="assets/demo.gif" alt="Terminal recording of the agentdryrun demo: a shadow report on a made-up payments agent, an evidence bundle that verifies, and the same bundle after one approval was edited, which fails"></p>
+  <p class="mu">The real output of one command on the example in the repository (invented data).</p>
+
+  <h2>Try it in one command</h2>
+  <pre>git clone https://github.com/ntinosgkiou-code/agentdryrun &amp;&amp; cd agentdryrun &amp;&amp; python -m agentdryrun demo</pre>
+  <p class="mu">Python 3.9 or newer. Nothing to install. Or: <code>pip install git+https://github.com/ntinosgkiou-code/agentdryrun</code></p>
+
+  <h2>Three things it does</h2>
+  <div class="grid">
+    <div class="card"><b>1. Record</b>Two lines around your agent's tool functions write every call to a local file, before it runs. It never breaks your agent.<pre>@rec.tool("refunds.issue")
+def issue_refund(customer, amount_eur): ...</pre></div>
+    <div class="card"><b>2. Dry run</b>A rules file says what may pass, what needs approval, what is refused. The report shows what <i>would</i> have happened, and which tools no rule covers. Runs in CI as a GitHub Action.</div>
+    <div class="card"><b>3. Prove</b>A one-file verifier checks an evidence bundle offline: records unedited, signed by the key you pinned, rules followed, and it tells you when records are missing.</div>
+  </div>
+
+  <h2>In CI</h2>
+  <pre>- uses: ntinosgkiou-code/agentdryrun@v0.5.0
+  with:
+    rules: rules.json
+    events: tests/agent-events.jsonl
+    max-refused: 0
+    max-unmapped: 0</pre>
+  <p class="mu">Fails the build when your agent would do more than you accept. Reads Langfuse, LangSmith and OpenTelemetry exports too.</p>
+
+  <h2>What it is not</h2>
+  <div class="warn">A <b>prototype with no external security review</b>. It does not certify anything, does not make you compliant with any regulation, and does not stop prompt injection. The recorder logs attempts, not outcomes or approvals. The example data is invented. Read the <a href="https://github.com/ntinosgkiou-code/agentdryrun/blob/main/docs/KNOWN-LIMITS.md">known limits</a>.</div>
+
+  <h2>Help wanted</h2>
+  <p>The most useful thing you can do: try it on a <b>real</b> export and tell us if it fails, or try to break the verifier. <a href="https://github.com/ntinosgkiou-code/agentdryrun/issues">Open issues</a> include good first issues.</p>
+
+  <footer>Apache-2.0. Built in public: the <a href="https://github.com/ntinosgkiou-code/agentdryrun/blob/main/BUILD-LOG.md">build log</a> records what worked and what was wrong.</footer>
+</main>
+</body>
+</html>

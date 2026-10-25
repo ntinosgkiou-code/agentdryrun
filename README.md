@@ -25,6 +25,8 @@ git clone https://github.com/ntinosgkiou-code/agentdryrun && cd agentdryrun && p
 
 (No git? **Code → Download ZIP**, unpack, run `python -m agentdryrun demo` inside. On Windows use `py -3` if `python` is not found.)
 
+**Just want to see it?** [Open the live page and the sample report](https://ntinosgkiou-code.github.io/agentdryrun/): no install, no account.
+
 > **Status: prototype.** No external security review. Never run with a real customer or bank. Read [what it cannot prove](docs/KNOWN-LIMITS.md) before relying on any of it.
 
 **Jump to:** [Install](#install-2-minutes) · [Try it on the example](#1-see-where-rules-would-have-stopped-an-agent-shadow-report) · [Use it on your own data](#2-use-it-on-your-own-data) · [Verify an evidence bundle](#3-verify-an-evidence-bundle) · [Run a witness](#4-run-a-witness) · [Community vs Gateway](#community-edition-this-repo-and-the-gateway) · [Limits](#what-this-does-not-do)
