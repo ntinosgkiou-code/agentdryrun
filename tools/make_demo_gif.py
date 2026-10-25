@@ -1,9 +1,11 @@
-"""Re-creates docs/assets/demo.gif from the REAL output of `python -m agentdryrun demo`.
+"""Re-creates docs/assets/demo.gif from the REAL output of `python -m agentdryrun demo`,
+or docs/assets/scan.gif from the real output of `python -m agentdryrun scan` on the invented sample transcripts.
 
 Optional developer tool (needs Pillow: pip install pillow). Nothing in the verifier or the shadow report needs it.
 The text in the GIF is whatever the command printed when you ran this script; only the typing speed is staged.
 
-    python tools/make_demo_gif.py
+    python tools/make_demo_gif.py          # demo.gif
+    python tools/make_demo_gif.py scan     # scan.gif
 """
 import os
 import subprocess
@@ -13,8 +15,10 @@ import tempfile
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "docs", "assets", "demo.gif")
-COMMAND = "python -m agentdryrun demo"
+SCAN = len(sys.argv) > 1 and sys.argv[1] == "scan"
+OUT = os.path.join(ROOT, "docs", "assets", "scan.gif" if SCAN else "demo.gif")
+COMMAND = "python -m agentdryrun scan --root examples/claude-code-sample/projects --days 0" if SCAN else "python -m agentdryrun demo"
+RUN = ["scan", "--root", os.path.join(ROOT, "examples", "claude-code-sample", "projects"), "--days", "0"] if SCAN else ["demo"]
 
 FONT_DIRS = ["C:/Windows/Fonts", "/usr/share/fonts/truetype/dejavu", "/System/Library/Fonts", "/Library/Fonts"]
 REGULAR = ["consola.ttf", "DejaVuSansMono.ttf", "Menlo.ttc"]
@@ -37,13 +41,21 @@ def load_font(names):
 def real_output():
     env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONPATH=ROOT)
     with tempfile.TemporaryDirectory() as d:
-        p = subprocess.run([sys.executable, "-m", "agentdryrun", "demo"], cwd=d, env=env, capture_output=True, text=True, encoding="utf-8")
+        p = subprocess.run([sys.executable, "-m", "agentdryrun", *RUN], cwd=d, env=env, capture_output=True, text=True, encoding="utf-8")
         if p.returncode != 0:
             sys.exit("the demo did not finish as expected:\n" + p.stdout + p.stderr)
         return p.stdout.rstrip("\n").splitlines()
 
 
 def style(line):
+    if SCAN:
+        if line.startswith("note:") or line.startswith("report card:"):
+            return DIM, False
+        if line[:1].isdigit():
+            return FG, True
+        if "would pass" in line:
+            return GREEN, False
+        return FG, False
     if line.startswith("RESULT: VERIFIED") or line.startswith("As expected"):
         return GREEN, True
     if line.startswith("RESULT: FAILED") or line.startswith("PROBLEM"):

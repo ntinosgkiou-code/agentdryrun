@@ -21,7 +21,12 @@ Honest status, updated as things ship. Checked = in this repository and tested.
 - [x] `suggest-rules`: a draft rules file from what the agent did
 - [x] JavaScript/TypeScript recorder (`js/`)
 
+- [x] `scan`: report card from Claude Code transcripts, with a starter rules pack
+
 ## Next
+- [ ] `scan` for Codex CLI sessions, then Cursor and others (needs a real sample of each format: open an issue with a redacted one)
+- [ ] `scan --fix`: print the matching permission rules for the agent's own settings, once the exact syntax of each version is verified
+- [ ] Per-project rules: `.agentdryrun.json` in a repository, so a team shares one pack
 - [ ] Check `mcp-record` against real MCP clients (Claude Desktop, Cursor, VS Code) and servers in other languages; the HTTP transport
 - [ ] Publish the JavaScript package on npm and the Python package on PyPI once someone outside this project uses it
 - [ ] Adapters for the common agent frameworks' tool decorators

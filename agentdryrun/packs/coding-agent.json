@@ -1,0 +1,240 @@
+{
+  "version": 1,
+  "default_unknown_tool": "pending",
+  "tools": {
+    "shell.command": {
+      "description": "An ordinary shell command that matched nothing risky (builds, tests, reads, edits).",
+      "reversibility": "two_way",
+      "risk": "low"
+    },
+    "shell.delete_recursive": {
+      "description": "Recursive delete (rm -rf, Remove-Item -Recurse, find -delete).",
+      "reversibility": "one_way_recoverable",
+      "risk": "low",
+      "deny": [
+        {
+          "when": {
+            "field": "scope",
+            "op": "in",
+            "value": [
+              "root",
+              "home",
+              "system"
+            ]
+          },
+          "reason": "recursive delete of the filesystem root, your home directory or a system folder"
+        }
+      ],
+      "escalate": [
+        {
+          "when": {
+            "field": "scope",
+            "op": "in",
+            "value": [
+              "outside_project",
+              "project_root",
+              "piped_input",
+              "unresolved_variable"
+            ]
+          },
+          "reason": "recursive delete outside the project, of the whole project, of a list from another command, or of a path built from a variable that cannot be checked"
+        }
+      ]
+    },
+    "shell.sudo": {
+      "description": "Command run with elevated rights.",
+      "reversibility": "one_way_consequential",
+      "risk": "high"
+    },
+    "shell.pipe_to_shell": {
+      "description": "Downloads a script and runs it without reading it (curl | sh).",
+      "reversibility": "one_way_consequential",
+      "risk": "high",
+      "deny": [
+        {
+          "when": {
+            "field": "sudo",
+            "op": "==",
+            "value": true
+          },
+          "reason": "downloaded script run with elevated rights"
+        }
+      ]
+    },
+    "shell.chmod_open": {
+      "description": "Opens file permissions to everyone (chmod 777).",
+      "reversibility": "one_way_recoverable",
+      "risk": "high"
+    },
+    "git.force_push": {
+      "description": "Rewrites or deletes history on the remote.",
+      "reversibility": "one_way_consequential",
+      "risk": "high",
+      "deny": [
+        {
+          "when": {
+            "field": "protected_branch",
+            "op": "==",
+            "value": true
+          },
+          "reason": "force push or branch deletion on main/master/production/release"
+        }
+      ]
+    },
+    "git.discard_changes": {
+      "description": "Throws away uncommitted work or history (reset --hard, clean, checkout ., filter-branch).",
+      "reversibility": "one_way_consequential",
+      "risk": "high"
+    },
+    "db.destructive_sql": {
+      "description": "DROP / TRUNCATE / DELETE without WHERE, or a database reset.",
+      "reversibility": "one_way_terminal",
+      "risk": "high",
+      "deny": [
+        {
+          "when": {
+            "field": "production_hint",
+            "op": "==",
+            "value": true
+          },
+          "reason": "destructive database command that mentions production"
+        }
+      ]
+    },
+    "infra.destructive": {
+      "description": "Destroys infrastructure or cloud resources (terraform destroy, kubectl delete, aws delete, repo delete).",
+      "reversibility": "one_way_terminal",
+      "risk": "high",
+      "deny": [
+        {
+          "when": {
+            "field": "production_hint",
+            "op": "==",
+            "value": true
+          },
+          "reason": "destructive infrastructure command that mentions production"
+        }
+      ]
+    },
+    "package.publish": {
+      "description": "Publishes a package or image.",
+      "reversibility": "one_way_consequential",
+      "risk": "high"
+    },
+    "net.upload": {
+      "description": "Sends a local file or command output to a remote host.",
+      "reversibility": "one_way_consequential",
+      "risk": "high",
+      "deny": [
+        {
+          "when": {
+            "field": "secret_file",
+            "op": "==",
+            "value": true
+          },
+          "reason": "uploads a file that looks like a secret (.env, key, token)"
+        }
+      ]
+    },
+    "net.fetch": {
+      "description": "Downloads from the web (curl/wget GET).",
+      "reversibility": "two_way",
+      "risk": "low"
+    },
+    "net.remote_access": {
+      "description": "Opens a connection to another machine (ssh, scp, rsync, nc).",
+      "reversibility": "one_way_consequential",
+      "risk": "high"
+    },
+    "secrets.read": {
+      "description": "Reads a file that looks like a secret (.env, ssh key, cloud credentials, token file).",
+      "reversibility": "one_way_recoverable",
+      "risk": "high"
+    },
+    "secrets.dump_env": {
+      "description": "Prints every environment variable (they often hold keys).",
+      "reversibility": "one_way_recoverable",
+      "risk": "high"
+    },
+    "file.read": {
+      "description": "Reads or searches files.",
+      "reversibility": "two_way",
+      "risk": "low"
+    },
+    "file.write": {
+      "description": "Writes a file.",
+      "reversibility": "one_way_recoverable",
+      "risk": "low",
+      "deny": [
+        {
+          "when": {
+            "field": "kind",
+            "op": "in",
+            "value": [
+              "ssh",
+              "shell_startup",
+              "system_config"
+            ]
+          },
+          "reason": "writes to ssh settings, a shell startup file or a system configuration file"
+        }
+      ],
+      "escalate": [
+        {
+          "when": {
+            "field": "kind",
+            "op": "in",
+            "value": [
+              "agent_config",
+              "ci_workflow",
+              "git_hooks",
+              "persistence"
+            ]
+          },
+          "reason": "changes the agent's own settings, a CI workflow, a git hook or a startup item"
+        },
+        {
+          "when": {
+            "field": "scope",
+            "op": "in",
+            "value": [
+              "system",
+              "root"
+            ]
+          },
+          "reason": "writes into a system folder"
+        }
+      ]
+    },
+    "web.fetch": {
+      "description": "Fetches a web page or searches the web.",
+      "reversibility": "two_way",
+      "risk": "low"
+    },
+    "agent.spawn": {
+      "description": "Starts a sub-agent.",
+      "reversibility": "two_way",
+      "risk": "low"
+    },
+    "agent.other": {
+      "description": "Another tool of the coding agent.",
+      "reversibility": "two_way",
+      "risk": "low"
+    },
+    "mcp.call": {
+      "description": "Calls a tool of an MCP server (judged from the tool's name only).",
+      "reversibility": "one_way_recoverable",
+      "risk": "low",
+      "escalate": [
+        {
+          "when": {
+            "field": "effect",
+            "op": "==",
+            "value": "change"
+          },
+          "reason": "MCP tool whose name suggests it changes, sends or deletes something"
+        }
+      ]
+    }
+  }
+}

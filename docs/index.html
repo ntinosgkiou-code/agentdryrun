@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>agentdryrun: a dry run for AI agents</title>
-<meta name="description" content="Record what your AI agent's tools did, see what your rules would have blocked or sent for approval, and keep a tamper-evident record. Local, zero dependencies, open source.">
-<meta property="og:title" content="agentdryrun: a dry run for AI agents">
-<meta property="og:description" content="Record your agent's tool calls, see what your rules would have blocked, and prove it later. Local, zero dependencies.">
+<title>agentdryrun: a dry run for AI coding agents</title>
+<meta name="description" content="One command reads your Claude Code history and shows what your rules would have stopped: recursive deletes, force pushes, curl | sh, secret files read. Read-only, local, zero dependencies, open source.">
+<meta property="og:title" content="agentdryrun: what did your coding agent actually do?">
+<meta property="og:description" content="Scan your Claude Code history for the commands you would never have approved. Read-only, local, zero dependencies.">
 <meta property="og:image" content="https://ntinosgkiou-code.github.io/agentdryrun/assets/social-preview.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -37,23 +37,23 @@
 <body>
 <main>
   <h1>agent<span>dryrun</span></h1>
-  <p class="lead"><b>A dry run for AI agents.</b></p>
-  <p>Record what your agent's tools did, see what your rules <i>would</i> have blocked or sent for approval, and keep a record nobody can quietly edit. Think <code>terraform plan</code>, but for the actions of an AI agent. Local, zero dependencies, nothing is sent anywhere.</p>
+  <p class="lead"><b>What did your coding agent actually do last month?</b></p>
+  <p>Anthropic reports that users accept <a href="https://anthropic.com/engineering/claude-code-auto-mode">93% of Claude Code's manual permission prompts</a>. One command reads the session history Claude Code already keeps on your machine and shows what your rules <i>would have stopped</i>: recursive deletes, force pushes to <code>main</code>, <code>curl | sh</code>, secret files read, files sent to other hosts, destructive database and cloud commands. Think <code>terraform plan</code>, but for what your agent did. Read-only, local, zero dependencies, nothing is sent anywhere.</p>
 
   <div class="btns">
-    <a class="btn primary" href="shadow-report.html">See a sample report</a>
+    <a class="btn primary" href="agent-report-card.html">See a sample report card</a>
     <a class="btn" href="https://github.com/ntinosgkiou-code/agentdryrun">GitHub</a>
     <a class="btn" href="https://github.com/ntinosgkiou-code/agentdryrun/releases/latest">Latest release</a>
   </div>
 
-  <p><img src="assets/demo.gif" alt="Terminal recording of the agentdryrun demo: a shadow report on a made-up payments agent, an evidence bundle that verifies, and the same bundle after one approval was edited, which fails"></p>
-  <p class="mu">The real output of one command on the example in the repository (invented data).</p>
+  <p><img src="assets/scan.gif" alt="Terminal recording of agentdryrun scan on invented sample transcripts: 48 actions judged, 24 would pass, 19 would need approval, 5 would be refused, grouped by kind"></p>
+  <p class="mu">The real output of one command on the invented sample in the repository.</p>
 
-  <h2>Try it in one command</h2>
-  <pre>git clone https://github.com/ntinosgkiou-code/agentdryrun &amp;&amp; cd agentdryrun &amp;&amp; python -m agentdryrun demo</pre>
-  <p class="mu">Python 3.9 or newer. Nothing to install. Or: <code>pip install git+https://github.com/ntinosgkiou-code/agentdryrun</code></p>
+  <h2>Try it on your own history</h2>
+  <pre>git clone https://github.com/ntinosgkiou-code/agentdryrun &amp;&amp; cd agentdryrun &amp;&amp; python -m agentdryrun scan</pre>
+  <p class="mu">Python 3.9 or newer. Nothing to install. Reads <code>~/.claude/projects</code> (last 30 days) and writes <code>agent-report-card.html</code>. Use <code>--no-previews</code> before you share the page. Claude Code only, for now.</p>
 
-  <h2>Three things it does</h2>
+  <h2>Under the scan: a dry-run engine for any agent</h2>
   <div class="grid">
     <div class="card"><b>1. Record</b>Two lines around your agent's tool functions (Python or JavaScript) write every call to a local file, before it runs. It never breaks your agent. Or put <code>mcp-record</code> in front of any MCP server and change nothing else.<pre>@rec.tool("refunds.issue")
 def issue_refund(customer, amount_eur): ...</pre></div>
@@ -62,7 +62,7 @@ def issue_refund(customer, amount_eur): ...</pre></div>
   </div>
 
   <h2>In CI</h2>
-  <pre>- uses: ntinosgkiou-code/agentdryrun@v0.6.0
+  <pre>- uses: ntinosgkiou-code/agentdryrun@v0.7.0
   with:
     rules: rules.json
     events: tests/agent-events.jsonl

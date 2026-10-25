@@ -5,27 +5,35 @@
 ![dependencies](https://img.shields.io/badge/dependencies-none-brightgreen)
 ![license](https://img.shields.io/badge/license-Apache--2.0-blue)
 
-**A dry run for AI agents.** Record what your agent's tools did, see what your rules *would* have blocked or sent for approval, and keep a record nobody can quietly edit.
+**What did your coding agent actually do last month?**
 
-*Think `terraform plan`, but for the actions of an AI agent: local, zero dependencies, nothing is sent anywhere.*
+Anthropic reports that users accept [93% of Claude Code's manual permission prompts](https://anthropic.com/engineering/claude-code-auto-mode). That is a lot of commands nobody read. One command reads the session history Claude Code already keeps on your machine and shows what your rules **would have stopped**: recursive deletes, force pushes to `main`, `curl | sh`, secret files read, files sent to other hosts, destructive database and cloud commands. It also shows where the tool output (and so the tokens) piled up.
 
-When an AI agent moves money, changes a customer record or deletes data, sooner or later someone asks:
-*who approved this? can you show the record was not changed afterwards? where would your rules have stopped it?*
-agentdryrun answers all three. This repository is the part you can **read, run and check yourself**.
+*Think `terraform plan`, but for what your coding agent did: read-only, local, zero dependencies, nothing is sent anywhere.*
 
-![Terminal recording of python -m agentdryrun demo: a shadow report on a made-up payments agent, an evidence bundle that verifies, and the same bundle after one approval was edited, which fails](docs/assets/demo.gif)
+![Terminal recording of python -m agentdryrun scan on invented sample transcripts: 48 actions judged, 24 would pass, 19 would need approval, 5 would be refused, grouped by kind](docs/assets/scan.gif)
 
-*That is the real output of one command on the example in this repository (invented data). Regenerate the recording with [`tools/make_demo_gif.py`](tools/make_demo_gif.py).*
+*The real output of `scan` on the invented sample in this repository. Regenerate it with [`tools/make_demo_gif.py scan`](tools/make_demo_gif.py).*
 
-**Try it now.** Python 3.9 or newer, nothing to install, nothing leaves your machine:
+**Try it on your own history.** Python 3.9 or newer, nothing to install, nothing leaves your machine:
 
 ```bash
-git clone https://github.com/ntinosgkiou-code/agentdryrun && cd agentdryrun && python -m agentdryrun demo
+git clone https://github.com/ntinosgkiou-code/agentdryrun && cd agentdryrun && python -m agentdryrun scan
 ```
 
-(No git? **Code → Download ZIP**, unpack, run `python -m agentdryrun demo` inside. On Windows use `py -3` if `python` is not found.)
+It reads `~/.claude/projects` (last 30 days; `--days 90`, `--project my-app`, `--root PATH` to change that), prints a summary and writes `agent-report-card.html`. Add `--no-previews` before you share the page: by default it contains excerpts of your commands (secrets are hidden on a best-effort basis).
 
-**Just want to see it?** [Open the live page and the sample report](https://ntinosgkiou-code.github.io/agentdryrun/): no install, no account.
+No Claude Code history yet? Try the invented sample: `python -m agentdryrun scan --root examples/claude-code-sample/projects --days 0`. [Open a sample report card](https://ntinosgkiou-code.github.io/agentdryrun/agent-report-card.html) in your browser.
+
+![The top of a sample report card: 48 actions judged, 24 would have passed, 19 would have needed approval, 5 would have been refused, with a table by kind of action](docs/assets/report-card.png)
+
+**What the scan is, honestly.**
+- It names what the agent **attempted**, by pattern-matching its commands. It misses things (a script that deletes files, `python -c`, a path built at run time) and flags a few harmless ones. It cannot know whether a command worked or whether you approved it.
+- The verdicts come from a **starter rules pack** ([`agentdryrun/packs/coding-agent.json`](agentdryrun/packs/coding-agent.json)). Copy it, change it to how you work, pass it with `--rules`. Your own history will show the pack is too strict in places and too loose in others; that is the point of a dry run.
+- **Claude Code only, for now.** Reading its transcripts is based on the files as they looked on 2026-10-25; that format is not a documented interface and can change. Codex, Cursor and others are not read yet ([help wanted](https://github.com/ntinosgkiou-code/agentdryrun/issues)).
+- It is not a sandbox and does not stop anything. Auto mode, permission rules and sandboxes are the tools for that; this tells you what they would have had to catch.
+
+**Beyond coding agents.** The same dry-run engine judges any agent's tool calls (Python or JavaScript recorder, MCP proxy, Langfuse / LangSmith / OpenTelemetry exports) and can verify a tamper-evident record offline; see below.
 
 > **Status: prototype.** No external security review. Never run with a real customer or bank. Read [what it cannot prove](docs/KNOWN-LIMITS.md) before relying on any of it.
 
@@ -37,6 +45,7 @@ git clone https://github.com/ntinosgkiou-code/agentdryrun && cd agentdryrun && p
 
 | | |
 |---|---|
+| **`scan`** | Reads your Claude Code history and writes one report card: what the agent did, what your rules would have stopped, where the output piled up. Read-only. |
 | **Recorder** | Two lines around your agent's tool functions write what it does to a local file. No vendor, no export, never breaks your agent. Python and JavaScript/TypeScript. |
 | **MCP recorder** | `mcp-record` sits between your MCP client and any MCP server (stdio) and records every `tools/call`, with **no change to your agent or the server**. |
 | **Rules drafter** | `suggest-rules` reads what your agent did and writes a first rules file to edit, so you do not start from a blank page. |
@@ -67,7 +76,7 @@ Prefer pip? `pip install git+https://github.com/ntinosgkiou-code/agentdryrun` gi
 
 Only the witness service needs packages: `pip install -r requirements.txt` (or `pip install "agentdryrun[witness] @ git+https://github.com/ntinosgkiou-code/agentdryrun"`).
 
-Check everything works: `python -m unittest discover -s tests` (92 tests, about twenty seconds; the JavaScript test is skipped when Node is not installed).
+Check everything works: `python -m unittest discover -s tests` (114 tests, about twenty seconds; the JavaScript test is skipped when Node is not installed).
 
 ---
 
@@ -267,7 +276,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ntinosgkiou-code/agentdryrun@v0.6.0
+      - uses: ntinosgkiou-code/agentdryrun@v0.7.0
         with:
           rules: rules.json
           events: tests/agent-events.jsonl   # recorded by your tests with the Recorder, or a trace export
@@ -435,6 +444,9 @@ The complete list is in [`docs/KNOWN-LIMITS.md`](docs/KNOWN-LIMITS.md).
 ```text
 verify.py                    the offline verifier (single file, standard library only)
 agentdryrun/demo.py               `python -m agentdryrun demo`: the shadow report and the verifier on the example, in one command
+agentdryrun/scan.py, coding.py    `scan`: reads Claude Code transcripts, names what the agent did, writes the report card
+agentdryrun/packs/                the starter rules pack for coding agents
+examples/claude-code-sample/      invented transcripts for `scan` (made by tools/make_claude_sample.py)
 agentdryrun/record.py             `Recorder`: two lines that write your agent's tool calls to a local events file
 js/index.js, index.d.ts           the same recorder for JavaScript/TypeScript (zero dependencies, Node 18+)
 agentdryrun/mcprec.py             `mcp-record`: a stdio proxy that records MCP `tools/call` requests unchanged
@@ -449,7 +461,7 @@ docs/                        RULES, EVIDENCE-BUNDLE-SPEC, WITNESS, KNOWN-LIMITS
 ROADMAP.md, BUILD-LOG.md, CHANGELOG.md, CONTRIBUTING.md   how it is built, in public
 examples/                    rules, events, a report, a valid and a tampered bundle, public keys
 action.yml                   the GitHub Action: dry run in CI, fails the build over your limits
-tests/                       92 tests, no network (test_adversarial.py attacks the verifier with hostile bundles); tests/integration/ needs `pip install mcp`
+tests/                       114 tests, no network (test_adversarial.py attacks the verifier with hostile bundles); tests/integration/ needs `pip install mcp`
 examples/agent_demo.py       a toy agent recorded with two lines; rules-front-office.json are its rules
 examples/traces/             invented Langfuse, LangSmith and OpenTelemetry exports of the same 45 actions
 tools/make_trace_examples.py re-creates examples/traces/ from examples/events.csv

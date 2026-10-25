@@ -1,5 +1,6 @@
 """
 python -m agentdryrun demo                                                                 the whole thing on the shipped example, one command
+python -m agentdryrun scan                                                                 dry run on your own Claude Code history: one report card
 python -m agentdryrun shadow --rules rules.json --events events.csv --out report.html    judge what your agent did (dry run, local)
                                                                                       (--events also takes an OpenTelemetry / Langfuse / LangSmith export)
 python -m agentdryrun import traces.json --out events.jsonl                               turn a trace export into an events file
@@ -32,6 +33,20 @@ def main(argv: Optional[list] = None) -> int:
     p.add_argument("--max-pending", type=int, metavar="N", help="exit with code 4 if more than N actions would need approval (for CI)")
     p.add_argument("--max-unmapped", type=int, metavar="N", help="exit with code 4 if more than N actions use a tool no rule covers (for CI)")
     p.add_argument("--summary-md", metavar="FILE", help="also write a short Markdown summary (for a CI job summary)")
+
+    p = sub.add_parser("scan", help="dry run on your coding agent's own history (Claude Code transcripts): one report card, read-only")
+    p.add_argument("--root", help="where the transcripts are (default: ~/.claude/projects, or $CLAUDE_CONFIG_DIR/projects)")
+    p.add_argument("--days", type=int, default=30, help="how many days back (default 30; 0 = everything)")
+    p.add_argument("--since", help="start date instead of --days, e.g. 2026-10-01")
+    p.add_argument("--project", help="only sessions whose folder contains this text")
+    p.add_argument("--rules", help="your own rules file (default: the built-in coding-agent pack)")
+    p.add_argument("--out", default="agent-report-card.html")
+    p.add_argument("--no-previews", action="store_true", help="leave command text out of the report (use before sharing it)")
+    p.add_argument("--banner", help="a notice shown at the top of the report")
+    p.add_argument("--json", help="also write the numbers as JSON")
+    p.add_argument("--events-out", help="also write the derived events (JSON Lines) so you can run `shadow` with your own rules")
+    p.add_argument("--max-refused", type=int, metavar="N", help="exit with code 4 if more than N actions would be refused")
+    p.add_argument("--max-pending", type=int, metavar="N", help="exit with code 4 if more than N actions would need approval")
 
     p = sub.add_parser("suggest-rules", help="draft a starter rules file from the tool calls you recorded (a draft to review, not a policy)")
     p.add_argument("--events", required=True, help="the events file or trace export, as for `shadow`")
@@ -75,6 +90,9 @@ def main(argv: Optional[list] = None) -> int:
     if a.cmd == "shadow":
         from . import shadow
         return shadow.main(a)
+    if a.cmd == "scan":
+        from . import scan
+        return scan.main(a)
     if a.cmd == "mcp-record":
         from . import mcprec
         return mcprec.main(a)
