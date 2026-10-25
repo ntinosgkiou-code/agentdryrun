@@ -5,14 +5,18 @@ You do not need permission to try it, break it or build on it. It is Apache-2.0.
 
 ## Run it
 ```bash
-python -m unittest discover -s tests      # 74 tests, no network, about ten seconds
+python -m unittest discover -s tests      # 114 tests, no network, about twenty seconds
 python -m agentdryrun demo                     # the whole thing on the shipped example
 python verify.py --help
 python -m agentdryrun shadow --help
 ```
 `verify.py` and the shadow report need Python 3.9+ and nothing else. Only the witness service needs `pip install -r requirements.txt`.
 
+## Money, assignments and `help wanted`
+This is an **unpaid, unfunded** open-source project. There is no budget for issues or pull requests, nobody is paid to work on it, and issues are not assigned: if you want to fix something, open a pull request (a comment first is welcome, not required). `help wanted` means "I would like help", not "there is a bounty". Contributions are accepted under Apache-2.0.
+
 ## What helps most (in this order)
+0. **Run `python -m agentdryrun scan` on your own Claude Code history** and tell us what it flagged that was normal, what it missed, or whether it crashed (paste command text only, no secrets). A redacted Codex CLI session file would let `scan` read Codex too ([issue 11](https://github.com/ntinosgkiou-code/agentdryrun/issues/11)).
 1. **Break the verifier.** A bundle that `verify.py` calls `VERIFIED` although a record was added, removed, edited or reordered is the most valuable report you can send. See [SECURITY.md](SECURITY.md).
 2. **A second verifier.** Write one in any language from [`docs/EVIDENCE-BUNDLE-SPEC.md`](docs/EVIDENCE-BUNDLE-SPEC.md) and run it on `examples/`. Every place it disagrees with `verify.py` is either a bug or a hole in the spec. Open an issue titled *verifier disagreement*.
 3. **Check the importers on a real export.** The Langfuse, LangSmith and OpenTelemetry readers in `agentdryrun/importers.py` were built from the vendors' documented field names and tested only on invented fixtures. Run `python -m agentdryrun import your-export.json`; if it reads it wrongly or not at all, open an issue with a **redacted** sample. New sources (OpenInference, Braintrust, Helicone, raw OpenAI or Anthropic tool-call logs) are welcome as pull requests with a fixture and a test.

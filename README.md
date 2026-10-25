@@ -471,7 +471,7 @@ docs/assets/                 the recording, the report screenshot and the social
 
 ## Built in public
 
-This is an open-source tool built in the open. The [roadmap](ROADMAP.md) says what is done and what is next, the [build log](BUILD-LOG.md) records what worked and what was wrong (including corrections), and [CONTRIBUTING.md](CONTRIBUTING.md) lists the contributions that help most: breaking the verifier, writing a second one, and checking the Langfuse, LangSmith and OpenTelemetry readers against real exports. Issues are welcome.
+This is an open-source tool built in the open. The [roadmap](ROADMAP.md) says what is done and what is next, the [build log](BUILD-LOG.md) records what worked and what was wrong (including corrections), and [CONTRIBUTING.md](CONTRIBUTING.md) lists the contributions that help most: breaking the verifier, writing a second one, and checking the Langfuse, LangSmith and OpenTelemetry readers against real exports. Issues are welcome. It is an unpaid project with no budget for issues or pull requests (`help wanted` is not a bounty); see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Roadmap
 
