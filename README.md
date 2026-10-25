@@ -30,7 +30,7 @@ No Claude Code history yet? Try the invented sample: `python -m agentdryrun scan
 **What the scan is, honestly.**
 - It names what the agent **attempted**, by pattern-matching its commands. It misses things (a script that deletes files, `python -c`, a path built at run time) and flags a few harmless ones. It cannot know whether a command worked or whether you approved it.
 - The verdicts come from a **starter rules pack** ([`agentdryrun/packs/coding-agent.json`](agentdryrun/packs/coding-agent.json)). Copy it, change it to how you work, pass it with `--rules`. Your own history will show the pack is too strict in places and too loose in others; that is the point of a dry run.
-- **Claude Code only, for now.** Reading its transcripts is based on the files as they looked on 2026-10-25; that format is not a documented interface and can change. Codex, Cursor and others are not read yet ([help wanted](https://github.com/ntinosgkiou-code/agentdryrun/issues)).
+- **Claude Code only, for now.** Reading its transcripts is based on the files as they looked on 2026-10-25; that format is not a documented interface and can change. Codex, Cursor and others are not read yet ([help wanted: issue 11](https://github.com/ntinosgkiou-code/agentdryrun/issues/11)).
 - It is not a sandbox and does not stop anything. Auto mode, permission rules and sandboxes are the tools for that; this tells you what they would have had to catch.
 
 **Beyond coding agents.** The same dry-run engine judges any agent's tool calls (Python or JavaScript recorder, MCP proxy, Langfuse / LangSmith / OpenTelemetry exports) and can verify a tamper-evident record offline; see below.
