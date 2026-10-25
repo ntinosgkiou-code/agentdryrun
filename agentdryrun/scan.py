@@ -168,10 +168,12 @@ def main(args) -> int:
     page = render_card(s=s, kinds=kinds, rows=attention_rows(obs, got["meta"]), meta=got["meta"], stats=stats,
                        info={"sessions": got["sessions"], "projects": got["projects"], "calls": got["calls"], "label": label},
                        days=args.days, previews=not args.no_previews, rules_name=rules_path.name, banner=args.banner or "")
-    Path(args.out).write_text(page, encoding="utf-8", newline="\n")
+    with open(args.out, "w", encoding="utf-8", newline="\n") as f:          # (Path.write_text has no `newline` before Python 3.10)
+        f.write(page)
     if args.json:
-        Path(args.json).write_text(json.dumps({"summary": s, "kinds": kinds, "waste": {k: v for k, v in stats.items() if k not in ("biggest", "loops")}},
-                                              indent=2, ensure_ascii=False), encoding="utf-8", newline="\n")
+        with open(args.json, "w", encoding="utf-8", newline="\n") as f:
+            json.dump({"summary": s, "kinds": kinds, "waste": {k: v for k, v in stats.items() if k not in ("biggest", "loops")}},
+                      f, indent=2, ensure_ascii=False)
     if args.events_out:
         with open(args.events_out, "w", encoding="utf-8", newline="\n") as f:
             for ev in got["events"]:
