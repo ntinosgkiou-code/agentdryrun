@@ -5,7 +5,8 @@
 - **Kept on purpose:** the evidence-bundle format identifier `omnios-evidence-bundle` and the `omnios/<tenant>` origin prefix inside the signed examples. They name a format, not the project, and changing them would invalidate existing bundles.
 - README leads with the problem and a one-line analogy (a dry run for AI agents, like `terraform plan`), badges for Python, dependencies and licence; "independent witness" is now "witness service" everywhere (independence depends on who runs it).
 - Regenerated the demo recording, the report screenshot and the social preview image.
-- 68 tests.
+- **GitHub Action** (`action.yml`): runs the dry run in CI and fails the build (exit code 4) when more actions would be refused, need approval or use a tool no rule covers than you accept; writes a job summary table and uploads the HTML report. New flags on `shadow`: `--max-refused`, `--max-pending`, `--max-unmapped`, `--summary-md`. Self-tested in this repository's CI on Linux and Windows, including the failing case.
+- 74 tests.
 
 ## 0.4.0 (2026-10-24)  Record your own agent
 - `omnios.record.Recorder`: two lines (`@rec.tool("name")`) write an agent's tool calls to a local events file before each call runs. Sync and async, threads, `rec.wrap` for code you cannot edit. Keeps only short scalar parameters and, with `rules=`, only the fields the rules look at. Never breaks the agent (one warning if the file cannot be written). Records the attempt only.

@@ -28,6 +28,10 @@ def main(argv: Optional[list] = None) -> int:
     p.add_argument("--agent", default="agent")
     p.add_argument("--name", default="Your company", help="name shown on the report")
     p.add_argument("--banner", help="a notice shown at the top of the report")
+    p.add_argument("--max-refused", type=int, metavar="N", help="exit with code 4 if more than N actions would be refused (for CI)")
+    p.add_argument("--max-pending", type=int, metavar="N", help="exit with code 4 if more than N actions would need approval (for CI)")
+    p.add_argument("--max-unmapped", type=int, metavar="N", help="exit with code 4 if more than N actions use a tool no rule covers (for CI)")
+    p.add_argument("--summary-md", metavar="FILE", help="also write a short Markdown summary (for a CI job summary)")
 
     p = sub.add_parser("demo", help="run the shadow report and the verifier on the shipped example (one command)")
     p.add_argument("--out", default="agentdryrun-demo-report.html", help="where to write the demo's shadow report")

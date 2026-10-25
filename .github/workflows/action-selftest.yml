@@ -1,0 +1,63 @@
+name: action self-test
+on:
+  push:
+  pull_request:
+jobs:
+  passes-within-limits:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - id: dry
+        uses: ./
+        with:
+          rules: examples/rules-finance.json
+          events: examples/events.csv
+          permissions: finance:pay,finance:vendor-admin,finance:books
+          max-refused: "9"
+          max-pending: "20"
+          name: Acme demo
+      - name: outputs are right
+        run: |
+          test "${{ steps.dry.outputs.total }}" = "45"
+          test "${{ steps.dry.outputs.would-pass }}" = "16"
+          test "${{ steps.dry.outputs.would-be-refused }}" = "9"
+
+  fails-when-over-the-limit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - id: dry
+        uses: ./
+        continue-on-error: true
+        with:
+          rules: examples/rules-finance.json
+          events: examples/events.csv
+          permissions: finance:pay,finance:vendor-admin,finance:books
+          max-refused: "0"
+      - name: the step must have failed
+        run: test "${{ steps.dry.outcome }}" = "failure"
+
+  reads-a-trace-export:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - id: dry
+        uses: ./
+        with:
+          rules: examples/rules-finance.json
+          events: examples/traces/langfuse.json
+          permissions: finance:pay,finance:vendor-admin,finance:books
+      - run: test "${{ steps.dry.outputs.total }}" = "45"
+
+  works-on-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: dry
+        uses: ./
+        with:
+          rules: examples/rules-front-office.json
+          events: examples/traces/otlp.json
+          name: Windows check
+          max-refused: "100"
+      - run: echo "judged ${{ steps.dry.outputs.total }} actions"

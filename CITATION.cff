@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "agentdryrun: a dry run for AI agents"
+type: software
+authors:
+  - alias: "ntinosgkiou-code"
+license: Apache-2.0
+repository-code: "https://github.com/ntinosgkiou-code/agentdryrun"
+version: 0.5.0
+date-released: 2026-10-25
+abstract: >-
+  Record an AI agent's tool calls, judge them against a rules file as a dry run (would pass, would need approval,
+  would be refused), and keep a tamper-evident record that a third party can verify offline. Local, standard library only.
+keywords:
+  - ai-agents
+  - dry-run
+  - tool-calling
+  - audit-trail
+  - transparency-log

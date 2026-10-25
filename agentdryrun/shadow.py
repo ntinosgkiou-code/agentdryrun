@@ -156,4 +156,41 @@ def main(args) -> int:
     if s["unmapped_tools"]:
         print("tools the agent used that no rule covers: " + ", ".join(f"{t} ({n})" for t, n in s["unmapped_tools"].items()))
     print(f"report: {args.out}   (nothing was blocked or executed)")
+    exceeded = thresholds_exceeded(s, getattr(args, "max_refused", None), getattr(args, "max_pending", None), getattr(args, "max_unmapped", None))
+    if getattr(args, "summary_md", None):
+        with open(args.summary_md, "w", encoding="utf-8", newline="\n") as f:
+            f.write(summary_markdown(s, args.name, exceeded))
+    if exceeded:
+        print("LIMIT EXCEEDED: " + "; ".join(exceeded), file=sys.stderr)
+        return 4
     return 0
+
+
+def thresholds_exceeded(s: dict, max_refused=None, max_pending=None, max_unmapped=None) -> list:
+    """Messages for every limit the run went over (empty list = fine). A limit left as None is not checked."""
+    unmapped = sum(s["unmapped_tools"].values())
+    out = []
+    for label, value, limit in (("would be refused", s["deny"], max_refused), ("would need approval", s["pending"], max_pending),
+                                ("use a tool no rule covers", unmapped, max_unmapped)):
+        if limit is not None and value > limit:
+            out.append(f"{value} actions {label}, the limit is {limit}")
+    return out
+
+
+def summary_markdown(s: dict, name: str, exceeded: list) -> str:
+    """A short Markdown block for a CI job summary (GitHub: $GITHUB_STEP_SUMMARY)."""
+    lines = [f"### agentdryrun: {name}", "",
+             f"**{s['total']} actions judged:** {s['allow']} would pass, {s['pending']} would need approval, {s['deny']} would be refused.", ""]
+    if s["by_tool"]:
+        lines += ["| Tool | Total | Pass | Approval | Refused |", "|---|---|---|---|---|"]
+        for tool, c in list(s["by_tool"].items())[:15]:
+            lines.append(f"| `{tool}` | {c['total']} | {c['allow']} | {c['pending']} | {c['deny']} |")
+        lines.append("")
+    if s["unmapped_tools"]:
+        lines += ["**Tools the agent used that no rule covers:** " + ", ".join(f"`{t}` ({n})" for t, n in s["unmapped_tools"].items()), ""]
+    if exceeded:
+        lines += ["**Limits exceeded:**"] + [f"- {m}" for m in exceeded] + [""]
+    else:
+        lines += ["No limit exceeded.", ""]
+    lines.append("_Dry run on the actions you reported: nothing was blocked or executed._")
+    return "\n".join(lines) + "\n"

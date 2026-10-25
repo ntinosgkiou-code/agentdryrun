@@ -1,0 +1,108 @@
+name: "agentdryrun: dry-run your AI agent in CI"
+description: "Run your AI agent's recorded tool calls against a rules file and fail the build when too many actions would be refused, need approval, or use a tool no rule covers. Local, no dependencies, nothing is sent anywhere."
+author: "ntinosgkiou-code"
+branding:
+  icon: "shield"
+  color: "blue"
+
+inputs:
+  rules:
+    description: "Path to the rules file (JSON). See docs/RULES.md."
+    required: true
+  events:
+    description: "Path to what the agent did: a .csv or .jsonl events file, or a Langfuse / LangSmith / OpenTelemetry export."
+    required: true
+  permissions:
+    description: "Comma-separated permissions the agent really holds (default: every permission named in the rules)."
+    required: false
+    default: ""
+  max-refused:
+    description: "Fail (exit 4) if more than this many actions would be refused. Empty = not checked."
+    required: false
+    default: ""
+  max-pending:
+    description: "Fail (exit 4) if more than this many actions would need approval. Empty = not checked."
+    required: false
+    default: ""
+  max-unmapped:
+    description: "Fail (exit 4) if more than this many actions use a tool no rule covers. Empty = not checked."
+    required: false
+    default: ""
+  name:
+    description: "Name shown on the report."
+    required: false
+    default: "CI run"
+  report:
+    description: "File name of the HTML report (uploaded as an artifact)."
+    required: false
+    default: "agentdryrun-report.html"
+  python-version:
+    description: "Python version to use (3.9 or newer)."
+    required: false
+    default: "3.12"
+
+outputs:
+  total:
+    description: "Number of actions judged."
+    value: ${{ steps.dryrun.outputs.total }}
+  would-pass:
+    description: "Actions that would have passed."
+    value: ${{ steps.dryrun.outputs.would_pass }}
+  would-need-approval:
+    description: "Actions that would have needed approval."
+    value: ${{ steps.dryrun.outputs.would_need_approval }}
+  would-be-refused:
+    description: "Actions that would have been refused."
+    value: ${{ steps.dryrun.outputs.would_be_refused }}
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Dry run
+      id: dryrun
+      shell: bash
+      env:
+        PYTHONPATH: ${{ github.action_path }}
+        IN_RULES: ${{ inputs.rules }}
+        IN_EVENTS: ${{ inputs.events }}
+        IN_PERMISSIONS: ${{ inputs.permissions }}
+        IN_MAX_REFUSED: ${{ inputs.max-refused }}
+        IN_MAX_PENDING: ${{ inputs.max-pending }}
+        IN_MAX_UNMAPPED: ${{ inputs.max-unmapped }}
+        IN_NAME: ${{ inputs.name }}
+        IN_REPORT: ${{ inputs.report }}
+      run: |
+        set +e
+        args=(shadow --rules "$IN_RULES" --events "$IN_EVENTS" --name "$IN_NAME" --out "$IN_REPORT" --json agentdryrun-summary.json --summary-md agentdryrun-summary.md)
+        [ -n "$IN_PERMISSIONS" ]  && args+=(--permissions "$IN_PERMISSIONS")
+        [ -n "$IN_MAX_REFUSED" ]  && args+=(--max-refused "$IN_MAX_REFUSED")
+        [ -n "$IN_MAX_PENDING" ]  && args+=(--max-pending "$IN_MAX_PENDING")
+        [ -n "$IN_MAX_UNMAPPED" ] && args+=(--max-unmapped "$IN_MAX_UNMAPPED")
+        python -m agentdryrun "${args[@]}"
+        code=$?
+        if [ -f agentdryrun-summary.md ]; then cat agentdryrun-summary.md >> "$GITHUB_STEP_SUMMARY"; fi
+        if [ -f agentdryrun-summary.json ]; then
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+        import json
+        s = json.load(open("agentdryrun-summary.json", encoding="utf-8"))
+        print(f"total={s['total']}")
+        print(f"would_pass={s['allow']}")
+        print(f"would_need_approval={s['pending']}")
+        print(f"would_be_refused={s['deny']}")
+        PY
+        fi
+        exit $code
+
+    - name: Upload the report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: agentdryrun-report
+        path: |
+          ${{ inputs.report }}
+          agentdryrun-summary.json
+        if-no-files-found: ignore

@@ -36,6 +36,7 @@ git clone https://github.com/ntinosgkiou-code/agentdryrun && cd agentdryrun && p
 | | |
 |---|---|
 | **Recorder** | Two lines around your agent's tool functions write what it does to a local file. No vendor, no export, never breaks your agent. |
+| **CI check (GitHub Action)** | Runs the dry run on every pull request and fails the build when the agent would do more than you accept. |
 | **Shadow report** | Give it a list of what your agent did (the recorder's file, a CSV, or a **Langfuse / LangSmith / OpenTelemetry** trace export) and a rules file. It judges every action as a dry run (*would pass / would need approval / would be refused*), lists the tools your agent uses that **no rule covers**, and writes a report you can hand to a manager or an auditor. Runs locally. Nothing is blocked, nothing is sent anywhere. |
 | **Offline verifier** | One Python file that checks an evidence bundle: every record it contains is unedited and in the signed tree; signed by the key you pinned; witnessed; the approval rules recorded in the log were followed; and it tells you when records are **missing** from the bundle. Hostile or malformed bundles end in FAILED, never in a crash or a false VERIFIED. |
 | **Witness service** | A small service that remembers a log's checkpoints and refuses any that rewrite the past. |
@@ -62,7 +63,7 @@ Prefer pip? `pip install git+https://github.com/ntinosgkiou-code/agentdryrun` gi
 
 Only the witness service needs packages: `pip install -r requirements.txt` (or `pip install "agentdryrun[witness] @ git+https://github.com/ntinosgkiou-code/agentdryrun"`).
 
-Check everything works: `python -m unittest discover -s tests` (68 tests, about ten seconds).
+Check everything works: `python -m unittest discover -s tests` (74 tests, about ten seconds).
 
 ---
 
@@ -201,6 +202,29 @@ python -m agentdryrun shadow --rules my-rules.json --events my-events.csv --perm
 Pass `--permissions` with the permissions your agent **really** holds. Without it the tool assumes the agent holds every permission named in the rules, and says so.
 
 Changing the rules and re-running takes a second. Try it: set a lower payment ceiling, run again, and see which actions flip.
+
+### In CI: fail the build when your agent does too much
+
+A GitHub Action runs the same dry run on every pull request and fails the build when more actions would be refused (or would need approval, or use a tool no rule covers) than you accept:
+
+```yaml
+# .github/workflows/agent-check.yml
+name: agent check
+on: [pull_request]
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ntinosgkiou-code/agentdryrun@v0.5.0
+        with:
+          rules: rules.json
+          events: tests/agent-events.jsonl   # recorded by your tests with the Recorder, or a trace export
+          max-refused: 0                     # fail if any action would be refused
+          max-unmapped: 0                    # fail if the agent uses a tool no rule covers
+```
+
+It writes a table into the job summary, uploads the HTML report as an artifact and exits with code 4 when a limit is exceeded. Inputs: `rules`, `events`, `permissions`, `max-refused`, `max-pending`, `max-unmapped`, `name`, `report`, `python-version`; outputs: `total`, `would-pass`, `would-need-approval`, `would-be-refused`. The same limits work on the command line: `python -m agentdryrun shadow ... --max-refused 0` (exit code 4). The Action is tested in this repository's own CI, on Linux and Windows, including the case where it must fail ([`action-selftest.yml`](.github/workflows/action-selftest.yml)).
 
 ---
 
@@ -370,7 +394,8 @@ agentdryrun/witnessd.py, tlog.py  the witness service and the Merkle-tree code
 docs/                        RULES, EVIDENCE-BUNDLE-SPEC, WITNESS, KNOWN-LIMITS
 ROADMAP.md, BUILD-LOG.md, CHANGELOG.md, CONTRIBUTING.md   how it is built, in public
 examples/                    rules, events, a report, a valid and a tampered bundle, public keys
-tests/                       68 tests, no network (test_adversarial.py attacks the verifier with hostile bundles)
+action.yml                   the GitHub Action: dry run in CI, fails the build over your limits
+tests/                       74 tests, no network (test_adversarial.py attacks the verifier with hostile bundles)
 examples/agent_demo.py       a toy agent recorded with two lines; rules-front-office.json are its rules
 examples/traces/             invented Langfuse, LangSmith and OpenTelemetry exports of the same 45 actions
 tools/make_trace_examples.py re-creates examples/traces/ from examples/events.csv
