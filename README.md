@@ -76,7 +76,7 @@ Prefer pip? `pip install git+https://github.com/ntinosgkiou-code/agentdryrun` gi
 
 Only the witness service needs packages: `pip install -r requirements.txt` (or `pip install "agentdryrun[witness] @ git+https://github.com/ntinosgkiou-code/agentdryrun"`).
 
-Check everything works: `python -m unittest discover -s tests` (114 tests, about twenty seconds; the JavaScript test is skipped when Node is not installed).
+Check everything works: `python -m unittest discover -s tests` (115 tests, about twenty seconds; the JavaScript test is skipped when Node is not installed).
 
 ---
 
@@ -461,7 +461,7 @@ docs/                        RULES, EVIDENCE-BUNDLE-SPEC, WITNESS, KNOWN-LIMITS
 ROADMAP.md, BUILD-LOG.md, CHANGELOG.md, CONTRIBUTING.md   how it is built, in public
 examples/                    rules, events, a report, a valid and a tampered bundle, public keys
 action.yml                   the GitHub Action: dry run in CI, fails the build over your limits
-tests/                       114 tests, no network (test_adversarial.py attacks the verifier with hostile bundles); tests/integration/ needs `pip install mcp`
+tests/                       115 tests, no network (test_adversarial.py attacks the verifier with hostile bundles); tests/integration/ needs `pip install mcp`
 examples/agent_demo.py       a toy agent recorded with two lines; rules-front-office.json are its rules
 examples/traces/             invented Langfuse, LangSmith and OpenTelemetry exports of the same 45 actions
 tools/make_trace_examples.py re-creates examples/traces/ from examples/events.csv
@@ -471,7 +471,7 @@ docs/assets/                 the recording, the report screenshot and the social
 
 ## Built in public
 
-This is an open-source tool built in the open. The [roadmap](ROADMAP.md) says what is done and what is next, the [build log](BUILD-LOG.md) records what worked and what was wrong (including corrections), and [CONTRIBUTING.md](CONTRIBUTING.md) lists the contributions that help most: breaking the verifier, writing a second one, and checking the Langfuse, LangSmith and OpenTelemetry readers against real exports. Issues are welcome. It is an unpaid project with no budget for issues or pull requests (`help wanted` is not a bounty); see [CONTRIBUTING.md](CONTRIBUTING.md).
+This is an open-source tool built in the open. The [roadmap](ROADMAP.md) says what is done and what is next, the [build log](BUILD-LOG.md) records what worked and what was wrong (including corrections), and [CONTRIBUTING.md](CONTRIBUTING.md) lists the contributions that help most: breaking the verifier, writing a second one, and checking the Langfuse, LangSmith and OpenTelemetry readers against real exports. Issues are welcome.
 
 ## Roadmap
 

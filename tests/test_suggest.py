@@ -85,6 +85,25 @@ class CommandLine(unittest.TestCase):
             with open(out, encoding="utf-8") as f:
                 self.assertEqual(validate_policy(json.load(f)), [])
 
+    def test_tools_with_no_numeric_parameters_and_the_cli_round_trip(self):
+        with tempfile.TemporaryDirectory() as d:
+            events = os.path.join(d, "e.jsonl")
+            with open(events, "w", encoding="utf-8") as f:
+                f.write(json.dumps({"tool": "calendar.share", "params": {}}) + os.linesep)                      # no parameters at all
+                f.write(json.dumps({"tool": "tickets.close", "params": {"reason": "duplicate"}}) + os.linesep)  # text only
+                f.write(json.dumps({"tool": "notes.list"}) + os.linesep)
+            out = os.path.join(d, "r.json")
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(main(["suggest-rules", "--events", events, "--out", out]), 0)
+            with open(out, encoding="utf-8") as f:
+                draft = json.load(f)
+            self.assertTrue(all("limits" not in t for t in draft["tools"].values()))                      # nothing is switched on
+            self.assertEqual(draft["default_unknown_tool"], "pending")
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                self.assertEqual(main(["rules", "check", out]), 0)                                         # the same validator the CLI ships
+            self.assertIn("valid: 3 tools", buf.getvalue())
+
     def test_reads_a_trace_export_too(self):
         with tempfile.TemporaryDirectory() as d:
             out = os.path.join(d, "r.json")

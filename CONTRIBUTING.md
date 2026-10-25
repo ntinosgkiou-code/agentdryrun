@@ -5,15 +5,12 @@ You do not need permission to try it, break it or build on it. It is Apache-2.0.
 
 ## Run it
 ```bash
-python -m unittest discover -s tests      # 114 tests, no network, about twenty seconds
+python -m unittest discover -s tests      # 115 tests, no network, about twenty seconds
 python -m agentdryrun demo                     # the whole thing on the shipped example
 python verify.py --help
 python -m agentdryrun shadow --help
 ```
 `verify.py` and the shadow report need Python 3.9+ and nothing else. Only the witness service needs `pip install -r requirements.txt`.
-
-## Money, assignments and `help wanted`
-This is an **unpaid, unfunded** open-source project. There is no budget for issues or pull requests, nobody is paid to work on it, and issues are not assigned: if you want to fix something, open a pull request (a comment first is welcome, not required). `help wanted` means "I would like help", not "there is a bounty". Contributions are accepted under Apache-2.0.
 
 ## What helps most (in this order)
 0. **Run `python -m agentdryrun scan` on your own Claude Code history** and tell us what it flagged that was normal, what it missed, or whether it crashed (paste command text only, no secrets). A redacted Codex CLI session file would let `scan` read Codex too ([issue 11](https://github.com/ntinosgkiou-code/agentdryrun/issues/11)).
