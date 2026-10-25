@@ -1,4 +1,4 @@
-"""`python -m omnios demo` runs the shadow report and the verifier on the shipped example. No network: python -m unittest"""
+"""`python -m agentdryrun demo` runs the shadow report and the verifier on the shipped example. No network: python -m unittest"""
 import contextlib
 import io
 import os
@@ -10,7 +10,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
 
-from omnios.__main__ import main  # noqa: E402
+from agentdryrun.__main__ import main  # noqa: E402
 
 
 class DemoTest(unittest.TestCase):

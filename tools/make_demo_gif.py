@@ -1,4 +1,4 @@
-"""Re-creates docs/assets/demo.gif from the REAL output of `python -m omnios demo`.
+"""Re-creates docs/assets/demo.gif from the REAL output of `python -m agentdryrun demo`.
 
 Optional developer tool (needs Pillow: pip install pillow). Nothing in the verifier or the shadow report needs it.
 The text in the GIF is whatever the command printed when you ran this script; only the typing speed is staged.
@@ -14,7 +14,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "docs", "assets", "demo.gif")
-COMMAND = "python -m omnios demo"
+COMMAND = "python -m agentdryrun demo"
 
 FONT_DIRS = ["C:/Windows/Fonts", "/usr/share/fonts/truetype/dejavu", "/System/Library/Fonts", "/Library/Fonts"]
 REGULAR = ["consola.ttf", "DejaVuSansMono.ttf", "Menlo.ttc"]
@@ -37,7 +37,7 @@ def load_font(names):
 def real_output():
     env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONPATH=ROOT)
     with tempfile.TemporaryDirectory() as d:
-        p = subprocess.run([sys.executable, "-m", "omnios", "demo"], cwd=d, env=env, capture_output=True, text=True, encoding="utf-8")
+        p = subprocess.run([sys.executable, "-m", "agentdryrun", "demo"], cwd=d, env=env, capture_output=True, text=True, encoding="utf-8")
         if p.returncode != 0:
             sys.exit("the demo did not finish as expected:\n" + p.stdout + p.stderr)
         return p.stdout.rstrip("\n").splitlines()
@@ -50,7 +50,7 @@ def style(line):
         return RED, line.startswith("RESULT")
     if line.startswith("["):
         return BLUE, True
-    if line.startswith("OmniOS demo"):
+    if line.startswith("agentdryrun demo"):
         return DIM, False
     return FG, False
 

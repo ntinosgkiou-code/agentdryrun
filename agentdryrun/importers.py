@@ -260,7 +260,7 @@ def try_load(path: str, keep_fields: Optional[set] = None):
 
 
 def main(args) -> int:
-    """python -m omnios import traces.json --out events.jsonl [--rules rules.json]"""
+    """python -m agentdryrun import traces.json --out events.jsonl [--rules rules.json]"""
     import sys
     keep = None
     if args.rules:

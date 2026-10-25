@@ -1,10 +1,10 @@
 # The rules language
 
 Rules are a JSON file that says, for each tool an agent may call, what is allowed, with which limits, and how many people must approve.
-The same file is read by the shadow command in this repository and by the OmniOS gateway. Check yours with:
+The same file is read by the shadow command in this repository and by the gateway. Check yours with:
 
 ```bash
-python -m omnios rules check my-rules.json
+python -m agentdryrun rules check my-rules.json
 ```
 
 A file that cannot be understood is refused **whole**, never partly applied.

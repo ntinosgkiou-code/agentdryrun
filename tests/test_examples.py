@@ -81,7 +81,7 @@ class ExampleBundles(unittest.TestCase):
 class Witness(unittest.TestCase):
     def test_a_witness_can_be_created(self):
         import tempfile
-        from omnios import witnessd
+        from agentdryrun import witnessd
         with tempfile.TemporaryDirectory() as d:
             info = witnessd.init_witness(d, "w-test")
             self.assertEqual(info["name"], "w-test")

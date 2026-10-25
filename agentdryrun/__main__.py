@@ -1,10 +1,10 @@
 """
-python -m omnios demo                                                                 the whole thing on the shipped example, one command
-python -m omnios shadow --rules rules.json --events events.csv --out report.html    judge what your agent did (dry run, local)
+python -m agentdryrun demo                                                                 the whole thing on the shipped example, one command
+python -m agentdryrun shadow --rules rules.json --events events.csv --out report.html    judge what your agent did (dry run, local)
                                                                                       (--events also takes an OpenTelemetry / Langfuse / LangSmith export)
-python -m omnios import traces.json --out events.jsonl                               turn a trace export into an events file
-python -m omnios rules check rules.json                                              validate a rules file
-python -m omnios witness init|run|serve|report                                       the independent witness
+python -m agentdryrun import traces.json --out events.jsonl                               turn a trace export into an events file
+python -m agentdryrun rules check rules.json                                              validate a rules file
+python -m agentdryrun witness init|run|serve|report                                       the witness service
 python verify.py bundle.zip --log-key ...                                            the offline verifier (single file)
 """
 from __future__ import annotations
@@ -16,7 +16,7 @@ from typing import Optional
 
 
 def main(argv: Optional[list] = None) -> int:
-    ap = argparse.ArgumentParser(prog="omnios", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = argparse.ArgumentParser(prog="agentdryrun", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
 
     p = sub.add_parser("shadow", help="judge what an agent already did against a rules file (dry run)")
@@ -30,7 +30,7 @@ def main(argv: Optional[list] = None) -> int:
     p.add_argument("--banner", help="a notice shown at the top of the report")
 
     p = sub.add_parser("demo", help="run the shadow report and the verifier on the shipped example (one command)")
-    p.add_argument("--out", default="omnios-demo-report.html", help="where to write the demo's shadow report")
+    p.add_argument("--out", default="agentdryrun-demo-report.html", help="where to write the demo's shadow report")
 
     p = sub.add_parser("import", help="turn a trace export (OpenTelemetry, Langfuse, LangSmith) into an events file")
     p.add_argument("traces", help="the export: JSON or JSON Lines")
@@ -41,7 +41,7 @@ def main(argv: Optional[list] = None) -> int:
     p = r.add_parser("check", help="validate a rules file")
     p.add_argument("file")
 
-    wp = sub.add_parser("witness", help="run an independent witness for one or many logs").add_subparsers(dest="sub", required=True)
+    wp = sub.add_parser("witness", help="run a witness for one or many logs").add_subparsers(dest="sub", required=True)
     p = wp.add_parser("init", help="create a witness key and a config skeleton")
     p.add_argument("--out", required=True)
     p.add_argument("--name", default="witness-1")

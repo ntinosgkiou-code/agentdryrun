@@ -5,7 +5,7 @@ about: The importer misses tool calls, reads parameters wrongly, or does not rec
 
 **Which tool and version produced the export** (Langfuse, LangSmith, OpenTelemetry collector or SDK, other)
 
-**Command you ran** (e.g. `python -m omnios import export.json`)
+**Command you ran** (e.g. `python -m agentdryrun import export.json`)
 
 **What it said**
 

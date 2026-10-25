@@ -3,9 +3,9 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "omnios"
-version = "0.4.0"
-description = "Record what your AI agents did, judge it against your rules locally, and verify evidence bundles offline."
+name = "agentdryrun"
+version = "0.5.0"
+description = "A dry run for AI agents: record their tool calls, see what your rules would have blocked, and prove it later. Local, zero dependencies."
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = []
@@ -20,9 +20,9 @@ classifiers = [
 witness = ["cryptography>=42", "fastapi>=0.110", "uvicorn>=0.29", "pydantic>=2"]
 
 [project.scripts]
-omnios = "omnios.__main__:main"
-omnios-verify = "verify:main"
+agentdryrun = "agentdryrun.__main__:main"
+agentdryrun-verify = "verify:main"
 
 [tool.setuptools]
-packages = ["omnios"]
+packages = ["agentdryrun"]
 py-modules = ["verify"]

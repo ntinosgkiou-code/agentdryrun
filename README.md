@@ -1,24 +1,29 @@
-# OmniOS
+# agentdryrun
 
-[![tests](https://github.com/ntinosgkiou-code/omnios/actions/workflows/tests.yml/badge.svg)](https://github.com/ntinosgkiou-code/omnios/actions/workflows/tests.yml)
+[![tests](https://github.com/ntinosgkiou-code/agentdryrun/actions/workflows/tests.yml/badge.svg)](https://github.com/ntinosgkiou-code/agentdryrun/actions/workflows/tests.yml)
+![python](https://img.shields.io/badge/python-3.9%2B-blue)
+![dependencies](https://img.shields.io/badge/dependencies-none-brightgreen)
+![license](https://img.shields.io/badge/license-Apache--2.0-blue)
 
-**See what your AI agents did, check it without trusting anyone, and find out where your rules would have stopped them.**
+**A dry run for AI agents.** Record what your agent's tools did, see what your rules *would* have blocked or sent for approval, and keep a record nobody can quietly edit.
+
+*Think `terraform plan`, but for the actions of an AI agent: local, zero dependencies, nothing is sent anywhere.*
 
 When an AI agent moves money, changes a customer record or deletes data, sooner or later someone asks:
 *who approved this? can you show the record was not changed afterwards? where would your rules have stopped it?*
-OmniOS answers all three. This repository is the part you can **read, run and check yourself**.
+agentdryrun answers all three. This repository is the part you can **read, run and check yourself**.
 
-![Terminal recording of python -m omnios demo: a shadow report on a made-up payments agent, an evidence bundle that verifies, and the same bundle after one approval was edited, which fails](docs/assets/demo.gif)
+![Terminal recording of python -m agentdryrun demo: a shadow report on a made-up payments agent, an evidence bundle that verifies, and the same bundle after one approval was edited, which fails](docs/assets/demo.gif)
 
 *That is the real output of one command on the example in this repository (invented data). Regenerate the recording with [`tools/make_demo_gif.py`](tools/make_demo_gif.py).*
 
 **Try it now.** Python 3.9 or newer, nothing to install, nothing leaves your machine:
 
 ```bash
-git clone https://github.com/ntinosgkiou-code/omnios && cd omnios && python -m omnios demo
+git clone https://github.com/ntinosgkiou-code/agentdryrun && cd agentdryrun && python -m agentdryrun demo
 ```
 
-(No git? **Code → Download ZIP**, unpack, run `python -m omnios demo` inside. On Windows use `py -3` if `python` is not found.)
+(No git? **Code → Download ZIP**, unpack, run `python -m agentdryrun demo` inside. On Windows use `py -3` if `python` is not found.)
 
 > **Status: prototype.** No external security review. Never run with a real customer or bank. Read [what it cannot prove](docs/KNOWN-LIMITS.md) before relying on any of it.
 
@@ -33,7 +38,7 @@ git clone https://github.com/ntinosgkiou-code/omnios && cd omnios && python -m o
 | **Recorder** | Two lines around your agent's tool functions write what it does to a local file. No vendor, no export, never breaks your agent. |
 | **Shadow report** | Give it a list of what your agent did (the recorder's file, a CSV, or a **Langfuse / LangSmith / OpenTelemetry** trace export) and a rules file. It judges every action as a dry run (*would pass / would need approval / would be refused*), lists the tools your agent uses that **no rule covers**, and writes a report you can hand to a manager or an auditor. Runs locally. Nothing is blocked, nothing is sent anywhere. |
 | **Offline verifier** | One Python file that checks an evidence bundle: every record it contains is unedited and in the signed tree; signed by the key you pinned; witnessed; the approval rules recorded in the log were followed; and it tells you when records are **missing** from the bundle. Hostile or malformed bundles end in FAILED, never in a crash or a false VERIFIED. |
-| **Independent witness** | A small service that remembers a log's checkpoints and refuses any that rewrite the past. |
+| **Witness service** | A small service that remembers a log's checkpoints and refuses any that rewrite the past. |
 | **Rules language** | The JSON format for "this tool needs two approvers above €1,000", with a strict validator. |
 | **Specs and real examples** | The bundle format, the witness protocol, and a valid and a tampered bundle you can run against. |
 
@@ -44,18 +49,18 @@ git clone https://github.com/ntinosgkiou-code/omnios && cd omnios && python -m o
 You need **Python 3.9 or newer**. The shadow report and the verifier need **nothing else**: no packages, no account, no network.
 
 ```bash
-git clone https://github.com/ntinosgkiou-code/omnios
-cd omnios
-python -m omnios demo          # the whole thing on the shipped example
+git clone https://github.com/ntinosgkiou-code/agentdryrun
+cd agentdryrun
+python -m agentdryrun demo          # the whole thing on the shipped example
 python verify.py --help
-python -m omnios shadow --help
+python -m agentdryrun shadow --help
 ```
 
 On Windows, use `py -3` instead of `python` if `python` is not found. No git? Use GitHub's **Code → Download ZIP** and unpack it.
 
-Prefer pip? `pip install git+https://github.com/ntinosgkiou-code/omnios` gives you the `omnios` and `omnios-verify` commands and `from omnios.record import Recorder` (the demo and the examples live in the clone).
+Prefer pip? `pip install git+https://github.com/ntinosgkiou-code/agentdryrun` gives you the `agentdryrun` and `agentdryrun-verify` commands and `from agentdryrun.record import Recorder` (the demo and the examples live in the clone).
 
-Only the witness service needs packages: `pip install -r requirements.txt` (or `pip install "omnios[witness] @ git+https://github.com/ntinosgkiou-code/omnios"`).
+Only the witness service needs packages: `pip install -r requirements.txt` (or `pip install "agentdryrun[witness] @ git+https://github.com/ntinosgkiou-code/agentdryrun"`).
 
 Check everything works: `python -m unittest discover -s tests` (68 tests, about ten seconds).
 
@@ -66,7 +71,7 @@ Check everything works: `python -m unittest discover -s tests` (68 tests, about 
 The repository ships an example: a made-up company, 45 things its payments agent did over two weeks, and a rules file.
 
 ```bash
-python -m omnios shadow \
+python -m agentdryrun shadow \
   --rules examples/rules-finance.json \
   --events examples/events.csv \
   --permissions finance:pay,finance:vendor-admin,finance:books \
@@ -97,7 +102,7 @@ Open `my-report.html` in a browser. It shows the four numbers, a table by tool, 
 No export, no vendor, no change to what your agent does. Put `@rec.tool("name")` on each function the agent can call:
 
 ```python
-from omnios.record import Recorder
+from agentdryrun.record import Recorder
 
 rec = Recorder("agent-events.jsonl", rules="my-rules.json")   # `rules=` keeps ONLY the parameters your rules look at
 
@@ -105,13 +110,13 @@ rec = Recorder("agent-events.jsonl", rules="my-rules.json")   # `rules=` keeps O
 def issue_refund(customer, amount_eur): ...
 ```
 
-Every call appends one line to `agent-events.jsonl` *before* the function runs, then runs it unchanged. Then judge the file like any other: `python -m omnios shadow --rules my-rules.json --events agent-events.jsonl`.
+Every call appends one line to `agent-events.jsonl` *before* the function runs, then runs it unchanged. Then judge the file like any other: `python -m agentdryrun shadow --rules my-rules.json --events agent-events.jsonl`.
 
 A complete, runnable example is [`examples/agent_demo.py`](examples/agent_demo.py): a toy front-office assistant (book, cancel, invoice, refund, message) that replays 50 invented calls, with [`examples/rules-front-office.json`](examples/rules-front-office.json):
 
 ```bash
 python examples/agent_demo.py
-python -m omnios shadow --rules examples/rules-front-office.json --events agent-events.jsonl --out report.html
+python -m agentdryrun shadow --rules examples/rules-front-office.json --events agent-events.jsonl --out report.html
 ```
 
 ```text
@@ -131,7 +136,7 @@ What the recorder is and is not:
 Point `--events` straight at the export. The tool calls are found and judged; everything else (model calls, retrieval) is skipped.
 
 ```bash
-python -m omnios shadow --rules examples/rules-finance.json --events examples/traces/langfuse.json \
+python -m agentdryrun shadow --rules examples/rules-finance.json --events examples/traces/langfuse.json \
   --permissions finance:pay,finance:vendor-admin,finance:books --out report.html
 ```
 
@@ -148,7 +153,7 @@ report: report.html   (nothing was blocked or executed)
 | **LangSmith** | runs as JSON or JSON Lines (a list or `{"runs": [...]}`) | `run_type: tool` (name = the tool, `inputs` = its parameters) |
 | **OpenTelemetry** | OTLP/JSON (`resourceSpans`) | a span with `gen_ai.operation.name = execute_tool` or `gen_ai.tool.name`; parameters from `gen_ai.tool.call.arguments` (upstream these GenAI conventions are still marked *Development*, so names may change) |
 
-To see what was read before judging it, or to keep only the parameters your rules look at (recommended before you share a file): `python -m omnios import export.json --rules my-rules.json --out events.jsonl`.
+To see what was read before judging it, or to keep only the parameters your rules look at (recommended before you share a file): `python -m agentdryrun import export.json --rules my-rules.json --out events.jsonl`.
 
 **Read this before trusting it on your own export.**
 - **What was checked, and what was not.** On 2026-10-24 the field names were checked against the primary sources: the [OpenTelemetry GenAI conventions](https://github.com/open-telemetry/semantic-conventions-genai) (`execute_tool`, `gen_ai.tool.name`, `gen_ai.tool.call.id`, and the opt-in `gen_ai.tool.call.arguments`), the [Langfuse source](https://github.com/langfuse/langfuse) (`type` `TOOL`, `startTime`, `input`) and the [LangSmith run data format](https://docs.langchain.com/langsmith/run-data-format) (`run_type` `tool`, `inputs`, `start_time`). The readers were then run only on **invented** fixtures ([`examples/traces/`](examples/traces/)), never on an export from a live system. If yours is read wrongly or not at all, open an issue with a redacted sample: that is the most useful report you can send.
@@ -184,13 +189,13 @@ Empty cells are left out. JSON Lines works too: `{"tool": "payments.send", "para
 Start from [`examples/rules-finance.json`](examples/rules-finance.json) and change the tool names, permissions and numbers. The format is explained in [`docs/RULES.md`](docs/RULES.md). Check it:
 
 ```bash
-python -m omnios rules check my-rules.json
+python -m agentdryrun rules check my-rules.json
 ```
 
 ### Step 3: run it
 
 ```bash
-python -m omnios shadow --rules my-rules.json --events my-events.csv --permissions finance:pay,finance:books --out report.html
+python -m agentdryrun shadow --rules my-rules.json --events my-events.csv --permissions finance:pay,finance:books --out report.html
 ```
 
 Pass `--permissions` with the permissions your agent **really** holds. Without it the tool assumes the agent holds every permission named in the rules, and says so.
@@ -201,7 +206,7 @@ Changing the rules and re-running takes a second. Try it: set a lower payment ce
 
 ## 3. Verify an evidence bundle
 
-An **evidence bundle** is the zip an auditor, insurer or customer receives. The repository includes two real ones. Both were made by the OmniOS gateway for the same made-up company; one was then edited.
+An **evidence bundle** is the zip an auditor, insurer or customer receives. The repository includes two real ones. Both were made by the gateway for the same made-up company; one was then edited.
 
 ```bash
 python verify.py examples/bundle-valid.zip \
@@ -271,8 +276,8 @@ A witness is a service run by **someone other than the log's operator** (an audi
 
 ```bash
 pip install -r requirements.txt
-python -m omnios witness init --out witness --name my-witness            # prints the witness's public key
-python -m omnios witness serve --config witness/witness.json --port 8100  # put TLS in front
+python -m agentdryrun witness init --out witness --name my-witness            # prints the witness's public key
+python -m agentdryrun witness serve --config witness/witness.json --port 8100  # put TLS in front
 ```
 
 Give the log's owner your public key and your URL. A witness only ever says *"I saw this checkpoint and it extends the previous one"*. It does **not** say the history is correct or complete. Details, independence levels and failure modes: [`docs/WITNESS.md`](docs/WITNESS.md).
@@ -315,7 +320,7 @@ The Gateway produces evidence; you do not have to trust it, because the verifier
 | Shadow report on your own exports, locally | ✅ | ✅ (also live, continuously, through an API or one line of SDK code) |
 | Rules language and validator | ✅ | ✅ |
 | Verify evidence bundles offline | ✅ | ✅ |
-| Run an independent witness | ✅ | ✅ |
+| Run a witness | ✅ | ✅ |
 | **Agents ask before acting; approvals enforced; fail-closed** | not included | ✅ |
 | **Signed append-only log written for you**, evidence bundles on demand | not included | ✅ |
 | Approver and admin screens, roles, two-person rule for changing the rules | not included | ✅ |
@@ -354,14 +359,14 @@ The complete list is in [`docs/KNOWN-LIMITS.md`](docs/KNOWN-LIMITS.md).
 
 ```text
 verify.py                    the offline verifier (single file, standard library only)
-omnios/demo.py               `python -m omnios demo`: the shadow report and the verifier on the example, in one command
-omnios/record.py             `Recorder`: two lines that write your agent's tool calls to a local events file
-omnios/importers.py          reads tool calls from Langfuse, LangSmith and OpenTelemetry exports; the `import` command
-pyproject.toml               makes `pip install git+https://github.com/ntinosgkiou-code/omnios` work
-omnios/shadow.py             the dry-run judge and the `shadow` command
-omnios/report.py             the shadow report (numbers and HTML) and the CSV/JSONL loader
-omnios/policy.py             the rules language: validation and evaluation
-omnios/witnessd.py, tlog.py  the independent witness and the Merkle-tree code
+agentdryrun/demo.py               `python -m agentdryrun demo`: the shadow report and the verifier on the example, in one command
+agentdryrun/record.py             `Recorder`: two lines that write your agent's tool calls to a local events file
+agentdryrun/importers.py          reads tool calls from Langfuse, LangSmith and OpenTelemetry exports; the `import` command
+pyproject.toml               makes `pip install git+https://github.com/ntinosgkiou-code/agentdryrun` work
+agentdryrun/shadow.py             the dry-run judge and the `shadow` command
+agentdryrun/report.py             the shadow report (numbers and HTML) and the CSV/JSONL loader
+agentdryrun/policy.py             the rules language: validation and evaluation
+agentdryrun/witnessd.py, tlog.py  the witness service and the Merkle-tree code
 docs/                        RULES, EVIDENCE-BUNDLE-SPEC, WITNESS, KNOWN-LIMITS
 ROADMAP.md, BUILD-LOG.md, CHANGELOG.md, CONTRIBUTING.md   how it is built, in public
 examples/                    rules, events, a report, a valid and a tampered bundle, public keys
@@ -394,4 +399,4 @@ Apache License 2.0 (see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE)). The Gatewa
 ---
 
 ### Ελληνικά (σύντομα)
-Το OmniOS δείχνει τι έκανε ένας AI agent, πού θα τον σταματούσαν οι κανόνες σου, και δίνει αποδείξεις που ελέγχει οποιοσδήποτε τρίτος **χωρίς να εμπιστευτεί το σύστημα που τις παρήγαγε**. Εδώ έχεις ό,τι μπορείς να διαβάσεις και να τρέξεις: την αναφορά «shadow» πάνω στα δικά σου δεδομένα (τοπικά, χωρίς δίκτυο), τον verifier σε ένα αρχείο Python, τον ανεξάρτητο μάρτυρα, τη γλώσσα κανόνων και παραδείγματα. Ο gateway που εφαρμόζει τους κανόνες στην πράξη και γράφει το υπογεγραμμένο αρχείο είναι υπηρεσία, όχι μέρος αυτού του repository. Είναι πρωτότυπο, χωρίς εξωτερικό έλεγχο ασφαλείας· τα όριά του είναι στο [`docs/KNOWN-LIMITS.md`](docs/KNOWN-LIMITS.md).
+Το agentdryrun δείχνει τι έκανε ένας AI agent, πού θα τον σταματούσαν οι κανόνες σου, και δίνει αποδείξεις που ελέγχει οποιοσδήποτε τρίτος **χωρίς να εμπιστευτεί το σύστημα που τις παρήγαγε**. Εδώ έχεις ό,τι μπορείς να διαβάσεις και να τρέξεις: την αναφορά «shadow» πάνω στα δικά σου δεδομένα (τοπικά, χωρίς δίκτυο), τον verifier σε ένα αρχείο Python, τον ανεξάρτητο μάρτυρα, τη γλώσσα κανόνων και παραδείγματα. Ο gateway που εφαρμόζει τους κανόνες στην πράξη και γράφει το υπογεγραμμένο αρχείο είναι υπηρεσία, όχι μέρος αυτού του repository. Είναι πρωτότυπο, χωρίς εξωτερικό έλεγχο ασφαλείας· τα όριά του είναι στο [`docs/KNOWN-LIMITS.md`](docs/KNOWN-LIMITS.md).

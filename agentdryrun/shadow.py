@@ -1,9 +1,9 @@
 """
 shadow.py: judge what an agent already did against a rules file, as a dry run. Nothing is blocked, nothing is executed.
 
-    python -m omnios shadow --rules examples/rules-finance.json --events examples/events.csv --out report.html
+    python -m agentdryrun shadow --rules examples/rules-finance.json --events examples/events.csv --out report.html
 
-Every reported event is judged by the same decision order the OmniOS gateway uses (permission, risk, deny rules, escalate rules,
+Every reported event is judged by the same decision order the gateway uses (permission, risk, deny rules, escalate rules,
 limits, approvals). Limits count the events you reported inside their own time window (`occurred_at`), because whatever is
 reported actually happened. Everything runs locally; nothing is sent anywhere.
 """

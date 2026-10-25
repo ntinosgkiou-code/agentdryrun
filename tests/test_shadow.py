@@ -12,9 +12,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
 
-from omnios import shadow  # noqa: E402
-from omnios.policy import validate_policy  # noqa: E402
-from omnios.report import load_events, render_html, summarize  # noqa: E402
+from agentdryrun import shadow  # noqa: E402
+from agentdryrun.policy import validate_policy  # noqa: E402
+from agentdryrun.report import load_events, render_html, summarize  # noqa: E402
 
 DAY = 86400
 T0 = 1_790_000_000.0

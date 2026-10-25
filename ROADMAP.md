@@ -4,14 +4,14 @@ Honest status, updated as things ship. Checked = in this repository and tested.
 
 ## Done
 - [x] Offline verifier, one file, standard library only (`verify.py`)
-- [x] Independent witness service and Merkle-tree/checkpoint code
+- [x] Witness service and Merkle-tree/checkpoint code
 - [x] Rules language with strict validation (`docs/RULES.md`)
 - [x] Local shadow report: judge what an agent did against a rules file, no network
 - [x] Bundle format and witness protocol written down (`docs/`)
 - [x] Real example bundles: one valid, one tampered, with public keys
 - [x] Known limits published first (`docs/KNOWN-LIMITS.md`)
 
-- [x] Readers for Langfuse, LangSmith and OpenTelemetry (OTLP/JSON) trace exports (`omnios/importers.py`), tested on invented fixtures only
+- [x] Readers for Langfuse, LangSmith and OpenTelemetry (OTLP/JSON) trace exports (`agentdryrun/importers.py`), tested on invented fixtures only
 
 - [x] Attack tests for the verifier: hostile bundles, relabelled scope, oversize and malformed files (`tests/test_adversarial.py`); `--require-all`, `--max-bytes`
 

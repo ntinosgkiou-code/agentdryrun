@@ -1,6 +1,6 @@
 # Security policy
 
-OmniOS is a **prototype**. It has not had an external security review.
+agentdryrun is a **prototype**. It has not had an external security review.
 
 ## Reporting a vulnerability
 Please do not open a public issue for something exploitable. Use GitHub's **private vulnerability reporting** (the *Security* tab of this repository, then *Report a vulnerability*) with:
@@ -13,7 +13,7 @@ The most valuable reports for this repository:
 - any parsing difference between the specification and the reference code that two implementations could disagree on.
 
 ## What counts as in scope
-`verify.py`, `omnios/tlog.py`, `omnios/witnessd.py`, and the format described in `docs/`.
+`verify.py`, `agentdryrun/tlog.py`, `agentdryrun/witnessd.py`, and the format described in `docs/`.
 The commercial gateway is not in this repository.
 
 ## What I will do

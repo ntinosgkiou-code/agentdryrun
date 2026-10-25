@@ -22,9 +22,9 @@ Two ways to feed it (same checks, same history, same report):
 Who runs it: someone who is not the log's operator (the customer's audit/security person, an auditor, the party that
 asks for the proof). If YOU run it for a customer, say so plainly: it is independent of their administrators, not of you.
 
-  python -m omnios witness init   --out witness-dir --name witness-1
-  python -m omnios witness run    --config witness-dir/witness.json [--once]
-  python -m omnios witness report --config witness-dir/witness.json --month 2026-10 --out reports/
+  python -m agentdryrun witness init   --out witness-dir --name witness-1
+  python -m agentdryrun witness run    --config witness-dir/witness.json [--once]
+  python -m agentdryrun witness report --config witness-dir/witness.json --month 2026-10 --out reports/
 
 Exit codes: 0 all logs verified · 2 at least one ALERT · 4 a log could not be reached.
 """
@@ -68,14 +68,14 @@ def _label(entry: dict) -> str:
 
 
 def _http_get(url: str) -> dict:
-    req = urllib.request.Request(url, headers={"User-Agent": "omnios-witnessd/2"})
+    req = urllib.request.Request(url, headers={"User-Agent": "agentdryrun-witnessd/2"})
     with urllib.request.urlopen(req, timeout=20) as r:
         return json.loads(r.read().decode("utf-8"))
 
 
 def _http_post(url: str, body: dict) -> dict:
     req = urllib.request.Request(url, data=json.dumps(body).encode("utf-8"), method="POST",
-                                 headers={"Content-Type": "application/json", "User-Agent": "omnios-witnessd/2"})
+                                 headers={"Content-Type": "application/json", "User-Agent": "agentdryrun-witnessd/2"})
     with urllib.request.urlopen(req, timeout=20) as r:
         return json.loads(r.read().decode("utf-8"))
 
@@ -99,7 +99,7 @@ def init_witness(out_dir: str, name: str = "witness-1") -> dict:
         cfg_path.write_text(json.dumps({
             "name": name, "key_file": "witness.key", "state_file": "witness_state.json", "format": "v1",
             "interval": 300, "max_gap_seconds": 3600,
-            "logs": [{"name": "example", "url": "https://omnios.example.com", "tenant": "example",
+            "logs": [{"name": "example", "url": "https://log.example.com", "tenant": "example",
                       "log_key": "<base64 log public key, obtained from the customer by another route>", "post_cosign": True}]},
             # for PUSH only (no "url"): {"name": "...", "origin": "omnios/<tenant>", "log_key": "<base64>"}
             indent=2), encoding="utf-8")
@@ -196,7 +196,7 @@ class WitnessDaemon:
 
     def run(self, once: bool = False) -> int:
         print(f"witness '{self.name}'  public key: {self.public_key}")
-        print(f"  (the tenant registers it:  python -m omnios tenant witness --id <tenant> --name {self.name} --key {self.public_key})")
+        print(f"  (the tenant registers it:  python -m agentdryrun tenant witness --id <tenant> --name {self.name} --key {self.public_key})")
         while True:
             code = self.poll_once()
             interval = int(self.cfg.get("interval", 0))
@@ -239,11 +239,11 @@ class WitnessDaemon:
             return 200, {"cosignature": line, "size": size, "witness": self.name}
 
     def app(self):
-        """The witness's own HTTP service:  python -m omnios witness serve --config witness.json"""
+        """The witness's own HTTP service:  python -m agentdryrun witness serve --config witness.json"""
         from fastapi import FastAPI
         from fastapi.responses import JSONResponse
 
-        api = FastAPI(title=f"OmniOS witness {self.name}", version="2.0-draft")
+        api = FastAPI(title=f"agentdryrun witness {self.name}", version="2.0-draft")
 
         @api.get("/witness/v1/info")
         def info() -> dict:
@@ -260,7 +260,7 @@ class WitnessDaemon:
         import uvicorn
         print(f"witness '{self.name}'  public key: {self.public_key}")
         print(f"  logs it accepts: {', '.join(_origin(e) for e in self.cfg['logs'])}")
-        print(f"  (a customer registers it:  python -m omnios tenant witness --id <tenant> --name {self.name} "
+        print(f"  (a customer registers it:  python -m agentdryrun tenant witness --id <tenant> --name {self.name} "
               f"--key {self.public_key} --url http://<this host>:{port})")
         uvicorn.run(self.app(), host=host, port=port, log_level="warning")
         return 0
@@ -292,7 +292,7 @@ class WitnessDaemon:
                 "generated_at": time.strftime("%Y-%m-%d %H:%M:%S UTC", time.gmtime(self._clock())), "logs": out_logs}
 
 
-_REPORT_HTML = """<!doctype html><html lang="en"><head><meta charset="utf-8"><title>OmniOS witness report {month}</title>
+_REPORT_HTML = """<!doctype html><html lang="en"><head><meta charset="utf-8"><title>agentdryrun witness report {month}</title>
 <style>body{{font:15px/1.5 system-ui,sans-serif;max-width:860px;margin:32px auto;padding:0 16px;color:#0e1a2b}}
 table{{border-collapse:collapse;width:100%}}th,td{{border:1px solid #d8dde6;padding:8px 10px;text-align:left}}th{{background:#edf0f5}}
 .CLEAN{{color:#17693f;font-weight:600}}.ALERT{{color:#9b2226;font-weight:700}}.GAPS,.NOCOVERAGE{{color:#8a4700;font-weight:600}}

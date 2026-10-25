@@ -1,21 +1,21 @@
 # Contributing
 
-OmniOS (the open parts) is **built in public**: the code, the roadmap, the mistakes and the corrections are all in this repository.
+agentdryrun (the open parts) is **built in public**: the code, the roadmap, the mistakes and the corrections are all in this repository.
 You do not need permission to try it, break it or build on it. It is Apache-2.0.
 
 ## Run it
 ```bash
 python -m unittest discover -s tests      # 68 tests, no network, about ten seconds
-python -m omnios demo                     # the whole thing on the shipped example
+python -m agentdryrun demo                     # the whole thing on the shipped example
 python verify.py --help
-python -m omnios shadow --help
+python -m agentdryrun shadow --help
 ```
 `verify.py` and the shadow report need Python 3.9+ and nothing else. Only the witness service needs `pip install -r requirements.txt`.
 
 ## What helps most (in this order)
 1. **Break the verifier.** A bundle that `verify.py` calls `VERIFIED` although a record was added, removed, edited or reordered is the most valuable report you can send. See [SECURITY.md](SECURITY.md).
 2. **A second verifier.** Write one in any language from [`docs/EVIDENCE-BUNDLE-SPEC.md`](docs/EVIDENCE-BUNDLE-SPEC.md) and run it on `examples/`. Every place it disagrees with `verify.py` is either a bug or a hole in the spec. Open an issue titled *verifier disagreement*.
-3. **Check the importers on a real export.** The Langfuse, LangSmith and OpenTelemetry readers in `omnios/importers.py` were built from the vendors' documented field names and tested only on invented fixtures. Run `python -m omnios import your-export.json`; if it reads it wrongly or not at all, open an issue with a **redacted** sample. New sources (OpenInference, Braintrust, Helicone, raw OpenAI or Anthropic tool-call logs) are welcome as pull requests with a fixture and a test.
+3. **Check the importers on a real export.** The Langfuse, LangSmith and OpenTelemetry readers in `agentdryrun/importers.py` were built from the vendors' documented field names and tested only on invented fixtures. Run `python -m agentdryrun import your-export.json`; if it reads it wrongly or not at all, open an issue with a **redacted** sample. New sources (OpenInference, Braintrust, Helicone, raw OpenAI or Anthropic tool-call logs) are welcome as pull requests with a fixture and a test.
 4. **Rules examples** for other workflows (refunds, data deletion, outbound email). The language is in [`docs/RULES.md`](docs/RULES.md).
 5. **Translations** of the README and docs.
 

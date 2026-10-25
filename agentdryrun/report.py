@@ -90,7 +90,7 @@ def render_html(summary: dict, tenant_name: str, generated: Optional[float] = No
     pct = round(100 * s["needs_review_share"])
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Shadow report: {e(tenant_name)}</title><style>{_CSS}</style></head><body><main>
-<p class="mu">OmniOS &middot; observe mode &middot; generated {e(gen)}</p>
+<p class="mu">agentdryrun &middot; observe mode &middot; generated {e(gen)}</p>
 <h1>Shadow report: {e(tenant_name)}</h1>
 {'<div class="box warn"><b>' + e(banner) + '</b></div>' if banner else ''}
 <p class="mu">Period {e(when(s['first_at']))} to {e(when(s['last_at']))} &middot; agents: {e(', '.join(s['agents']) or '-')} &middot; rules in force: {e(', '.join(s['policy_hashes']) or '-')}</p>

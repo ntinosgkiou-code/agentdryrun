@@ -1,6 +1,6 @@
-"""Record what your agent does, in two lines, and judge it later with `python -m omnios shadow`.
+"""Record what your agent does, in two lines, and judge it later with `python -m agentdryrun shadow`.
 
-    from omnios.record import Recorder
+    from agentdryrun.record import Recorder
     rec = Recorder("agent-events.jsonl", rules="my-rules.json")
 
     @rec.tool("payments.send")
@@ -70,7 +70,7 @@ class Recorder:
         except OSError as e:
             if not self._warned:
                 self._warned = True
-                warnings.warn(f"omnios Recorder could not write {self.path} ({e}); the agent keeps running without recording", RuntimeWarning, stacklevel=3)
+                warnings.warn(f"agentdryrun Recorder could not write {self.path} ({e}); the agent keeps running without recording", RuntimeWarning, stacklevel=3)
         return ev
 
     # ───────────────────────── wrapping ─────────────────────────

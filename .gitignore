@@ -9,4 +9,4 @@ build/
 dist/
 *.egg-info/
 agent-events.jsonl
-omnios-demo-report.html
+agentdryrun-demo-report.html

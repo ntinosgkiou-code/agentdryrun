@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-verify.py — check an OmniOS evidence bundle with nothing but Python 3.9+.   (stand-alone: no OmniOS code needed)
+verify.py — check an agentdryrun evidence bundle with nothing but Python 3.9+.   (stand-alone: no agentdryrun code needed)
 
     python verify.py bundle.zip --log-key <base64 public key of the log>  [--witness name=<base64 key> ...] [--json]
 
@@ -578,7 +578,7 @@ def _check_rules(parsed: dict, rep: dict) -> None:
 # ───────────────────────── command line ─────────────────────────
 def render(rep: dict) -> str:
     i = rep.get("info", {})
-    out = ["OmniOS evidence bundle", "=" * 60]
+    out = ["agentdryrun evidence bundle", "=" * 60]
     if i:
         out += [f"tenant           {i.get('tenant')}   (profile {i.get('profile')}, admin quorum {i.get('admin_quorum')})",
                 f"log              {i.get('origin')}   size {i.get('size')}",
@@ -611,7 +611,7 @@ def render(rep: dict) -> str:
 
 
 def main(argv: Optional[list] = None) -> int:
-    ap = argparse.ArgumentParser(description="Verify an OmniOS evidence bundle offline")
+    ap = argparse.ArgumentParser(description="Verify an agentdryrun evidence bundle offline")
     ap.add_argument("bundle")
     ap.add_argument("--log-key", help="base64 public key of the log, obtained out of band")
     ap.add_argument("--witness", action="append", default=[], metavar="NAME=KEY", help="a trusted witness public key (repeatable)")

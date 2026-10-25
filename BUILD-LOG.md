@@ -2,6 +2,12 @@
 
 A dated, honest log of what was built, what worked, and what was wrong. Newest first. Nothing here is a customer story: there are none yet.
 
+## 2026-10-25: a new name
+- **The project was called OmniOS, which is also an unrelated operating system** (omnios.org, release r151058 in May 2026) with a GitHub organization of the same name. Searching for it would never have found this repository. The trademark status was not checked (no registry lookup was possible); renaming early, with zero stars, was the cheap way to avoid finding out the hard way.
+- **Chosen name: agentdryrun**, after checking that it is free on PyPI, npm and GitHub (no repository, user or organization). It says what it does: a dry run for AI agents.
+- **Done with a script and checked by the tests** (68 pass). **Left unchanged on purpose:** the bundle format identifier `omnios-evidence-bundle` and the `omnios/<tenant>` origin in the signed examples, because changing them would break existing signed bundles (see the note in `docs/EVIDENCE-BUNDLE-SPEC.md`).
+- **Evidence I used on what makes repositories grow** (so the next steps are not guesses): developers check stars before using a project and promotion matters most (Borges and Valente, 2018); a Hacker News post raises stars, mostly for well-documented projects, but the *median* launch is far below the average (Kraishan 2025, KIT causal study); bought stars give a boost under two months and then become a liability (ICSE 2026). Nothing in this repository buys or trades stars.
+
 ## 2026-10-24 (late night): the recorder
 - **Why:** every way in so far needed an export or a hand-made CSV. The shortest path from "I have an agent" to "show me what it would have needed approval for" is two lines of code around its tool functions.
 - **Built** `omnios.record.Recorder`, a front-office example with rules, and `pyproject.toml` so `pip install git+...` works. Checked the install in a clean virtual environment and ran `omnios`, `omnios-verify` and `Recorder` from another directory.

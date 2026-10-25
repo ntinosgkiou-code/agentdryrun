@@ -11,9 +11,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
 
-from omnios import importers, shadow  # noqa: E402
-from omnios.__main__ import main  # noqa: E402
-from omnios.report import load_events, summarize  # noqa: E402
+from agentdryrun import importers, shadow  # noqa: E402
+from agentdryrun.__main__ import main  # noqa: E402
+from agentdryrun.report import load_events, summarize  # noqa: E402
 
 EX = os.path.join(ROOT, "examples")
 PERMS = {"finance:pay", "finance:vendor-admin", "finance:books"}

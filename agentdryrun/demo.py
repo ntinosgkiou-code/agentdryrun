@@ -1,4 +1,4 @@
-"""python -m omnios demo: the three things this repository does, on the shipped example, in one command.
+"""python -m agentdryrun demo: the three things this repository does, on the shipped example, in one command.
 
 It only reads files from examples/ and writes one HTML report. It sends nothing anywhere.
 """
@@ -37,10 +37,10 @@ def main(args) -> int:
     needed = [os.path.join(EX, n) for n in ("rules-finance.json", "events.csv", "bundle-valid.zip", "bundle-tampered.zip")]
     missing = [p for p in needed if not os.path.isfile(p)]
     if missing:
-        print("the demo needs the examples/ folder of the repository (git clone https://github.com/ntinosgkiou-code/omnios); missing: " + ", ".join(os.path.basename(p) for p in missing), file=sys.stderr)
+        print("the demo needs the examples/ folder of the repository (git clone https://github.com/ntinosgkiou-code/agentdryrun); missing: " + ", ".join(os.path.basename(p) for p in missing), file=sys.stderr)
         return 3
 
-    print("OmniOS demo: what this repository does, on the shipped example (a made-up company, invented data).\n")
+    print("agentdryrun demo: what this repository does, on the shipped example (a made-up company, invented data).\n")
 
     print("[1/3] Shadow report: where would the rules have stopped a payments agent?")
     ns = argparse.Namespace(rules=os.path.join(EX, "rules-finance.json"), events=os.path.join(EX, "events.csv"), out=args.out, json=None,

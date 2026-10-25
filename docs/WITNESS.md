@@ -1,7 +1,7 @@
-> **In this repository:** the witness service (`python -m omnios witness init|run|serve|report`) and the verifier (`python verify.py`).
-> Commands in this document that start with `python -m omnios tenant`, `serve` or `push` belong to the OmniOS gateway, which is not part of this repository. They are shown so you can see the whole protocol; the witness side is complete without them.
+> **In this repository:** the witness service (`python -m agentdryrun witness init|run|serve|report`) and the verifier (`python verify.py`).
+> Commands in this document that start with `python -m agentdryrun tenant`, `serve` or `push` belong to the gateway, which is not part of this repository. They are shown so you can see the whole protocol; the witness side is complete without them.
 
-# The independent witness: how it works, what it proves, what it does not
+# The witness service: how it works, what it proves, what it does not
 
 The idea in one line: **whoever runs the system cannot quietly rewrite its past, because someone else already remembers it.**
 The operator still *writes* the log. What it cannot do, without being caught, is change what a witness has already seen.
@@ -10,7 +10,7 @@ The operator still *writes* the log. What it cannot do, without being caught, is
 
 | Party | Holds | Does |
 |---|---|---|
-| **The log** (the customer's OmniOS installation) | the ledger and its signing key | writes records; signs a *checkpoint* (size N, root hash R) |
+| **The log** (the customer's installation) | the ledger and its signing key | writes records; signs a *checkpoint* (size N, root hash R) |
 | **A witness** (a separate service on someone else's machine, with its own key) | the log's *public* key (given to it another way), and the last checkpoint it accepted | checks that each new checkpoint extends the previous one, and cosigns only if it does |
 | **The auditor / insurer / customer** | the log's public key and the witnesses' public keys (each obtained another way) | checks an evidence bundle offline and sets the bar: *how many witnesses, how recent* |
 
@@ -34,7 +34,7 @@ A checkpoint contains no data: only the size, a root hash and signatures. The wi
   registered for this tenant)
 ```
 
-`python -m omnios serve --push-interval 300` does this every five minutes for every witness registered with a URL. The older **pull** mode (the witness fetches `/public/<tenant>/checkpoint`) still exists for logs that can be reached from outside; both modes share one history and one report.
+`python -m agentdryrun serve --push-interval 300` does this every five minutes for every witness registered with a URL. The older **pull** mode (the witness fetches `/public/<tenant>/checkpoint`) still exists for logs that can be reached from outside; both modes share one history and one report.
 
 ## 3. What a cosignature says, in exact words
 
@@ -78,18 +78,18 @@ python verify.py bundle.zip --log-key <log public key> \
 
 ```
 # on the witness's machine (a person who is not an administrator of the installation)
-python -m omnios witness init --out witness --name auditor-witness      # prints its public key
+python -m agentdryrun witness init --out witness --name auditor-witness      # prints its public key
 # edit witness/witness.json: for each customer add
 #   {"name": "acme", "origin": "omnios/acme", "log_key": "<the log's public key, received another way>"}
-python -m omnios witness serve --config witness/witness.json --port 8100   # put TLS in front
+python -m agentdryrun witness serve --config witness/witness.json --port 8100   # put TLS in front
 
 # on the customer's installation
-python -m omnios tenant witness --root data --id acme --name auditor-witness --key <witness public key> --url https://witness.example
-python -m omnios serve --root data --push-interval 300
-# or once, from a scheduler:   python -m omnios push --root data
+python -m agentdryrun tenant witness --root data --id acme --name auditor-witness --key <witness public key> --url https://witness.example
+python -m agentdryrun serve --root data --push-interval 300
+# or once, from a scheduler:   python -m agentdryrun push --root data
 ```
 
-Monthly: `python -m omnios witness report --config witness/witness.json --month 2026-10` (CLEAN / GAPS / NO COVERAGE / ALERT per log).
+Monthly: `python -m agentdryrun witness report --config witness/witness.json --month 2026-10` (CLEAN / GAPS / NO COVERAGE / ALERT per log).
 
 ## 8. Failure modes, in plain words
 

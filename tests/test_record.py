@@ -15,9 +15,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
 
-from omnios.__main__ import main  # noqa: E402
-from omnios.record import Recorder  # noqa: E402
-from omnios.report import load_events  # noqa: E402
+from agentdryrun.__main__ import main  # noqa: E402
+from agentdryrun.record import Recorder  # noqa: E402
+from agentdryrun.report import load_events  # noqa: E402
 
 RULES = os.path.join(ROOT, "examples", "rules-front-office.json")
 

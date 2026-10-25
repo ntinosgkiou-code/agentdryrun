@@ -1,5 +1,7 @@
 # Evidence bundle, format `omnios-evidence-bundle` version 1
 
+> **A note on the name.** This project was called *OmniOS* until 2026-10-25 and is now **agentdryrun** (OmniOS is also the name of an unrelated operating system). The identifier `omnios-evidence-bundle` and the origin prefix `omnios/<tenant>` are the **historical names of the format and are kept on purpose**, so every existing bundle and checkpoint keeps verifying. They name a format, not this project.
+
 The file an auditor, insurer or customer receives. Anyone can write a verifier from this page; the reference one is `verify.py` in the root of this repository, which is also inside every bundle as `verify.py`.
 
 ## 1. Layout (a zip)

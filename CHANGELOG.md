@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0 (2026-10-25)  New name: agentdryrun
+- **Renamed from OmniOS to agentdryrun.** OmniOS is the name of an unrelated, actively released operating system (omnios.org), which made the project impossible to find and risked confusion. Python package, commands (`python -m agentdryrun`, `agentdryrun-verify`), repository (`ntinosgkiou-code/agentdryrun`; the old URL redirects), docs and tests all use the new name. The old repository URL keeps working through GitHub's redirect.
+- **Kept on purpose:** the evidence-bundle format identifier `omnios-evidence-bundle` and the `omnios/<tenant>` origin prefix inside the signed examples. They name a format, not the project, and changing them would invalidate existing bundles.
+- README leads with the problem and a one-line analogy (a dry run for AI agents, like `terraform plan`), badges for Python, dependencies and licence; "independent witness" is now "witness service" everywhere (independence depends on who runs it).
+- Regenerated the demo recording, the report screenshot and the social preview image.
+- 68 tests.
+
 ## 0.4.0 (2026-10-24)  Record your own agent
 - `omnios.record.Recorder`: two lines (`@rec.tool("name")`) write an agent's tool calls to a local events file before each call runs. Sync and async, threads, `rec.wrap` for code you cannot edit. Keeps only short scalar parameters and, with `rules=`, only the fields the rules look at. Never breaks the agent (one warning if the file cannot be written). Records the attempt only.
 - `examples/agent_demo.py` + `examples/rules-front-office.json`: a toy front-office assistant (50 invented calls: book, cancel, invoice, refund, message, win-back) and the rules for it; tests pin the verdicts (37 pass, 11 need approval, 2 refused) and check that names and message bodies never reach the file.

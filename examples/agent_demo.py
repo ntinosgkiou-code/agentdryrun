@@ -1,8 +1,8 @@
-"""A toy front-office assistant, recorded with two lines of OmniOS. Everything here is invented; there is no model, no
+"""A toy front-office assistant, recorded with two lines of agentdryrun. Everything here is invented; there is no model, no
 network and no real customer: the "agent" replays a fixed list of calls, the way a real one would make them.
 
     python examples/agent_demo.py                      # writes agent-events.jsonl
-    python -m omnios shadow --rules examples/rules-front-office.json --events agent-events.jsonl --out report.html
+    python -m agentdryrun shadow --rules examples/rules-front-office.json --events agent-events.jsonl --out report.html
 
 The point: your own agent only needs `@rec.tool("name")` on each function it can call. Compare examples/rules-front-office.json.
 """
@@ -12,7 +12,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
 
-from omnios.record import Recorder  # noqa: E402
+from agentdryrun.record import Recorder  # noqa: E402
 
 RULES = os.path.join(HERE, "rules-front-office.json")
 
@@ -108,7 +108,7 @@ def main(out_path="agent-events.jsonl"):
         os.remove(out_path)                              # the demo starts from an empty file; real use appends forever
     n = replay(build(out_path))
     print(f"the toy agent made {n} tool calls; recorded to {out_path} (only the fields the rules look at)")
-    print(f"next: python -m omnios shadow --rules examples/rules-front-office.json --events {out_path} --out report.html")
+    print(f"next: python -m agentdryrun shadow --rules examples/rules-front-office.json --events {out_path} --out report.html")
     return n
 
 
