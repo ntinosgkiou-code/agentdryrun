@@ -1,0 +1,14 @@
+{
+  "name": "agentdryrun",
+  "version": "0.6.0",
+  "description": "A dry run for AI agents: record their tool calls (JavaScript/TypeScript recorder) and judge them with the agentdryrun CLI. Zero dependencies.",
+  "main": "js/index.js",
+  "types": "js/index.d.ts",
+  "files": ["js/index.js", "js/index.d.ts", "LICENSE", "NOTICE"],
+  "scripts": { "test": "node --test js/test/recorder.test.js" },
+  "engines": { "node": ">=18" },
+  "license": "Apache-2.0",
+  "repository": { "type": "git", "url": "git+https://github.com/ntinosgkiou-code/agentdryrun.git" },
+  "homepage": "https://ntinosgkiou-code.github.io/agentdryrun/",
+  "keywords": ["ai-agents", "dry-run", "tool-calling", "audit-trail", "observability", "guardrails"]
+}

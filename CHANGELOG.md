@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.0 (2026-10-25)  Fewer steps to the first report
+- **`mcp-record`**: a stdio proxy that starts any MCP server, forwards every message unchanged in both directions and copies each `tools/call` request into an events file before the server sees it. No change to the agent or the server. Tested byte for byte against a fake server, and between the official MCP Python SDK client and a server written with it (SDK 1.30 and 2.3, Linux and Windows CI: `mcp-compat.yml`). **Not tested** against desktop clients (Claude Desktop, Cursor, VS Code) or non-Python servers; stdio only.
+- **`suggest-rules`**: drafts a first rules file from the events: tools whose names look read-only need no approval, everything else (and anything unrecognised) needs one approval. Never writes limits, refusals or escalations; prints the numeric fields it saw instead. Output passes `rules check` and is marked `REVIEW ME`.
+- **JavaScript/TypeScript recorder** (`js/`, `package.json`): the same `Recorder` for Node 18+, zero dependencies, same events file. Install from GitHub; not published on npm.
+- Fixed while testing against the official SDK: the proxy crashed ("Fatal Python error") when the server exited while the client still held stdin open. It now flushes and exits with the server's exit code. A test pins it.
+- GitHub Action example pinned to `v0.6.0`.
+- 92 tests (plus 7 in Node, 1 integration check run in CI).
+
 ## 0.5.0 (2026-10-25)  New name: agentdryrun
 - **Renamed from OmniOS to agentdryrun.** OmniOS is the name of an unrelated, actively released operating system (omnios.org), which made the project impossible to find and risked confusion. Python package, commands (`python -m agentdryrun`, `agentdryrun-verify`), repository (`ntinosgkiou-code/agentdryrun`; the old URL redirects), docs and tests all use the new name. The old repository URL keeps working through GitHub's redirect.
 - **Kept on purpose:** the evidence-bundle format identifier `omnios-evidence-bundle` and the `omnios/<tenant>` origin prefix inside the signed examples. They name a format, not the project, and changing them would invalidate existing bundles.

@@ -55,14 +55,14 @@
 
   <h2>Three things it does</h2>
   <div class="grid">
-    <div class="card"><b>1. Record</b>Two lines around your agent's tool functions write every call to a local file, before it runs. It never breaks your agent.<pre>@rec.tool("refunds.issue")
+    <div class="card"><b>1. Record</b>Two lines around your agent's tool functions (Python or JavaScript) write every call to a local file, before it runs. It never breaks your agent. Or put <code>mcp-record</code> in front of any MCP server and change nothing else.<pre>@rec.tool("refunds.issue")
 def issue_refund(customer, amount_eur): ...</pre></div>
-    <div class="card"><b>2. Dry run</b>A rules file says what may pass, what needs approval, what is refused. The report shows what <i>would</i> have happened, and which tools no rule covers. Runs in CI as a GitHub Action.</div>
+    <div class="card"><b>2. Dry run</b>A rules file says what may pass, what needs approval, what is refused. The report shows what <i>would</i> have happened, and which tools no rule covers. <code>suggest-rules</code> drafts the first rules file for you. Runs in CI as a GitHub Action.</div>
     <div class="card"><b>3. Prove</b>A one-file verifier checks an evidence bundle offline: records unedited, signed by the key you pinned, rules followed, and it tells you when records are missing.</div>
   </div>
 
   <h2>In CI</h2>
-  <pre>- uses: ntinosgkiou-code/agentdryrun@v0.5.0
+  <pre>- uses: ntinosgkiou-code/agentdryrun@v0.6.0
   with:
     rules: rules.json
     events: tests/agent-events.jsonl

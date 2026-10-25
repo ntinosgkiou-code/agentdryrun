@@ -33,6 +33,16 @@ def main(argv: Optional[list] = None) -> int:
     p.add_argument("--max-unmapped", type=int, metavar="N", help="exit with code 4 if more than N actions use a tool no rule covers (for CI)")
     p.add_argument("--summary-md", metavar="FILE", help="also write a short Markdown summary (for a CI job summary)")
 
+    p = sub.add_parser("suggest-rules", help="draft a starter rules file from the tool calls you recorded (a draft to review, not a policy)")
+    p.add_argument("--events", required=True, help="the events file or trace export, as for `shadow`")
+    p.add_argument("--out", default="rules.draft.json")
+
+    p = sub.add_parser("mcp-record", help="record the tool calls of an MCP server (stdio) without changing any code: mcp-record --out F -- <server command>")
+    p.add_argument("--out", default="mcp-events.jsonl", help="where the events go (JSON Lines, appended)")
+    p.add_argument("--rules", help="keep only the parameters these rules look at")
+    p.add_argument("--fields", help="comma-separated parameter names to keep (added to the rules' fields)")
+    p.add_argument("command", nargs=argparse.REMAINDER, help="the command that starts the MCP server, after --")
+
     p = sub.add_parser("demo", help="run the shadow report and the verifier on the shipped example (one command)")
     p.add_argument("--out", default="agentdryrun-demo-report.html", help="where to write the demo's shadow report")
 
@@ -65,6 +75,12 @@ def main(argv: Optional[list] = None) -> int:
     if a.cmd == "shadow":
         from . import shadow
         return shadow.main(a)
+    if a.cmd == "mcp-record":
+        from . import mcprec
+        return mcprec.main(a)
+    if a.cmd == "suggest-rules":
+        from . import suggest
+        return suggest.main(a)
     if a.cmd == "import":
         from . import importers
         return importers.main(a)

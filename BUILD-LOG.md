@@ -2,6 +2,13 @@
 
 A dated, honest log of what was built, what worked, and what was wrong. Newest first. Nothing here is a customer story: there are none yet.
 
+## 2026-10-25 (later): fewer steps to the first report
+- **Why:** every way in still needed either code in the agent, an export, or a hand-written rules file. Three additions remove one step each: record MCP calls without touching anything (`mcp-record`), draft the rules from what was seen (`suggest-rules`), and a JavaScript recorder.
+- **An "enterprise wish list" I was handed** (Postgres, multi-region failover, SSO, Slack approvals, passkeys, a "SOC 2 / EU AI Act report signed by independent witnesses") was triaged instead of built. None of it helps someone who wants to try the tool today; all of it is guessing before a user exists. It is written down under *Not now* in the roadmap with the reason. Two claims in it are not made anywhere in this project: that a compliance report can be produced (this is not a certification, and the EU AI Act's high-risk obligations have been postponed to December 2027 as far as I know: check the current text before relying on any date), and that signed approvals make forgery impossible.
+- **A real bug, found only by using a real client:** my own tests passed, but running the proxy between the official MCP SDK client and server showed "Fatal Python error" when the server exited while the client still held stdin open. A background thread was blocked reading stdin while the interpreter shut down. Fix: flush and `os._exit` with the server's code. I wrote the test first, saw it fail without the fix, then fixed it.
+- **What is verified:** byte-identical forwarding against a fake server; the official SDK 1.30 and 2.3, client and server, both calls recorded; Node recorder with `node:test`; events written by JavaScript judged by the Python side.
+- **What is not:** any desktop MCP client, servers in other languages, the HTTP transport. The MCP proxy space already has several small projects; this one is meant to feed the dry run and CI, not to compete as a firewall.
+
 ## 2026-10-25: a new name
 - **The project was called OmniOS, which is also an unrelated operating system** (omnios.org, release r151058 in May 2026) with a GitHub organization of the same name. Searching for it would never have found this repository. The trademark status was not checked (no registry lookup was possible); renaming early, with zero stars, was the cheap way to avoid finding out the hard way.
 - **Chosen name: agentdryrun**, after checking that it is free on PyPI, npm and GitHub (no repository, user or organization). It says what it does: a dry run for AI agents.

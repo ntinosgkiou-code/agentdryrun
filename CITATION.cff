@@ -6,7 +6,7 @@ authors:
   - alias: "ntinosgkiou-code"
 license: Apache-2.0
 repository-code: "https://github.com/ntinosgkiou-code/agentdryrun"
-version: 0.5.0
+version: 0.6.0
 date-released: 2026-10-25
 abstract: >-
   Record an AI agent's tool calls, judge them against a rules file as a dry run (would pass, would need approval,

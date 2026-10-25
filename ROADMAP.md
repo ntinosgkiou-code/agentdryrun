@@ -17,8 +17,14 @@ Honest status, updated as things ship. Checked = in this repository and tested.
 
 - [x] `Recorder`: two lines around an agent's tool functions write the events the shadow report reads; `pip install git+...`
 
+- [x] `mcp-record`: record MCP `tools/call` requests with no change to the agent or the server (stdio; tested against the official Python SDK)
+- [x] `suggest-rules`: a draft rules file from what the agent did
+- [x] JavaScript/TypeScript recorder (`js/`)
+
 ## Next
-- [ ] A recorder for non-Python agents (a tiny HTTP or CLI shim), and adapters for the common agent frameworks' tool decorators
+- [ ] Check `mcp-record` against real MCP clients (Claude Desktop, Cursor, VS Code) and servers in other languages; the HTTP transport
+- [ ] Publish the JavaScript package on npm and the Python package on PyPI once someone outside this project uses it
+- [ ] Adapters for the common agent frameworks' tool decorators
 - [ ] Cross-check our checkpoint and `cosignature/v1` bytes against a second implementation (for example Go's `x/mod/sumdb/note`)
 - [ ] Check the three readers against **real** exports (send a redacted sample), and fix what they get wrong
 - [ ] More sources: OpenInference / Phoenix, Braintrust, Helicone, plain OpenAI and Anthropic tool-call logs
@@ -35,3 +41,11 @@ Honest status, updated as things ship. Checked = in this repository and tested.
 
 ## Not planned in this repository
 - The production gateway (enforcement, approvals UI, multi-customer log writer). It is a separate commercial product.
+
+## Not now: waits for a real, paying user
+These are real needs of a large company, and building them before anyone depends on the tool would be guessing. Each is started when a user who runs this in production asks for it.
+- A PostgreSQL or other managed store for the log, and a multi-region, highly available service. The recorder and the dry run are local and fail open; they do not need it.
+- Single sign-on and identity-provider integration (Okta, Entra), role mapping.
+- Approvals from Slack, Teams or a phone, with buttons.
+- Signing approvals with a passkey (WebAuthn). The direction is right and is listed under *Later*; it is not a promise that a forged approval becomes impossible (a compromised device can still sign what it is shown).
+- Reports for a specific regulation. This project does not certify anything and will not claim to; any mapping will say "relevant to", never "compliant with".

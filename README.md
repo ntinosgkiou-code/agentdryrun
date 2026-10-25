@@ -37,7 +37,9 @@ git clone https://github.com/ntinosgkiou-code/agentdryrun && cd agentdryrun && p
 
 | | |
 |---|---|
-| **Recorder** | Two lines around your agent's tool functions write what it does to a local file. No vendor, no export, never breaks your agent. |
+| **Recorder** | Two lines around your agent's tool functions write what it does to a local file. No vendor, no export, never breaks your agent. Python and JavaScript/TypeScript. |
+| **MCP recorder** | `mcp-record` sits between your MCP client and any MCP server (stdio) and records every `tools/call`, with **no change to your agent or the server**. |
+| **Rules drafter** | `suggest-rules` reads what your agent did and writes a first rules file to edit, so you do not start from a blank page. |
 | **CI check (GitHub Action)** | Runs the dry run on every pull request and fails the build when the agent would do more than you accept. |
 | **Shadow report** | Give it a list of what your agent did (the recorder's file, a CSV, or a **Langfuse / LangSmith / OpenTelemetry** trace export) and a rules file. It judges every action as a dry run (*would pass / would need approval / would be refused*), lists the tools your agent uses that **no rule covers**, and writes a report you can hand to a manager or an auditor. Runs locally. Nothing is blocked, nothing is sent anywhere. |
 | **Offline verifier** | One Python file that checks an evidence bundle: every record it contains is unedited and in the signed tree; signed by the key you pinned; witnessed; the approval rules recorded in the log were followed; and it tells you when records are **missing** from the bundle. Hostile or malformed bundles end in FAILED, never in a crash or a false VERIFIED. |
@@ -65,7 +67,7 @@ Prefer pip? `pip install git+https://github.com/ntinosgkiou-code/agentdryrun` gi
 
 Only the witness service needs packages: `pip install -r requirements.txt` (or `pip install "agentdryrun[witness] @ git+https://github.com/ntinosgkiou-code/agentdryrun"`).
 
-Check everything works: `python -m unittest discover -s tests` (74 tests, about ten seconds).
+Check everything works: `python -m unittest discover -s tests` (92 tests, about twenty seconds; the JavaScript test is skipped when Node is not installed).
 
 ---
 
@@ -133,6 +135,53 @@ What the recorder is and is not:
 - **Data minimisation:** only short scalar parameters are kept, and with `rules=` only the fields your rules look at. In the example, customer names and message bodies never reach the file (a test checks it).
 - **It never breaks your agent:** if the file cannot be written you get one warning and the call goes ahead. That makes it a measuring tool, not a security control. Making agents *ask first* is the Gateway's job, not this module's.
 - Works with sync and async functions, threads, and code you cannot edit (`rec.wrap(client.send, "payments.send")`).
+
+### Your agent is JavaScript or TypeScript? Same file, same report
+
+```bash
+npm install github:ntinosgkiou-code/agentdryrun      # zero dependencies, Node 18+
+```
+
+```js
+const { Recorder } = require('agentdryrun');
+
+const rec = new Recorder('agent-events.jsonl', { rules: 'my-rules.json' });
+const issueRefund = rec.tool('refunds.issue', async ({ customer, amount_eur }) => { /* ... */ });
+```
+
+It writes exactly the file the Python side reads (`python -m agentdryrun shadow ...`). A test writes events from JavaScript and has the Python judge give the verdicts. Same limits as the Python recorder: it records the attempt, a tool you did not wrap is invisible, and a failure to write never breaks your agent. Types are in [`js/index.d.ts`](js/index.d.ts); it is **not published on npm yet**, so install it from GitHub as above.
+
+### Your agent talks to MCP servers? Record without touching either side
+
+[Model Context Protocol](https://modelcontextprotocol.io) servers are how many agents get their tools. `mcp-record` starts the server for you and forwards every message unchanged in both directions; it only copies the `tools/call` requests into the events file, before the server sees them.
+
+```bash
+# before: your client starts the server like this
+#   python my_server.py
+# after: the client starts it through agentdryrun (in the client's MCP config, "command" and "args")
+python -m agentdryrun mcp-record --out mcp-events.jsonl --rules my-rules.json -- python my_server.py
+python -m agentdryrun shadow --rules my-rules.json --events mcp-events.jsonl --out report.html
+```
+
+What was and was not checked:
+- **Checked:** a test (`tests/test_mcp_record.py`) shows the bytes the client and server exchange are identical with and without the proxy; and between the **official MCP Python SDK** client and a server written with it, on SDK 1.30 and 2.3, the client gets the right results and both calls are recorded ([`tests/integration/mcp_sdk_check.py`](tests/integration/mcp_sdk_check.py), run in CI on Linux and Windows by [`mcp-compat.yml`](.github/workflows/mcp-compat.yml)).
+- **Not checked:** desktop clients such as Claude Desktop, Cursor or VS Code, and servers written in other languages. Only the **stdio** transport exists (not HTTP). If yours misbehaves, open an issue with the client name and version.
+- It records the **attempt** (name and the parameters that survive minimisation), not the result, and not whether a human approved it. It cannot stop anything: this is a measuring tool.
+- Anything the server prints on stdout must be valid MCP, as the protocol requires; the proxy writes its own notes to stderr only.
+
+### Do not know what your rules should say? Let it draft them
+
+```bash
+python -m agentdryrun suggest-rules --events agent-events.jsonl --out rules.draft.json
+```
+
+```text
+5 tools seen in 45 calls. Draft written to rules.draft.json: 0 look read-only (no approval), 5 need a human.
+THIS IS A DRAFT, NOT A POLICY. It is guessed from tool names only: read every tool before you rely on it.
+  note: payments.send: numeric field `amount_eur` seen 21 time(s), from 240 to 12400 (median 1500). Consider a deny/escalate rule or a limit.
+```
+
+It only looks at the **names** of the tools. A tool that looks read-only (`get_`, `list_`, `search_`) gets no approval; anything that looks like paying, sending, deleting or changing, and anything it does not recognise, needs one approval. It never writes a limit, a refusal or an escalation: those depend on your business, so it prints the numbers it saw and leaves the decision to you. The file passes `rules check`, and you then run the normal `shadow` command on it. A name can lie (`get_and_delete`): that is why every entry says `REVIEW ME`.
 
 ### Already tracing your agent with Langfuse, LangSmith or OpenTelemetry? Skip step 1
 
@@ -218,7 +267,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ntinosgkiou-code/agentdryrun@v0.5.0
+      - uses: ntinosgkiou-code/agentdryrun@v0.6.0
         with:
           rules: rules.json
           events: tests/agent-events.jsonl   # recorded by your tests with the Recorder, or a trace export
@@ -387,6 +436,9 @@ The complete list is in [`docs/KNOWN-LIMITS.md`](docs/KNOWN-LIMITS.md).
 verify.py                    the offline verifier (single file, standard library only)
 agentdryrun/demo.py               `python -m agentdryrun demo`: the shadow report and the verifier on the example, in one command
 agentdryrun/record.py             `Recorder`: two lines that write your agent's tool calls to a local events file
+js/index.js, index.d.ts           the same recorder for JavaScript/TypeScript (zero dependencies, Node 18+)
+agentdryrun/mcprec.py             `mcp-record`: a stdio proxy that records MCP `tools/call` requests unchanged
+agentdryrun/suggest.py            `suggest-rules`: drafts a first rules file from what the agent did
 agentdryrun/importers.py          reads tool calls from Langfuse, LangSmith and OpenTelemetry exports; the `import` command
 pyproject.toml               makes `pip install git+https://github.com/ntinosgkiou-code/agentdryrun` work
 agentdryrun/shadow.py             the dry-run judge and the `shadow` command
@@ -397,7 +449,7 @@ docs/                        RULES, EVIDENCE-BUNDLE-SPEC, WITNESS, KNOWN-LIMITS
 ROADMAP.md, BUILD-LOG.md, CHANGELOG.md, CONTRIBUTING.md   how it is built, in public
 examples/                    rules, events, a report, a valid and a tampered bundle, public keys
 action.yml                   the GitHub Action: dry run in CI, fails the build over your limits
-tests/                       74 tests, no network (test_adversarial.py attacks the verifier with hostile bundles)
+tests/                       92 tests, no network (test_adversarial.py attacks the verifier with hostile bundles); tests/integration/ needs `pip install mcp`
 examples/agent_demo.py       a toy agent recorded with two lines; rules-front-office.json are its rules
 examples/traces/             invented Langfuse, LangSmith and OpenTelemetry exports of the same 45 actions
 tools/make_trace_examples.py re-creates examples/traces/ from examples/events.csv

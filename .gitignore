@@ -10,3 +10,5 @@ dist/
 *.egg-info/
 agent-events.jsonl
 agentdryrun-demo-report.html
+node_modules/
+*.tgz
