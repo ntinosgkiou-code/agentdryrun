@@ -3,7 +3,7 @@
 agentdryrun is a **prototype**. It has not had an external security review.
 
 ## Reporting a vulnerability
-Please do not open a public issue for something exploitable. Use GitHub's **private vulnerability reporting** (the *Security* tab of this repository, then *Report a vulnerability*) with:
+Please do not open a public issue for something exploitable. Use GitHub's **private vulnerability reporting** ([report a vulnerability](https://github.com/ntinosgkiou-code/agentdryrun/security/advisories/new), or the *Security* tab of this repository) with:
 what you found, how to reproduce it (a failing `bundle.zip` is ideal), and what you think it breaks.
 
 The most valuable reports for this repository:

@@ -1,6 +1,6 @@
 # verify.py needs nothing but Python 3.9+ (it uses `cryptography` if installed, an inline RFC 8032 implementation otherwise)
 # the witness service needs:
-cryptography>=42
+cryptography>=50
 fastapi>=0.110
 uvicorn>=0.29
-pydantic>=2
+pydantic>=2.4
