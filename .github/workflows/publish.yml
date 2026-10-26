@@ -23,6 +23,8 @@ jobs:
           path: dist/
   publish:
     needs: build
+    # Stays off until the owner has set the pending publisher on pypi.org AND the repository variable PUBLISH_TO_PYPI=true.
+    if: ${{ vars.PUBLISH_TO_PYPI == 'true' }}
     runs-on: ubuntu-24.04
     environment: pypi
     permissions:

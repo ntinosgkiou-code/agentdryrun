@@ -23,7 +23,13 @@ Honest status, updated as things ship. Checked = in this repository and tested.
 
 - [x] `scan`: report card from Claude Code transcripts, with a starter rules pack
 
+- [x] `scan --write-rules`: rules proposed from your own history
+- [x] `hook` (experimental): the same rules applied live in Claude Code, with an observe mode
+
 ## Next
+- [ ] Run the hook inside a live Claude Code session and fix what that shows; then drop "experimental"
+- [ ] A Codex CLI reader for `scan`, written against Codex's open-source session format and checked on a real session (issue 11)
+- [ ] Publish to PyPI (needs the owner's pypi.org account), then `uvx agentdryrun scan`
 - [ ] Submit the plugin to Anthropic's directory (needs a paid claude.ai plan and the developer portal; the author does this)
 - [ ] `scan` for Codex CLI sessions, then Cursor and others (needs a real sample of each format: open an issue with a redacted one)
 - [ ] `scan --fix`: print the matching permission rules for the agent's own settings, once the exact syntax of each version is verified

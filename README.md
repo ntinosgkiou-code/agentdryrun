@@ -42,6 +42,25 @@ No Claude Code history yet? Try the invented sample: `python -m agentdryrun scan
 - **Claude Code only, for now.** Reading its transcripts is based on the files as they looked on 2026-10-25; that format is not a documented interface and can change. Codex, Cursor and others are not read yet ([help wanted: issue 11](https://github.com/ntinosgkiou-code/agentdryrun/issues/11)).
 - It is not a sandbox and does not stop anything. Auto mode, permission rules and sandboxes are the tools for that; this tells you what they would have had to catch.
 
+### Make the rules fit you
+
+```bash
+python -m agentdryrun scan --days 90 --write-rules my-rules.json
+```
+
+The starter pack treats every risky kind of action the same for everyone. Your history says more. `--write-rules` writes a copy of the pack in which the kinds of action that **do not appear in your history** (for example: the agent never force-pushed, never read a secret file, never destroyed cloud resources) get a first deny rule: a rule that refuses them costs you nothing, and anything that suddenly tries one is worth a look. The kinds you *do* use keep the starter rules. It needs at least 200 judged actions to say what you "never" do; with less, it locks nothing and says so. It is a proposal in a file: nothing is blocked by it, and you read it with `--rules`.
+
+### Experimental: apply the same rules live (a Claude Code hook)
+
+`scan` looks back; `hook` looks at each tool call just before Claude Code runs it and answers with the rules' verdict: **refused** blocks the call and shows why, **needs approval** asks you (even if the tool was on an allow list), **would pass** prints nothing so Claude Code's normal permission flow decides exactly as it does today. It never answers "allow": it can only make things stricter.
+
+```bash
+python -m agentdryrun hook --print-settings --mode observe --log hook-log.jsonl   # prints the settings.json block; start in observe mode
+python -m agentdryrun hook --print-settings                                      # the enforcing version
+```
+
+Add the block to `.claude/settings.json` (one project) or `~/.claude/settings.json`. In `observe` mode it judges and logs every call to `hook-log.jsonl` and never blocks: run it for a few days, look at what it would have done, then switch. **What was and was not checked:** the protocol (what Claude Code sends and expects) was read from the hooks documentation and exercised with simulated calls in the tests; it has **not** been run inside a live Claude Code session by the author. A hook that crashes or times out lets the call through unless you set `"onFailure": "block"` (needs a recent Claude Code). It is pattern matching on commands, not a sandbox.
+
 **Beyond coding agents.** The same dry-run engine judges any agent's tool calls (Python or JavaScript recorder, MCP proxy, Langfuse / LangSmith / OpenTelemetry exports) and can verify a tamper-evident record offline; see below.
 
 > **Status: prototype.** No external security review. Never run with a real customer or bank. Read [what it cannot prove](docs/KNOWN-LIMITS.md) before relying on any of it.
@@ -85,7 +104,7 @@ Prefer pip? `pip install git+https://github.com/ntinosgkiou-code/agentdryrun` gi
 
 Only the witness service needs packages: `pip install -r requirements.txt` (or `pip install "agentdryrun[witness] @ git+https://github.com/ntinosgkiou-code/agentdryrun"`).
 
-Check everything works: `python -m unittest discover -s tests` (119 tests, about twenty seconds; the JavaScript test is skipped when Node is not installed).
+Check everything works: `python -m unittest discover -s tests` (142 tests, about twenty seconds; the JavaScript test is skipped when Node is not installed).
 
 ---
 
@@ -285,7 +304,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ntinosgkiou-code/agentdryrun@v0.7.1
+      - uses: ntinosgkiou-code/agentdryrun@v0.8.0
         with:
           rules: rules.json
           events: tests/agent-events.jsonl   # recorded by your tests with the Recorder, or a trace export
@@ -470,7 +489,7 @@ docs/                        RULES, EVIDENCE-BUNDLE-SPEC, WITNESS, KNOWN-LIMITS
 ROADMAP.md, BUILD-LOG.md, CHANGELOG.md, CONTRIBUTING.md   how it is built, in public
 examples/                    rules, events, a report, a valid and a tampered bundle, public keys
 action.yml                   the GitHub Action: dry run in CI, fails the build over your limits
-tests/                       119 tests, no network (test_adversarial.py attacks the verifier with hostile bundles); tests/integration/ needs `pip install mcp`
+tests/                       142 tests, no network (test_adversarial.py attacks the verifier with hostile bundles); tests/integration/ needs `pip install mcp`
 examples/agent_demo.py       a toy agent recorded with two lines; rules-front-office.json are its rules
 examples/traces/             invented Langfuse, LangSmith and OpenTelemetry exports of the same 45 actions
 tools/make_trace_examples.py re-creates examples/traces/ from examples/events.csv

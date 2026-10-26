@@ -185,6 +185,24 @@ def main(args) -> int:
         print(f"  {LABEL.get(t, t):52} {v['total']:>5}  ({v['deny']} refused, {v['pending']} approval)")
     print(f"  tool output the model read: about {stats['output_tokens_estimate']:,} tokens;  {stats['errors']} of {stats['calls']} calls failed")
     print(f"report card: {args.out}   (read-only: nothing was blocked, changed or sent)")
+    if getattr(args, "write_rules", None):
+        from .profile import MIN_ACTIONS, personal_rules
+        mine, rep = personal_rules(policy, got["events"], label)
+        errs = validate_policy(mine)
+        if errs:
+            print("internal error: the personal rules are not valid:\n  " + "\n  ".join(errs), file=sys.stderr)
+            return 5
+        with open(args.write_rules, "w", encoding="utf-8", newline="\n") as f:
+            json.dump(mine, f, indent=2, ensure_ascii=False)
+            f.write("\n")
+        if not rep["enough"]:
+            print(f"rules: {rep['actions']} actions is too little history to say what you never do (needs {MIN_ACTIONS}); nothing was locked. Written: {args.write_rules}")
+        else:
+            lk = ", ".join(LABEL.get(t, t) for t in rep["locked"]) or "nothing (you use every kind)"
+            print(f"rules from your history ({label}): LOCKED because you never do them: {lk}")
+            kp = ", ".join(f"{LABEL.get(t, t)} ({n})" for t, n in sorted(rep["kept"].items(), key=lambda kv: -kv[1])) or "-"
+            print(f"  kept as in the starter pack because you do them: {kp}")
+            print(f"  written: {args.write_rules}  (a proposal: check it with `python -m agentdryrun rules check`, then use it with --rules)")
     if not args.no_previews:
         print("note: the report contains excerpts of your commands. Use --no-previews before you share it.")
     exceeded = thresholds_exceeded(s, args.max_refused, args.max_pending, None)

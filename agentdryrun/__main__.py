@@ -43,10 +43,17 @@ def main(argv: Optional[list] = None) -> int:
     p.add_argument("--out", default="agent-report-card.html")
     p.add_argument("--no-previews", action="store_true", help="leave command text out of the report (use before sharing it)")
     p.add_argument("--banner", help="a notice shown at the top of the report")
+    p.add_argument("--write-rules", metavar="FILE", help="also write a rules file that fits YOUR history: kinds of action you never do are locked (a proposal, not enforcement)")
     p.add_argument("--json", help="also write the numbers as JSON")
     p.add_argument("--events-out", help="also write the derived events (JSON Lines) so you can run `shadow` with your own rules")
     p.add_argument("--max-refused", type=int, metavar="N", help="exit with code 4 if more than N actions would be refused")
     p.add_argument("--max-pending", type=int, metavar="N", help="exit with code 4 if more than N actions would need approval")
+
+    p = sub.add_parser("hook", help="EXPERIMENTAL: the same rules as `scan`, applied live as a Claude Code PreToolUse hook (reads the call on stdin)")
+    p.add_argument("--rules", help="your own rules file (default: the built-in coding-agent pack)")
+    p.add_argument("--mode", choices=["enforce", "observe"], default="enforce", help="observe: judge and log only, never block (start here)")
+    p.add_argument("--log", metavar="FILE", help="append every decision to this JSON Lines file")
+    p.add_argument("--print-settings", action="store_true", help="print the settings.json block that registers this hook, and exit")
 
     p = sub.add_parser("suggest-rules", help="draft a starter rules file from the tool calls you recorded (a draft to review, not a policy)")
     p.add_argument("--events", required=True, help="the events file or trace export, as for `shadow`")
@@ -90,6 +97,9 @@ def main(argv: Optional[list] = None) -> int:
     if a.cmd == "shadow":
         from . import shadow
         return shadow.main(a)
+    if a.cmd == "hook":
+        from . import hook
+        return hook.main(a)
     if a.cmd == "scan":
         from . import scan
         return scan.main(a)
