@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="540" height="675" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#241552"/></linearGradient></defs>
+<rect width="1080" height="1350" fill="url(#g)"/>
+<text x="90" y="130" font-size="30" letter-spacing="6" fill="#a9b4ff">CLAUDE CODE WRAPPED</text>
+<text x="90" y="180" font-size="30" fill="#7e89c9">all time</text>
+<text x="90" y="400" font-size="190" font-weight="800" fill="#ffffff">48</text>
+<text x="90" y="460" font-size="40" fill="#c9d1ff">tool calls by your agent</text>
+<text x="90" y="590" font-size="40" font-weight="700" fill="#ffffff">12</text><text x="90" y="632" font-size="26" fill="#a9b4ff">sessions</text><text x="400" y="590" font-size="40" font-weight="700" fill="#ffffff">12</text><text x="400" y="632" font-size="26" fill="#a9b4ff">active days</text><text x="710" y="590" font-size="40" font-weight="700" fill="#ffffff">09:00</text><text x="710" y="632" font-size="26" fill="#a9b4ff">busiest hour</text>
+<text x="90" y="720" font-size="40" font-weight="700" fill="#ffffff">33</text><text x="90" y="762" font-size="26" fill="#a9b4ff">commands</text><text x="400" y="720" font-size="40" font-weight="700" fill="#ffffff">6</text><text x="400" y="762" font-size="26" fill="#a9b4ff">files read</text><text x="710" y="720" font-size="40" font-weight="700" fill="#ffffff">4</text><text x="710" y="762" font-size="26" fill="#a9b4ff">files written</text>
+<rect x="60" y="810" width="960" height="130" rx="28" fill="#ffffff" fill-opacity="0.08"/>
+<text x="90" y="866" font-size="30" fill="#a9b4ff">YOU ARE</text>
+<text x="90" y="918" font-size="52" font-weight="800" fill="#ffd166">Living Dangerously</text>
+<text x="90" y="985" font-size="28" fill="#c9d1ff">50.0% of actions would have needed a human &#183; 19 approvals, 5 refused</text>
+<text x="90" y="1010" font-size="34" fill="#e8ecff">Writes to settings, CI, startup files, syste</text><text x="990" y="1010" font-size="34" fill="#ffd166" text-anchor="end">4  (1 refused)</text><text x="90" y="1072" font-size="34" fill="#e8ecff">Infrastructure or cloud deletes</text><text x="990" y="1072" font-size="34" fill="#ffd166" text-anchor="end">3  (1 refused)</text><text x="90" y="1134" font-size="34" fill="#e8ecff">Recursive deletes</text><text x="990" y="1134" font-size="34" fill="#ffd166" text-anchor="end">5</text>
+<text x="90" y="1250" font-size="26" fill="#7e89c9">judged with the starter rules &#183; a simulation, not a security audit</text>
+<text x="90" y="1300" font-size="30" fill="#ffffff">github.com/ntinosgkiou-code/agentdryrun</text>
+</svg>

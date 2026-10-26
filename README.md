@@ -1,6 +1,7 @@
 # agentdryrun
 
 [![tests](https://github.com/ntinosgkiou-code/agentdryrun/actions/workflows/tests.yml/badge.svg)](https://github.com/ntinosgkiou-code/agentdryrun/actions/workflows/tests.yml)
+[![CodeQL](https://github.com/ntinosgkiou-code/agentdryrun/actions/workflows/codeql.yml/badge.svg)](https://github.com/ntinosgkiou-code/agentdryrun/actions/workflows/codeql.yml)
 ![python](https://img.shields.io/badge/python-3.9%2B-blue)
 ![dependencies](https://img.shields.io/badge/dependencies-none-brightgreen)
 ![license](https://img.shields.io/badge/license-Apache--2.0-blue)
@@ -24,6 +25,10 @@ git clone https://github.com/ntinosgkiou-code/agentdryrun && cd agentdryrun && p
 It reads `~/.claude/projects` (last 30 days; `--days 90`, `--project my-app`, `--root PATH` to change that), prints a summary and writes `agent-report-card.html`. Add `--no-previews` before you share the page: by default it contains excerpts of your commands (secrets are hidden on a best-effort basis).
 
 **Want a card to share?** Add `--wrapped`: `python -m agentdryrun scan --wrapped` also writes *Claude Code Wrapped*, one card with your sessions, tool calls, busiest hour and a label for how often your agent would have needed a human. **Numbers only: no commands, file names or project names.** Open the page to save it as a PNG; nothing is uploaded.
+
+<img src="docs/assets/wrapped-sample.svg" alt="Claude Code Wrapped card made from the invented sample transcripts in this repository" width="320">
+
+*The card for the invented sample in this repository. Regenerate it with [`tools/make_wrapped_sample.py`](tools/make_wrapped_sample.py).*
 
 **Or from inside Claude Code**, as a plugin from this repository (Python 3.9+ must be on the machine; nothing else is installed):
 
