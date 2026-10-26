@@ -480,6 +480,8 @@ docs/assets/                 the recording, the report screenshot and the social
 
 ## Built in public
 
+**Read the story:** [What did your coding agent do last month?](https://ntinosgkiou-code.github.io/agentdryrun/blog/what-did-your-coding-agent-do.html) (how `scan` works, what went wrong in the first version, what it cannot do).
+
 This is an open-source tool built in the open. The [roadmap](ROADMAP.md) says what is done and what is next, the [build log](BUILD-LOG.md) records what worked and what was wrong (including corrections), and [CONTRIBUTING.md](CONTRIBUTING.md) lists the contributions that help most: breaking the verifier, writing a second one, and checking the Langfuse, LangSmith and OpenTelemetry readers against real exports. Issues are welcome.
 
 ## Roadmap

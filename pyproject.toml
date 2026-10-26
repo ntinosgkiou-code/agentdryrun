@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -9,12 +9,20 @@ description = "A dry run for AI coding agents: scan your Claude Code history for
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = []
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+keywords = ["ai-agents", "claude-code", "coding-agents", "dry-run", "audit", "guardrails", "mcp"]
 classifiers = [
-  "License :: OSI Approved :: Apache Software License",
   "Programming Language :: Python :: 3",
   "Intended Audience :: Developers",
   "Topic :: Security",
 ]
+
+[project.urls]
+Homepage = "https://ntinosgkiou-code.github.io/agentdryrun/"
+Repository = "https://github.com/ntinosgkiou-code/agentdryrun"
+Issues = "https://github.com/ntinosgkiou-code/agentdryrun/issues"
+Changelog = "https://github.com/ntinosgkiou-code/agentdryrun/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 witness = ["cryptography>=42", "fastapi>=0.110", "uvicorn>=0.29", "pydantic>=2"]
@@ -24,8 +32,8 @@ agentdryrun = "agentdryrun.__main__:main"
 agentdryrun-verify = "verify:main"
 
 [tool.setuptools]
-packages = ["agentdryrun"]
+packages = ["agentdryrun", "agentdryrun.packs"]
 py-modules = ["verify"]
 
 [tool.setuptools.package-data]
-agentdryrun = ["packs/*.json"]
+"agentdryrun.packs" = ["*.json"]

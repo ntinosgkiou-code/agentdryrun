@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What did your coding agent do last month? A dry run for Claude Code</title>
+<meta name="description" content="Anthropic says users accept 93% of Claude Code's manual permission prompts. How a read-only scanner replays your own session history against rules, what it flagged, what went wrong in the first version, and what it cannot do.">
+<link rel="canonical" href="https://ntinosgkiou-code.github.io/agentdryrun/blog/what-did-your-coding-agent-do.html">
+<meta property="og:title" content="What did your coding agent do last month?">
+<meta property="og:description" content="A read-only dry run on your own Claude Code history: what your rules would have stopped, and what went wrong while building it.">
+<meta property="og:image" content="https://ntinosgkiou-code.github.io/agentdryrun/assets/social-preview.png">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root { --bg:#ffffff; --ink:#0e1a2b; --mu:#5b6472; --ln:#d8dde6; --sf:#f4f6f9; --ac:#0b5fd1; --cd:#0d1117; --cdi:#c9d1d9; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0a111d; --ink:#e7ecf6; --mu:#93a0b6; --ln:#243350; --sf:#111b2c; --ac:#6aa8ff; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.65 system-ui, "Segoe UI", sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 48px 20px 72px; }
+  h1 { font-size: 44px; line-height: 1.1; margin: 0 0 8px; letter-spacing: -0.02em; }
+  h1 span { color: var(--ac); }
+  h2 { font-size: 22px; margin: 42px 0 10px; }
+  .lead { font-size: 21px; color: var(--ink); margin: 6px 0 4px; }
+  .mu { color: var(--mu); }
+  a { color: var(--ac); }
+  .btns { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0 8px; }
+  .btn { display: inline-block; padding: 10px 18px; border-radius: 8px; border: 1px solid var(--ln); text-decoration: none; font-weight: 600; }
+  .btn.primary { background: var(--ac); color: #fff; border-color: var(--ac); }
+  pre { background: var(--cd); color: var(--cdi); padding: 14px 16px; border-radius: 10px; overflow-x: auto; font: 14.5px/1.55 ui-monospace, Consolas, monospace; }
+  img { max-width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--ln); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 14px; }
+  .card { background: var(--sf); border: 1px solid var(--ln); border-radius: 12px; padding: 14px 16px; }
+  .card b { display: block; margin-bottom: 4px; }
+  .warn { background: var(--sf); border-left: 4px solid #d29922; padding: 12px 16px; border-radius: 6px; }
+  footer { margin-top: 48px; color: var(--mu); font-size: 15px; }
+  article h2 { margin-top: 36px; }
+  article p, article li { max-width: 70ch; }
+  .meta { color: var(--mu); font-size: 15px; }
+  blockquote { margin: 18px 0; padding: 4px 16px; border-left: 4px solid var(--ln); color: var(--mu); }
+  code { background: var(--sf); padding: 1px 6px; border-radius: 5px; font-size: 0.92em; }
+  pre code { background: none; padding: 0; }
+</style>
+</head>
+<body>
+<main>
+<p class="meta"><a href="../index.html">agentdryrun</a> &middot; 26 October 2026</p>
+<article>
+<h1 style="font-size:36px">What did your coding agent do last month?</h1>
+<p class="lead">Anthropic says users accept <a href="https://anthropic.com/engineering/claude-code-auto-mode">93% of Claude Code's manual permission prompts</a>. I wanted to know what was in the ones I clicked through, so I wrote a read-only scanner for my own history.</p>
+
+<h2>The idea</h2>
+<p>Claude Code already keeps a transcript of every session on your machine, in <code>~/.claude/projects</code>. Each tool call the agent made is in there, with the command or the path, the folder it ran in, a timestamp, and whether it failed. Nothing needs to be installed in the agent and nothing needs to be sent anywhere: the information is already on disk.</p>
+<p><code>python -m agentdryrun scan</code> reads those files, names what the agent attempted, and judges each action against a rules file as a <em>dry run</em>: would it pass, would it need a human, or would it be refused. Nothing is blocked, changed or executed. Python 3.9+, no dependencies.</p>
+<p><img src="../assets/report-card.png" alt="The top of a sample report card: 48 actions judged, 24 would have passed, 19 would have needed approval, 5 would have been refused, with a table by kind of action" style="max-width:100%;border-radius:10px;border:1px solid var(--ln)"></p>
+<p class="meta">A sample report card. Every command in it is invented.</p>
+
+<h2>What it names</h2>
+<ul>
+<li>recursive deletes, by how far from the project they reach (inside it, outside it, your home directory, a path it cannot resolve);</li>
+<li>force pushes and remote branch deletes, with extra weight on <code>main</code>;</li>
+<li>a download piped into a shell (<code>curl ... | sh</code>);</li>
+<li>secret files read (<code>.env</code>, ssh keys, cloud credentials) and files or command output sent to another host;</li>
+<li>destructive database and cloud commands, with a hint when the command mentions production;</li>
+<li>writes to the agent's own settings, CI workflows, git hooks and shell startup files;</li>
+<li>MCP tools whose names suggest they change, send or delete something.</li>
+</ul>
+<p>The starter rules are a JSON file in the repository. You are meant to copy it and change it to how you work: a dry run is only as good as the rules it is judged by.</p>
+
+<h2>What went wrong in the first version</h2>
+<p>I ran the first version on one real 90-day history, about 11,000 tool calls. It said roughly a fifth of everything needed approval and a couple dozen actions would be refused. Almost all of it was noise from my own parser:</p>
+<ul>
+<li><code>curl ... | python -c "..."</code> was flagged as "download piped into a shell". It only reads the download.</li>
+<li>Text inside a here-document (a note, a script being written to a file) was read as if it were commands.</li>
+<li><code>rm -rf "$DIR/build"</code> was "a path built from a variable we cannot check", even when the variable was set on the line above.</li>
+<li>Every <code>cd other-folder && rm -rf build</code> was judged against the wrong folder.</li>
+<li>Any write outside the working directory counted, although people legitimately work in several directories.</li>
+</ul>
+<p>After fixing those, about 3% needed approval and two actions were refused. Both were real force pushes to <code>main</code>. The lesson is not subtle: <strong>invented test fixtures would have shown none of this.</strong> The repository's tests now pin every one of these cases, and the build log records the mistakes.</p>
+
+<h2>What it cannot do</h2>
+<ul>
+<li>It matches patterns in commands. It misses a script that deletes files, <code>python -c</code>, and paths built at run time, and it flags a few harmless things.</li>
+<li>It sees what the agent <em>attempted</em>. It cannot know whether a command worked, or whether you approved it.</li>
+<li>Claude Code only, for now. The transcript format is not a documented interface and was read as it looked on 25 October 2026; a new version can break the reader.</li>
+<li>It is not a sandbox and stops nothing. Auto mode, permission rules and sandboxes are the tools for that. This tells you what they would have had to catch.</li>
+</ul>
+
+<h2>Try it</h2>
+<pre><code>git clone https://github.com/ntinosgkiou-code/agentdryrun
+cd agentdryrun
+python -m agentdryrun scan --no-previews</code></pre>
+<p><code>--no-previews</code> leaves command text out of the page, so you can share it. Or, inside Claude Code: <code>claude plugin marketplace add ntinosgkiou-code/agentdryrun</code>, then <code>claude plugin install agentdryrun@agentdryrun</code> and <code>/agentdryrun:scan</code>.</p>
+<p>The most useful thing you can send back is where it is wrong: a false alarm, something it missed, or a crash. Paste the command text only, no secrets, in an <a href="https://github.com/ntinosgkiou-code/agentdryrun/issues">issue</a>. If you use Codex or another agent and can share a redacted session file, <a href="https://github.com/ntinosgkiou-code/agentdryrun/issues/11">issue 11</a> explains what would let it read yours too.</p>
+
+<p class="meta">Code, tests and the full <a href="https://github.com/ntinosgkiou-code/agentdryrun/blob/main/BUILD-LOG.md">build log</a> (including the mistakes) are in the <a href="https://github.com/ntinosgkiou-code/agentdryrun">repository</a>. Prototype, Apache-2.0, no external security review.</p>
+</article>
+</main>
+</body>
+</html>

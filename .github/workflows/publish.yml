@@ -1,0 +1,35 @@
+name: publish to PyPI
+# Runs when a GitHub release is published. Uses PyPI "trusted publishing" (no token stored in this repository).
+# One-time setup by the project owner on pypi.org: Publishing > Add a pending publisher:
+#   project agentdryrun, owner ntinosgkiou-code, repository agentdryrun, workflow publish.yml, environment pypi.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: python -m pip install build twine
+      - run: python -m build
+      - run: python -m twine check dist/*
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist/
+  publish:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
