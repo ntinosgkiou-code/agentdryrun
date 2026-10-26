@@ -6,8 +6,8 @@ authors:
   - alias: "ntinosgkiou-code"
 license: Apache-2.0
 repository-code: "https://github.com/ntinosgkiou-code/agentdryrun"
-version: 0.8.0
-date-released: 2026-10-25
+version: 0.8.1
+date-released: 2026-10-26
 abstract: >-
   Record an AI agent's tool calls, judge them against a rules file as a dry run (would pass, would need approval,
   would be refused), and keep a tamper-evident record that a third party can verify offline. Local, standard library only.

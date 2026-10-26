@@ -105,6 +105,42 @@ class Naming(unittest.TestCase):
         self.assertEqual(one("find /var/log -delete")[1]["scope"], "system")
 
 
+class FoundOnPublicRuns(unittest.TestCase):
+    """False alarms found by running the rules over 2,000 public SWE-agent runs (nebius/SWE-rebench-openhands-trajectories, CC-BY-4.0)."""
+
+    def test_sql_text_inside_a_script_is_not_a_database_command(self):
+        # a SQL parser's own test: the words DROP TABLE are data, nothing runs them
+        parser_test = "python3 -c \"import sqlglot; print(sqlglot.parse_one('DROP TABLE IF EXISTS t'))\""
+        self.assertEqual(tools(parser_test), ["shell.command"])
+        self.assertEqual(tools("node -e \"console.log(require('sql-parser').parse('TRUNCATE TABLE users'))\""), ["shell.command"])
+
+    def test_a_script_that_can_run_the_sql_still_counts(self):
+        self.assertEqual(one("python3 -c \"import sqlite3; sqlite3.connect('x.db').execute('DROP TABLE t')\"")[0], "db.destructive_sql")
+        self.assertEqual(one("node -e \"client.query('TRUNCATE TABLE users')\"")[0], "db.destructive_sql")
+        self.assertEqual(one("psql -c 'DROP TABLE users;'")[0], "db.destructive_sql")             # a database client: unchanged
+
+    def test_the_pattern_given_to_grep_is_not_a_file_it_reads(self):
+        for cmd in ("grep -rn \"tokens.txt\" .", "grep -r \"confirmation.key\" . --include=\"*.py\"", "rg 'api.key' src", "sed -n '1,5p' notes.txt"):
+            self.assertEqual(tools(cmd), ["shell.command"], cmd)
+        self.assertEqual(one("grep -r token .env")[0], "secrets.read")                              # the file operand still counts
+        self.assertEqual(one("sed -i 's/a/b/' .env")[0], "secrets.read")
+        self.assertEqual(one("grep -e foo .env")[0], "secrets.read")
+
+    def test_star_after_a_cd_means_the_directory_it_moved_to(self):
+        _, p = one("cd /tmp/work && rm -rf *")
+        self.assertEqual(p["scope"], "temp")                                                       # not "the whole project"
+        _, p = one("rm -rf *")
+        self.assertEqual(p["scope"], "project_root")
+        _, p = one("cd build && rm -rf *")
+        self.assertEqual(p["scope"], "inside_project")
+
+    def test_a_port_check_on_this_machine_is_not_remote_access(self):
+        self.assertEqual(tools("nc -zv localhost 7687"), ["shell.command"])
+        self.assertEqual(tools("nc -z 127.0.0.1 5432"), ["shell.command"])
+        self.assertEqual(one("nc -zv db.example.com 5432")[0], "net.remote_access")
+        self.assertEqual(one("ssh prod 'ls'")[0], "net.remote_access")
+
+
 class Hiding(unittest.TestCase):
     def test_keys_and_tokens_are_hidden(self):
         raw = ("curl -H 'Authorization: Bearer abcdef0123456789abcdef' https://x.io?api_key=ghp_abcdefghijklmnopqrstuvwxyz0123456789 "

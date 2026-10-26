@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agentdryrun"
-version = "0.8.0"
+version = "0.8.1"
 description = "A dry run for AI coding agents: scan your Claude Code history for what your rules would have stopped, and record any agent's tool calls. Local, read-only, zero dependencies."
 readme = "README.md"
 requires-python = ">=3.9"

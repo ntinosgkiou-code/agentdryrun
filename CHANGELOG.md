@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.8.1 (2026-10-26)  Fewer false alarms, found on other people's runs
+- The starter rules were run over a random sample of 2,000 public agent runs (121,219 actions; Nebius `SWE-rebench-openhands-trajectories`, CC-BY-4.0). Result and method: [docs/VALIDATION-PUBLIC-RUNS.md](docs/VALIDATION-PUBLIC-RUNS.md); script: `tools/study_public_runs.py`. 14 of the 49 flags it raised were false alarms and are fixed:
+  - SQL text inside `python -c` / `node -e` (a SQL parser's own tests) is no longer a destructive database command; a script that can run the SQL (`.execute(`, a DB driver) still is.
+  - The first word given to `grep`, `rg`, `sed`, `awk` is the pattern or script, not a secret file being read (`grep -r "tokens.txt" .`).
+  - `cd /tmp/work && rm -rf *`: the `*` is the directory the shell moved to, not the project.
+  - `nc -zv localhost 5432` is not remote access.
+- After the fixes: 34 approvals and 1 refusal in 121,219 actions (19 of 2,000 runs have a flag), down from 48 and 1 (29 runs). All remaining flags are what the rules intend (CI file edits, `sudo`, `git reset --hard`, deletes outside the project, secret-like files read) and happened in disposable sandboxes, so this is **not a measure of danger**.
+- The first attempt at this check was wrong because of a bug in the study script (project folder taken with a stray `
+`), not in the rules; it was fixed and the whole sample re-run before any number was written down.
+- 147 tests (5 new, `FoundOnPublicRuns`).
+
 ## 0.8.0 (2026-10-26)  Rules that fit you, and a live hook (experimental)
 - **`scan --write-rules FILE`**: writes a copy of the starter pack in which the kinds of action that do not appear in your history get a first deny rule ("locked"), and the kinds you use keep the starter rules. Needs 200 judged actions, otherwise it locks nothing and says so. Verified on a real 90-day history (7 kinds locked, 6 kept; the same verdicts as the pack on that history, as it must be).
 - **`python -m agentdryrun hook`** (experimental): the same rules applied live as a Claude Code PreToolUse hook. Refused: `deny`; needs approval: `ask`; would pass: no output, so the normal permission flow decides (it never answers `allow`). `--mode observe --log FILE` judges and logs without blocking. `--print-settings` prints the settings.json block (exec form, ASCII-safe, so it works the same on Windows, macOS and Linux). Protocol read from the hooks documentation and tested with simulated calls; **not run inside a live Claude Code session**.

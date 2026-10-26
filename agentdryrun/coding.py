@@ -113,7 +113,7 @@ class Ctx:
         """root | home | system | project_root | inside_project | temp | outside_project | unresolved_variable"""
         p = self.resolve(raw.rstrip("*").rstrip("/\\") if raw.strip() not in ("/", "*") else raw)
         if raw.strip() in ("*", "./*", "*/"):
-            p = self.cwd or None
+            p = self.base or None                                  # everything in the directory the shell is in now (after any `cd`)
         if p is None:
             return "unresolved_variable"
         k = self._k(p)
@@ -290,6 +290,11 @@ _DB_RESET = re.compile(r"\b(dropdb|flushall|flushdb|db:drop|db:reset|db:schema:l
 _DB_CLI = {"psql", "mysql", "mariadb", "sqlite3", "mongosh", "mongo", "redis-cli", "sqlcmd", "clickhouse-client", "cockroach",
            "supabase", "prisma", "drizzle-kit", "sequelize", "knex", "alembic", "rails", "rake", "dropdb", "mysqladmin", "turso",
            "pscale", "neon", "neonctl", "npx", "pnpm", "yarn", "bun", "bunx", "npm", "python", "python3", "node", "php", "docker", "kubectl"}
+# A script that merely contains SQL text (a parser's test, a docstring) is not a database command; one that can run it is.
+_SCRIPT_RUNNERS = {"python", "python3", "node", "php", "npx", "pnpm", "yarn", "bun", "bunx", "npm"}
+_SQL_RUN_CUE = re.compile(r"\.(execute|executemany|executescript|exec|query|raw|run)\s*\(|\b(psycopg2?|pymysql|mysql\.connector|sqlite3|sqlalchemy|"
+                          r"create_engine|asyncpg|aiosqlite|mysqli|PDO|mongoose|sequelize|knex|prisma|drizzle|typeorm)\b", re.I)
+_PATTERN_FIRST = {"grep", "egrep", "fgrep", "rg", "ag", "ack", "findstr", "select-string", "sls", "sed", "awk"}
 _READERS = {"cat", "head", "tail", "less", "more", "bat", "type", "get-content", "gc", "grep", "egrep", "fgrep", "rg", "sed", "awk", "cp",
             "scp", "base64", "xxd", "strings", "source", ".", "od", "hexdump", "tr", "cut", "sort", "tac", "nl", "rsync", "curl", "wget",
             "open", "code", "vim", "vi", "nano", "ag", "ack", "findstr", "select-string", "sls", "copy", "xcopy", "mv", "move"}
@@ -525,7 +530,8 @@ def classify_command(cmd: str, ctx: Ctx, powershell: bool = False) -> list:
         elif prog in ("chmod", "icacls", "chown") and ("777" in args or "a+rwx" in args or "o+w" in args or ("-R" in args and "777" in " ".join(args))):
             found.append(("shell.chmod_open", {"program": prog, "recursive": "-R" in args or "/t" in [x.lower() for x in args]}))
         # databases
-        elif prog in _DB_CLI and (_SQL_BAD.search(seg) or _SQL_DELETE_ALL.search(seg) or _DB_RESET.search(seg)):
+        elif prog in _DB_CLI and (_SQL_BAD.search(seg) or _SQL_DELETE_ALL.search(seg) or _DB_RESET.search(seg)) and (
+                prog not in _SCRIPT_RUNNERS or _SQL_RUN_CUE.search(seg) or _DB_RESET.search(seg)):
             found.append(("db.destructive_sql", {"program": prog, "production_hint": bool(_PROD.search(seg))}))
         elif prog in ("dropdb", "flushall", "flushdb"):
             found.append(("db.destructive_sql", {"program": prog, "production_hint": bool(_PROD.search(seg))}))
@@ -547,11 +553,15 @@ def classify_command(cmd: str, ctx: Ctx, powershell: bool = False) -> list:
                     ev[1]["secret_file"] = True             # the secret was piped in from the previous part of the command
                 if ev:
                     found.append(ev)
-        elif prog in _REMOTE and (prog in ("nc", "ncat", "netcat", "socat", "telnet", "ssh", "mosh") or any("@" in a or re.match(r"^[\w.\-]+:", a) for a in args)):
+        elif prog in _REMOTE and (prog in ("nc", "ncat", "netcat", "socat", "telnet", "ssh", "mosh") or any("@" in a or re.match(r"^[\w.\-]+:", a) for a in args)) \
+                and not (prog in ("nc", "ncat", "netcat", "telnet") and (_targets(args)[:1] or [""])[0] in ("localhost", "127.0.0.1", "::1", "0.0.0.0")):
             found.append(("net.remote_access", {"program": prog}))
         # reading secrets
         if prog in _READERS or prog in ("env", "printenv", "set", "export", "get-childitem", "gci", "ls", "dir"):
-            for t in _targets(args):
+            tgts = _targets(args)
+            if prog in _PATTERN_FIRST and tgts and not any(a in ("-e", "-f", "--regexp", "--file") or a.startswith("--regexp=") for a in args):
+                tgts = tgts[1:]                       # the first word is the pattern or the script, not a file it reads
+            for t in tgts:
                 k = secret_kind(t) if not t.startswith("$") else None
                 if k:
                     found.append(("secrets.read", {"via": prog, "path_kind": k}))

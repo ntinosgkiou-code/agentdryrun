@@ -2,6 +2,13 @@
 
 A dated, honest log of what was built, what worked, and what was wrong. Newest first. Nothing here is a customer story: there are none yet.
 
+## 2026-10-26 (evening): the rules, run on other people's data
+- **Why:** everything so far was tuned on one real history and invented examples. A friendly test. I took 2,000 random runs from a public set of 67,074 agent runs and judged every action with the starter rules, read-only.
+- **First result was wrong, and it was my script:** 133 approvals, 72 runs flagged. Cause: the study script took the project folder from the task text with a pattern that kept a trailing `
+`, so every `rm -rf` inside the project looked like it was outside it. Found by checking why harmless `rm -rf __pycache__` was flagged (it was allowed when I ran it by hand with the right folder). Fixed, whole sample re-run: 48 approvals, 1 refusal.
+- **Then 14 of those 49 flags were real false alarms in the rules** (SQL words inside a `python -c` test of a SQL parser, a `grep` pattern read as a secret file, `rm -rf *` after `cd /tmp/x`, `nc` to localhost). Fixed with 5 tests; same sample again: 34 approvals, 1 refusal.
+- **What it does not prove:** these are disposable sandboxes, so the flags are not harm; one agent and one kind of task; misses are not measured.
+
 ## 2026-10-26: three suggestions from outside, triaged
 A list of four ideas for `agentdryrun` arrived (from someone who read the project). Decisions, with the reason:
 - **"Run commands in an invisible sandbox and freeze the dangerous ones"**: not as stated. It would make the tool a security product with a much larger failure surface, it is Linux-only for the proposed mechanism (eBPF), sandboxes are already built into the agents and sold by others, and "the AI thinks the command ran" is deception that breaks easily. What was built instead is the honest small version: a live hook that uses the same rules and can only make things stricter (deny or ask), with an observe mode first.
