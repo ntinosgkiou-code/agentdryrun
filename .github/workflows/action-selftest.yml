@@ -2,11 +2,13 @@ name: action self-test
 on:
   push:
   pull_request:
+permissions:
+  contents: read
 jobs:
   passes-within-limits:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - id: dry
         uses: ./
         with:
@@ -25,7 +27,7 @@ jobs:
   fails-when-over-the-limit:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - id: dry
         uses: ./
         continue-on-error: true
@@ -40,7 +42,7 @@ jobs:
   reads-a-trace-export:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - id: dry
         uses: ./
         with:
@@ -52,7 +54,7 @@ jobs:
   works-on-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - id: dry
         uses: ./
         with:

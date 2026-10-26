@@ -2,6 +2,7 @@
 
 [![tests](https://github.com/ntinosgkiou-code/agentdryrun/actions/workflows/tests.yml/badge.svg)](https://github.com/ntinosgkiou-code/agentdryrun/actions/workflows/tests.yml)
 [![CodeQL](https://github.com/ntinosgkiou-code/agentdryrun/actions/workflows/codeql.yml/badge.svg)](https://github.com/ntinosgkiou-code/agentdryrun/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/ntinosgkiou-code/agentdryrun/badge)](https://scorecard.dev/viewer/?uri=github.com/ntinosgkiou-code/agentdryrun)
 ![python](https://img.shields.io/badge/python-3.9%2B-blue)
 ![dependencies](https://img.shields.io/badge/dependencies-none-brightgreen)
 ![license](https://img.shields.io/badge/license-Apache--2.0-blue)
