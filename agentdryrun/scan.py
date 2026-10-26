@@ -178,6 +178,12 @@ def main(args) -> int:
         with open(args.events_out, "w", encoding="utf-8", newline="\n") as f:
             for ev in got["events"]:
                 f.write(json.dumps(ev, ensure_ascii=False) + "\n")
+    if getattr(args, "wrapped", None):
+        from . import wrapped
+        w = wrapped.card_stats(s=s, kinds=kinds, stats=stats, calls_info=got["calls_info"], label=LABEL,
+                               info={"sessions": got["sessions"], "calls": got["calls"], "label": label})
+        with open(args.wrapped, "w", encoding="utf-8", newline="\n") as f:
+            f.write(wrapped.render_wrapped(w))
     print(f"{got['sessions']} sessions, {got['calls']} tool calls ({label}): {s['total']} actions judged.")
     print(f"  would pass {s['allow']}   would need approval {s['pending']}   would be refused {s['deny']}")
     risky = [(t, v) for t, v in kinds.items() if t not in _QUIET and (v["pending"] or v["deny"])]
@@ -185,6 +191,8 @@ def main(args) -> int:
         print(f"  {LABEL.get(t, t):52} {v['total']:>5}  ({v['deny']} refused, {v['pending']} approval)")
     print(f"  tool output the model read: about {stats['output_tokens_estimate']:,} tokens;  {stats['errors']} of {stats['calls']} calls failed")
     print(f"report card: {args.out}   (read-only: nothing was blocked, changed or sent)")
+    if getattr(args, "wrapped", None):
+        print(f"wrapped card: {args.wrapped}   (numbers only: no commands, file names or project names; open it to save the PNG)")
     if getattr(args, "write_rules", None):
         from .profile import MIN_ACTIONS, personal_rules
         mine, rep = personal_rules(policy, got["events"], label)

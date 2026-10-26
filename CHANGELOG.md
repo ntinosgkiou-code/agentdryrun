@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.0 (2026-10-26)  Claude Code Wrapped
+- **`scan --wrapped [FILE]`**: also writes "Claude Code Wrapped", one shareable card: sessions, tool calls, active days, busiest hour, commands / files read / files written, the share of actions that would have needed a human, and a label for it (The Calm Operator ... Living Dangerously). **Numbers only: no command, file name or project name can reach it** (a test plants private strings in the data and checks they are absent). It is a page with an inline SVG card and a button that saves a PNG in the browser; nothing is uploaded. The label is a joke built on the starter rules, not a security rating.
+- 152 tests (5 new, `tests/test_wrapped.py`).
+
 ## 0.8.1 (2026-10-26)  Fewer false alarms, found on other people's runs
 - The starter rules were run over a random sample of 2,000 public agent runs (121,219 actions; Nebius `SWE-rebench-openhands-trajectories`, CC-BY-4.0). Result and method: [docs/VALIDATION-PUBLIC-RUNS.md](docs/VALIDATION-PUBLIC-RUNS.md); script: `tools/study_public_runs.py`. 14 of the 49 flags it raised were false alarms and are fixed:
   - SQL text inside `python -c` / `node -e` (a SQL parser's own tests) is no longer a destructive database command; a script that can run the SQL (`.execute(`, a DB driver) still is.

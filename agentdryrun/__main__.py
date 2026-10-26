@@ -45,6 +45,8 @@ def main(argv: Optional[list] = None) -> int:
     p.add_argument("--banner", help="a notice shown at the top of the report")
     p.add_argument("--write-rules", metavar="FILE", help="also write a rules file that fits YOUR history: kinds of action you never do are locked (a proposal, not enforcement)")
     p.add_argument("--json", help="also write the numbers as JSON")
+    p.add_argument("--wrapped", nargs="?", const="claude-code-wrapped.html", metavar="FILE",
+                   help="also write a shareable 'Claude Code Wrapped' card: numbers only, no commands, file names or project names")
     p.add_argument("--events-out", help="also write the derived events (JSON Lines) so you can run `shadow` with your own rules")
     p.add_argument("--max-refused", type=int, metavar="N", help="exit with code 4 if more than N actions would be refused")
     p.add_argument("--max-pending", type=int, metavar="N", help="exit with code 4 if more than N actions would need approval")
