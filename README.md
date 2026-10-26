@@ -422,12 +422,12 @@ Give the log's owner your public key and your URL. A witness only ever says *"I 
 
 ---
 
-## Community edition (this repo) and the Gateway
+## Community edition (this repo) and the Gateway ([OmniOS](https://github.com/ntinosgkiou-code/omnios))
 
 The split is deliberate and it is the whole idea: **the part you have to trust is the part you can read.**
 The Gateway produces evidence; you do not have to trust it, because the verifier here checks what it produced.
 
-| | Community (this repository, open) | Gateway (commercial) |
+| | Community (this repository, open, Apache-2.0) | Gateway ([OmniOS](https://github.com/ntinosgkiou-code/omnios): source-available draft, all rights reserved) |
 |---|---|---|
 | Shadow report on your own exports, locally | ✅ | ✅ (also live, continuously, through an API or one line of SDK code) |
 | Rules language and validator | ✅ | ✅ |
@@ -461,7 +461,7 @@ The complete list is in [`docs/KNOWN-LIMITS.md`](docs/KNOWN-LIMITS.md).
 
 **Why not just write logs to write-once storage?** Object Lock stops deletion at the storage layer, but you still trust the cloud account, and it says nothing about order, completeness or whether the approval rules were followed. If write-once storage plus a separate security team is enough for you, you may not need this. This is for the case where a third party must check without trusting you or us.
 
-**Why is the Gateway not open?** Because the verifier makes it unnecessary to trust. The code that produces evidence is checked by code anyone can read.
+**Why is the Gateway not open?** Its source is published as a draft at [github.com/ntinosgkiou-code/omnios](https://github.com/ntinosgkiou-code/omnios) for reading and review, with all rights reserved and no license granted yet. You do not have to trust it, because the verifier here is open and checks what it produced: the code that produces evidence is checked by code anyone can read.
 
 **Does the shadow report send my data anywhere?** No. It is a local command and the output is a file on your disk.
 
@@ -515,7 +515,7 @@ To talk: **open an issue titled `pilot`** or `question` in this repository (no p
 
 ## License
 
-Apache License 2.0 (see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE)). The Gateway is a separate commercial product and is not covered by this license.
+Apache License 2.0 (see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE)). The Gateway ([OmniOS](https://github.com/ntinosgkiou-code/omnios)) is a separate project with its own terms (all rights reserved) and is not covered by this license.
 
 ---
 
